@@ -27,5 +27,78 @@ class cadPaciente extends Model
         'statusVacinacao',
         'dtCriacao',
         'imgPaciente',
+
+        // Saúde Reprodutiva
+        'castrado',
+        'dtCastracao',
+        'considerouCastracao',
+        'ciosRegulares',
+        'ficouGestante',
+        'gestacaoPsicologica',
+
+        // Alimentação
+        'tipoAlimentacao',
+        'tipoAlimentacaoOutro',
+        'usaSuplemento',
+        'tipoSuplemento',
+        'incluiProcessados',
+
+        // Controle de Ectoparasitas
+        'controleEctoparasita',
+        'nomeProdutoEctoparasita',
+        'frequenciaEctoparasita',
+
+        // Vermifugação
+        'usoVermifugo',
+        'nomeProdutoVermifugo',
+        'frequenciaVermifugo',
+
+        // Vacinação
+        'vacinadoAnualmente',
+        'vacinasAplicadas',
+        'dataUltimaVacinacao',
+        'vacinacaoEmClinica',
+        'localVacinacao',
+
+        // Exposição Solar
+        'exposicaoSol',
+        'tempoExposicaoSol',
+        'periodoExposicaoSol',
+        'usaProtetorSolar',
+        'tipoProtetorSolar',
+        'frequenciaProtetorSolar',
+
+        // Acesso à Rua
+        'acessoRuaSozinho',
+        'tempoAcessoRua',
+        'frequenciaAcessoRua',
+
+        // Produtos Químicos e Poluentes
+        'exposicaoQuimicos',
+        'fumantePassivo',
+        'pertoIndustria',
+
+        // Contracepção
+        'usoInjecaoContraceptiva',
+        'frequenciaInjecaoContraceptiva',
+        'dataUltimaInjecaoContraceptiva',
+
+        // Histórico de Saúde
+        'problemaPele',
+        'tipoProblemaPele',
+        'recidivaPele',
+        'possuiDoenca',
+        'doencaTratada',
+        'respostaTratamento',
+        'medicacaoContinua',
+        'tipoMedicacao',
+        'inicioMedicacao',
+
+        // Exames
+        'examesLaboratoriais',
+        'examesImagem',
+
+        // Histórico Familiar
+        'historicoCancerFamiliar',
     ];
 }

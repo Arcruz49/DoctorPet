@@ -330,18 +330,18 @@
                             <div class="question-group">
                                 <label>O animal é castrado?</label>
                                 <div class="radio-group">
-                                    <label><input type="radio" name="castrated" value="yes"> Sim</label>
-                                    <label><input type="radio" name="castrated" value="no"> Não</label>
+                                    <label><input type="radio" name="castrated" id="castrated" value="yes"> Sim</label>
+                                    <label><input type="radio" name="castrated" id="castrated" value="no"> Não</label>
                                 </div>
                                 <div class="conditional-field" data-condition="castrated" data-value="yes">
                                     <label>Se sim, quando?</label>
-                                    <input type="date">
+                                    <input type="date" id="castration_date" name="castration_date">
                                 </div>
                                 <div class="conditional-field" data-condition="castrated" data-value="no">
                                     <label>Já considerou a castração como medida preventiva contra certos tipos de câncer?</label>
                                     <div class="radio-group">
-                                        <label><input type="radio" name="considered_castration" value="yes"> Sim</label>
-                                        <label><input type="radio" name="considered_castration" value="no"> Não</label>
+                                        <label><input type="radio" name="considered_castration" id="considered_castration" value="yes"> Sim</label>
+                                        <label><input type="radio" name="considered_castration" id="considered_castration" value="no"> Não</label>
                                     </div>
                                 </div>
                             </div>
@@ -349,25 +349,25 @@
                             <div class="question-group">
                                 <label>Os cios são regulares?</label>
                                 <div class="radio-group">
-                                    <label><input type="radio" name="regular_cycles" value="yes"> Sim</label>
-                                    <label><input type="radio" name="regular_cycles" value="no"> Não</label>
-                                    <label><input type="radio" name="regular_cycles" value="na"> Não se aplica</label>
+                                    <label><input type="radio" name="regular_cycles" id="regular_cycles" value="yes"> Sim</label>
+                                    <label><input type="radio" name="regular_cycles" id="regular_cycles" value="no"> Não</label>
+                                    <label><input type="radio" name="regular_cycles" id="regular_cycles" value="na"> Não se aplica</label>
                                 </div>
                             </div>
                             
                             <div class="question-group">
                                 <label>Já ficou gestante?</label>
                                 <div class="radio-group">
-                                    <label><input type="radio" name="pregnant" value="yes"> Sim</label>
-                                    <label><input type="radio" name="pregnant" value="no"> Não</label>
+                                    <label><input type="radio" name="pregnant" id="pregnant" value="yes"> Sim</label>
+                                    <label><input type="radio" name="pregnant" id="pregnant" value="no"> Não</label>
                                 </div>
                             </div>
                             
                             <div class="question-group">
                                 <label>Apresentou gestação psicológica (pseudociese)?</label>
                                 <div class="radio-group">
-                                    <label><input type="radio" name="pseudopregnancy" value="yes"> Sim</label>
-                                    <label><input type="radio" name="pseudopregnancy" value="no"> Não</label>
+                                    <label><input type="radio" name="pseudopregnancy" id="pseudopregnancy" value="yes"> Sim</label>
+                                    <label><input type="radio" name="pseudopregnancy" id="pseudopregnancy" value="no"> Não</label>
                                 </div>
                             </div>
                         </div>
@@ -377,33 +377,33 @@
                             <div class="question-group">
                                 <label>Qual tipo de alimentação o animal consome?</label>
                                 <div class="radio-group">
-                                    <label><input type="radio" name="food_type" value="commercial"> Ração</label>
-                                    <label><input type="radio" name="food_type" value="homemade"> Caseira</label>
-                                    <label><input type="radio" name="food_type" value="natural"> Natural</label>
+                                    <label><input type="radio" name="food_type" id="food_type" value="commercial"> Ração</label>
+                                    <label><input type="radio" name="food_type" id="food_type" value="homemade"> Caseira</label>
+                                    <label><input type="radio" name="food_type" id="food_type" value="natural"> Natural</label>
                                 </div>
                                 <div class="conditional-field" data-condition="food_type">
                                     <label>Qual?</label>
-                                    <input type="text" placeholder="Especificar tipo de alimentação">
+                                    <input type="text" id="food_type_spec" name="food_type_spec" placeholder="Especificar tipo de alimentação">
                                 </div>
                             </div>
                             
                             <div class="question-group">
                                 <label>Faz uso de suplemento alimentar ou vitaminas como parte da dieta?</label>
                                 <div class="radio-group">
-                                    <label><input type="radio" name="supplements" value="yes"> Sim</label>
-                                    <label><input type="radio" name="supplements" value="no"> Não</label>
+                                    <label><input type="radio" name="supplements" id="supplements" value="yes"> Sim</label>
+                                    <label><input type="radio" name="supplements" id="supplements" value="no"> Não</label>
                                 </div>
                                 <div class="conditional-field" data-condition="supplements" data-value="yes">
                                     <label>Qual?</label>
-                                    <input type="text" placeholder="Especificar suplementos">
+                                    <input type="text" id="supplements_type" name="supplements_type" placeholder="Especificar suplementos">
                                 </div>
                             </div>
                             
                             <div class="question-group">
                                 <label>A alimentação inclui alimentos processados, conservantes ou corantes artificiais?</label>
                                 <div class="radio-group">
-                                    <label><input type="radio" name="preservatives" value="yes"> Sim</label>
-                                    <label><input type="radio" name="preservatives" value="no"> Não</label>
+                                    <label><input type="radio" name="preservatives" id="preservatives" value="yes"> Sim</label>
+                                    <label><input type="radio" name="preservatives" id="preservatives" value="no"> Não</label>
                                 </div>
                             </div>
                         </div>
@@ -413,14 +413,14 @@
                             <div class="question-group">
                                 <label>O animal faz controle de ectoparasitas?</label>
                                 <div class="radio-group">
-                                    <label><input type="radio" name="ectoparasite_control" value="yes"> Sim</label>
-                                    <label><input type="radio" name="ectoparasite_control" value="no"> Não</label>
+                                    <label><input type="radio" name="ectoparasite_control" id="ectoparasite_control" value="yes"> Sim</label>
+                                    <label><input type="radio" name="ectoparasite_control" id="ectoparasite_control" value="no"> Não</label>
                                 </div>
                                 <div class="conditional-field" data-condition="ectoparasite_control" data-value="yes">
                                     <label>Nome do produto:</label>
-                                    <input type="text" placeholder="Nome do produto">
+                                    <input type="text" id="ectoparasite_product" name="ectoparasite_product" placeholder="Nome do produto">
                                     <label>Qual frequência?</label>
-                                    <input type="text" placeholder="Frequência de uso">
+                                    <input type="text" id="ectoparasite_frequency" name="ectoparasite_frequency" placeholder="Frequência de uso">
                                 </div>
                             </div>
                         </div>
@@ -430,14 +430,14 @@
                             <div class="question-group">
                                 <label>O animal faz uso de vermífugo?</label>
                                 <div class="radio-group">
-                                    <label><input type="radio" name="deworming" value="yes"> Sim</label>
-                                    <label><input type="radio" name="deworming" value="no"> Não</label>
+                                    <label><input type="radio" name="deworming" id="deworming" value="yes"> Sim</label>
+                                    <label><input type="radio" name="deworming" id="deworming" value="no"> Não</label>
                                 </div>
                                 <div class="conditional-field" data-condition="deworming" data-value="yes">
                                     <label>Nome do produto:</label>
-                                    <input type="text" placeholder="Nome do produto">
+                                    <input type="text" id="deworming_product" name="deworming_product" placeholder="Nome do produto">
                                     <label>Qual frequência?</label>
-                                    <input type="text" placeholder="Frequência de uso">
+                                    <input type="text" id="deworming_frequency" name="deworming_frequency" placeholder="Frequência de uso">
                                 </div>
                             </div>
                         </div>
@@ -447,21 +447,21 @@
                             <div class="question-group">
                                 <label>O animal é vacinado anualmente?</label>
                                 <div class="radio-group">
-                                    <label><input type="radio" name="vaccinated" value="yes"> Sim</label>
-                                    <label><input type="radio" name="vaccinated" value="no"> Não</label>
+                                    <label><input type="radio" name="vaccinated" id="vaccinated" value="yes"> Sim</label>
+                                    <label><input type="radio" name="vaccinated" id="vaccinated" value="no"> Não</label>
                                 </div>
                                 <div class="conditional-field" data-condition="vaccinated" data-value="yes">
                                     <label>Com quais vacinas?</label>
-                                    <input type="text" placeholder="Lista de vacinas">
+                                    <input type="text" id="vaccines" name="vaccines" placeholder="Lista de vacinas">
                                     <label>Qual foi a última vez que foi vacinado?</label>
-                                    <input type="date">
+                                    <input type="date" id="last_vaccine_date" name="last_vaccine_date">
                                     <label>Vacinação é feita em clínica veterinária?</label>
                                     <div class="radio-group">
-                                        <label><input type="radio" name="vet_clinic_vaccine" value="yes"> Sim</label>
-                                        <label><input type="radio" name="vet_clinic_vaccine" value="no"> Não</label>
+                                        <label><input type="radio" name="vet_clinic_vaccine" id="vet_clinic_vaccine" value="yes"> Sim</label>
+                                        <label><input type="radio" name="vet_clinic_vaccine" id="vet_clinic_vaccine" value="no"> Não</label>
                                     </div>
                                     <label>Em qual local do corpo do animal é feita a vacinação?</label>
-                                    <input type="text" placeholder="Local da vacinação">
+                                    <input type="text" id="vaccine_location" name="vaccine_location" placeholder="Local da vacinação">
                                 </div>
                             </div>
                         </div>
@@ -471,28 +471,28 @@
                             <div class="question-group">
                                 <label>O animal fica exposto ao sol em algum período do dia?</label>
                                 <div class="radio-group">
-                                    <label><input type="radio" name="sun_exposure" value="yes"> Sim</label>
-                                    <label><input type="radio" name="sun_exposure" value="no"> Não</label>
+                                    <label><input type="radio" name="sun_exposure" id="sun_exposure" value="yes"> Sim</label>
+                                    <label><input type="radio" name="sun_exposure" id="sun_exposure" value="no"> Não</label>
                                 </div>
                                 <div class="conditional-field" data-condition="sun_exposure" data-value="yes">
                                     <label>Por quanto tempo/dia?</label>
-                                    <input type="text" placeholder="Tempo de exposição">
+                                    <input type="text" id="sun_exposure_time" name="sun_exposure_time" placeholder="Tempo de exposição">
                                     <label>Qual período do dia o animal fica mais exposto?</label>
-                                    <input type="text" placeholder="Período do dia">
+                                    <input type="text" id="sun_exposure_period" name="sun_exposure_period" placeholder="Período do dia">
                                 </div>
                             </div>
                             
                             <div class="question-group">
                                 <label>Usa proteção solar?</label>
                                 <div class="radio-group">
-                                    <label><input type="radio" name="sunscreen" value="yes"> Sim</label>
-                                    <label><input type="radio" name="sunscreen" value="no"> Não</label>
+                                    <label><input type="radio" name="sunscreen" id="sunscreen" value="yes"> Sim</label>
+                                    <label><input type="radio" name="sunscreen" id="sunscreen" value="no"> Não</label>
                                 </div>
                                 <div class="conditional-field" data-condition="sunscreen" data-value="yes">
                                     <label>Qual tipo?</label>
-                                    <input type="text" placeholder="Tipo de protetor">
+                                    <input type="text" id="sunscreen_type" name="sunscreen_type" placeholder="Tipo de protetor">
                                     <label>Com que frequência?</label>
-                                    <input type="text" placeholder="Frequência de uso">
+                                    <input type="text" id="sunscreen_frequency" name="sunscreen_frequency" placeholder="Frequência de uso">
                                 </div>
                             </div>
                         </div>
@@ -502,14 +502,14 @@
                             <div class="question-group">
                                 <label>O animal tem acesso a rua desacompanhado?</label>
                                 <div class="radio-group">
-                                    <label><input type="radio" name="street_access" value="yes"> Sim</label>
-                                    <label><input type="radio" name="street_access" value="no"> Não</label>
+                                    <label><input type="radio" name="street_access" id="street_access" value="yes"> Sim</label>
+                                    <label><input type="radio" name="street_access" id="street_access" value="no"> Não</label>
                                 </div>
                                 <div class="conditional-field" data-condition="street_access" data-value="yes">
                                     <label>Por quanto tempo?</label>
-                                    <input type="text" placeholder="Tempo de acesso">
+                                    <input type="text" id="street_access_time" name="street_access_time" placeholder="Tempo de acesso">
                                     <label>Com que frequência?</label>
-                                    <input type="text" placeholder="Frequência de acesso">
+                                    <input type="text" id="street_access_frequency" name="street_access_frequency" placeholder="Frequência de acesso">
                                 </div>
                             </div>
                         </div>
@@ -519,24 +519,24 @@
                             <div class="question-group">
                                 <label>O animal tem acesso a áreas onde são aplicados produtos químicos para o controle de pragas, como gramados tratados com pesticidas ou algum outro poluente ambiental?</label>
                                 <div class="radio-group">
-                                    <label><input type="radio" name="chemical_exposure" value="yes"> Sim</label>
-                                    <label><input type="radio" name="chemical_exposure" value="no"> Não</label>
+                                    <label><input type="radio" name="chemical_exposure" id="chemical_exposure" value="yes"> Sim</label>
+                                    <label><input type="radio" name="chemical_exposure" id="chemical_exposure" value="no"> Não</label>
                                 </div>
                             </div>
                             
                             <div class="question-group">
                                 <label>O animal é fumante passivo? (convive com algum fumante)</label>
                                 <div class="radio-group">
-                                    <label><input type="radio" name="passive_smoker" value="yes"> Sim</label>
-                                    <label><input type="radio" name="passive_smoker" value="no"> Não</label>
+                                    <label><input type="radio" name="passive_smoker" id="passive_smoker" value="yes"> Sim</label>
+                                    <label><input type="radio" name="passive_smoker" id="passive_smoker" value="no"> Não</label>
                                 </div>
                             </div>
                             
                             <div class="question-group">
                                 <label>Mora perto de alguma indústria, fábrica (cimento, telha, fibra, etc)?</label>
                                 <div class="radio-group">
-                                    <label><input type="radio" name="near_industry" value="yes"> Sim</label>
-                                    <label><input type="radio" name="near_industry" value="no"> Não</label>
+                                    <label><input type="radio" name="near_industry" id="near_industry" value="yes"> Sim</label>
+                                    <label><input type="radio" name="near_industry" id="near_industry" value="no"> Não</label>
                                 </div>
                             </div>
                         </div>
@@ -546,14 +546,14 @@
                             <div class="question-group">
                                 <label>O animal já fez/faz uso de injeção contraceptiva?</label>
                                 <div class="radio-group">
-                                    <label><input type="radio" name="contraceptive_injection" value="yes"> Sim</label>
-                                    <label><input type="radio" name="contraceptive_injection" value="no"> Não</label>
+                                    <label><input type="radio" name="contraceptive_injection" id="contraceptive_injection" value="yes"> Sim</label>
+                                    <label><input type="radio" name="contraceptive_injection" id="contraceptive_injection" value="no"> Não</label>
                                 </div>
                                 <div class="conditional-field" data-condition="contraceptive_injection" data-value="yes">
                                     <label>Qual a frequência da administração?</label>
-                                    <input type="text" placeholder="Frequência">
+                                    <input type="text" id="contraceptive_frequency" name="contraceptive_frequency" placeholder="Frequência">
                                     <label>Qual a data da última aplicação?</label>
-                                    <input type="date">
+                                    <input type="date" id="last_contraceptive_date" name="last_contraceptive_date">
                                 </div>
                             </div>
                         </div>
@@ -563,16 +563,16 @@
                             <div class="question-group">
                                 <label>O animal já apresentou algum problema de pele?</label>
                                 <div class="radio-group">
-                                    <label><input type="radio" name="skin_problems" value="yes"> Sim</label>
-                                    <label><input type="radio" name="skin_problems" value="no"> Não</label>
+                                    <label><input type="radio" name="skin_problems" id="skin_problems" value="yes"> Sim</label>
+                                    <label><input type="radio" name="skin_problems" id="skin_problems" value="no"> Não</label>
                                 </div>
                                 <div class="conditional-field" data-condition="skin_problems" data-value="yes">
                                     <label>Qual?</label>
-                                    <input type="text" placeholder="Problema de pele">
+                                    <input type="text" id="skin_problem_type" name="skin_problem_type" placeholder="Problema de pele">
                                     <label>Teve recidiva?</label>
                                     <div class="radio-group">
-                                        <label><input type="radio" name="skin_recurrence" value="yes"> Sim</label>
-                                        <label><input type="radio" name="skin_recurrence" value="no"> Não</label>
+                                        <label><input type="radio" name="skin_recurrence" id="skin_recurrence" value="yes"> Sim</label>
+                                        <label><input type="radio" name="skin_recurrence" id="skin_recurrence" value="no"> Não</label>
                                     </div>
                                 </div>
                             </div>
@@ -580,31 +580,31 @@
                             <div class="question-group">
                                 <label>O animal tem alguma doença?</label>
                                 <div class="radio-group">
-                                    <label><input type="radio" name="has_disease" value="yes"> Sim</label>
-                                    <label><input type="radio" name="has_disease" value="no"> Não</label>
+                                    <label><input type="radio" name="has_disease" id="has_disease" value="yes"> Sim</label>
+                                    <label><input type="radio" name="has_disease" id="has_disease" value="no"> Não</label>
                                 </div>
                                 <div class="conditional-field" data-condition="has_disease" data-value="yes">
                                     <label>Se sim, está sendo tratada?</label>
                                     <div class="radio-group">
-                                        <label><input type="radio" name="disease_treated" value="yes"> Sim</label>
-                                        <label><input type="radio" name="disease_treated" value="no"> Não</label>
+                                        <label><input type="radio" name="disease_treated" id="disease_treated" value="yes"> Sim</label>
+                                        <label><input type="radio" name="disease_treated" id="disease_treated" value="no"> Não</label>
                                     </div>
                                     <label>Como você avalia a resposta do animal ao tratamento?</label>
-                                    <input type="text" placeholder="Avaliação do tratamento">
+                                    <input type="text" id="treatment_response" name="treatment_response" placeholder="Avaliação do tratamento">
                                 </div>
                             </div>
                             
                             <div class="question-group">
                                 <label>Faz uso de alguma medicação de forma contínua?</label>
                                 <div class="radio-group">
-                                    <label><input type="radio" name="continuous_medication" value="yes"> Sim</label>
-                                    <label><input type="radio" name="continuous_medication" value="no"> Não</label>
+                                    <label><input type="radio" name="continuous_medication" id="continuous_medication" value="yes"> Sim</label>
+                                    <label><input type="radio" name="continuous_medication" id="continuous_medication" value="no"> Não</label>
                                 </div>
                                 <div class="conditional-field" data-condition="continuous_medication" data-value="yes">
                                     <label>Qual?</label>
-                                    <input type="text" placeholder="Medicação">
+                                    <input type="text" id="medication_type" name="medication_type" placeholder="Medicação">
                                     <label>Quando teve início?</label>
-                                    <input type="date">
+                                    <input type="date" id="medication_start_date" name="medication_start_date">
                                 </div>
                             </div>
                         </div>
@@ -614,16 +614,16 @@
                             <div class="question-group">
                                 <label>O animal é submetido a exames de sangue ou outros testes laboratoriais para avaliar sua saúde geral?</label>
                                 <div class="radio-group">
-                                    <label><input type="radio" name="lab_tests" value="yes"> Sim</label>
-                                    <label><input type="radio" name="lab_tests" value="no"> Não</label>
+                                    <label><input type="radio" name="lab_tests" id="lab_tests" value="yes"> Sim</label>
+                                    <label><input type="radio" name="lab_tests" id="lab_tests" value="no"> Não</label>
                                 </div>
                             </div>
                             
                             <div class="question-group">
                                 <label>O animal já foi submetido a exames de imagem (como radiografias, ultrassonografias) para monitorar sua saúde?</label>
                                 <div class="radio-group">
-                                    <label><input type="radio" name="imaging_tests" value="yes"> Sim</label>
-                                    <label><input type="radio" name="imaging_tests" value="no"> Não</label>
+                                    <label><input type="radio" name="imaging_tests" id="imaging_tests" value="yes"> Sim</label>
+                                    <label><input type="radio" name="imaging_tests" id="imaging_tests" value="no"> Não</label>
                                 </div>
                             </div>
                         </div>
@@ -633,9 +633,9 @@
                             <div class="question-group">
                                 <label>O animal tem histórico familiar de câncer?</label>
                                 <div class="radio-group">
-                                    <label><input type="radio" name="family_cancer_history" value="yes"> Sim</label>
-                                    <label><input type="radio" name="family_cancer_history" value="no"> Não</label>
-                                    <label><input type="radio" name="family_cancer_history" value="dont_know"> Não sei</label>
+                                    <label><input type="radio" name="family_cancer_history" id="family_cancer_history" value="yes"> Sim</label>
+                                    <label><input type="radio" name="family_cancer_history" id="family_cancer_history" value="no"> Não</label>
+                                    <label><input type="radio" name="family_cancer_history" id="family_cancer_history" value="dont_know"> Não sei</label>
                                 </div>
                             </div>
                         </div>
