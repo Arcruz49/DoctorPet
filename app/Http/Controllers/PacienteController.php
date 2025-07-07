@@ -8,8 +8,8 @@ use App\Models\cadPaciente;
 class PacienteController extends Controller
 {
     public function GetPacientes(Request $request){
-        $pacientes = cadPaciente::select()->all();
+        $pacientes = cadPaciente::all();
 
-        dd($pacientes);
+        return response()->json($pacientes);
     }
 }

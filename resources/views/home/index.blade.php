@@ -119,104 +119,8 @@
                 </div>
                 
                 <!-- Lista de pacientes -->
-                <div class="patients-grid">
-                    <!-- Card de paciente 1 -->
-                    <div class="patient-card">
-                        <div class="patient-avatar" style="background-color: #FFD6E0;">
-                            <i class="fas fa-dog"></i>
-                        </div>
-                        <div class="patient-info">
-                            <h3>Rex</h3>
-                            <p class="meta">Labrador • 3 anos</p>
-                            <p class="owner">Tutor: João Silva</p>
-                            <div class="status-badge active">Ativo</div>
-                        </div>
-                        <div class="patient-actions">
-                            <button class="icon-btn view"><i class="fas fa-eye"></i></button>
-                            <button class="icon-btn edit"><i class="fas fa-edit"></i></button>
-                            <button class="icon-btn more"><i class="fas fa-ellipsis-v"></i></button>
-                        </div>
-                    </div>
-                    
-                    <!-- Card de paciente 2 -->
-                    <div class="patient-card">
-                        <div class="patient-avatar" style="background-color: #C1FBA4;">
-                            <i class="fas fa-cat"></i>
-                        </div>
-                        <div class="patient-info">
-                            <h3>Mimi</h3>
-                            <p class="meta">Siamês • 5 anos</p>
-                            <p class="owner">Tutor: Maria Souza</p>
-                            <div class="status-badge active">Ativo</div>
-                        </div>
-                        <div class="patient-actions">
-                            <button class="icon-btn view"><i class="fas fa-eye"></i></button>
-                            <button class="icon-btn edit"><i class="fas fa-edit"></i></button>
-                            <button class="icon-btn more"><i class="fas fa-ellipsis-v"></i></button>
-                        </div>
-                    </div>
-                    
-                    <!-- Card de paciente 3 -->
-                    <div class="patient-card">
-                        <div class="patient-avatar" style="background-color: #7BF1A8;">
-                            <i class="fas fa-dog"></i>
-                        </div>
-                        <div class="patient-info">
-                            <h3>Thor</h3>
-                            <p class="meta">Golden Retriever • 2 anos</p>
-                            <p class="owner">Tutor: Carlos Oliveira</p>
-                            <div class="status-badge inactive">Inativo</div>
-                        </div>
-                        <div class="patient-actions">
-                            <button class="icon-btn view"><i class="fas fa-eye"></i></button>
-                            <button class="icon-btn edit"><i class="fas fa-edit"></i></button>
-                            <button class="icon-btn more"><i class="fas fa-ellipsis-v"></i></button>
-                        </div>
-                    </div>
-                    
-                    <!-- Card de paciente 4 -->
-                    <div class="patient-card">
-                        <div class="patient-avatar" style="background-color: #90F1EF;">
-                            <i class="fas fa-dove"></i>
-                        </div>
-                        <div class="patient-info">
-                            <h3>Piu</h3>
-                            <p class="meta">Calopsita • 1 ano</p>
-                            <p class="owner">Tutor: Luiza Mendes</p>
-                            <div class="status-badge active">Ativo</div>
-                        </div>
-                        <div class="patient-actions">
-                            <button class="icon-btn view"><i class="fas fa-eye"></i></button>
-                            <button class="icon-btn edit"><i class="fas fa-edit"></i></button>
-                            <button class="icon-btn more"><i class="fas fa-ellipsis-v"></i></button>
-                        </div>
-                    </div>
-                    
-                    <!-- Card de paciente 5 -->
-                    <div class="patient-card">
-                        <div class="patient-avatar" style="background-color: #FFB7FF;">
-                            <i class="fas fa-cat"></i>
-                        </div>
-                        <div class="patient-info">
-                            <h3>Luna</h3>
-                            <p class="meta">Persa • 4 anos</p>
-                            <p class="owner">Tutor: Pedro Alves</p>
-                            <div class="status-badge active">Ativo</div>
-                        </div>
-                        <div class="patient-actions">
-                            <button class="icon-btn view"><i class="fas fa-eye"></i></button>
-                            <button class="icon-btn edit"><i class="fas fa-edit"></i></button>
-                            <button class="icon-btn more"><i class="fas fa-ellipsis-v"></i></button>
-                        </div>
-                    </div>
-                    
-                    <!-- Card de novo paciente -->
-                    <div class="add-patient-card">
-                        <button class="add-patient-btn">
-                            <i class="fas fa-plus-circle"></i>
-                            <span>Adicionar Paciente</span>
-                        </button>
-                    </div>
+                <div class="patients-grid" id="patientsContainer">
+                    <!-- Os cards virão aqui via JavaScript -->
                 </div>
             </div>
         </main>
@@ -744,8 +648,64 @@
         // Se não tem data-value, mostra para qualquer valor
         $(`.conditional-field[data-condition="${name}"]:not([data-value])`).show();
     });
+
+    $.ajax({
+        url: '/getPacientes',
+        method: 'GET',
+        success: function (pacientes) {
+            let container = $('#patientsContainer');
+            container.empty();
+
+            pacientes.forEach(paciente => {
+                // Ícone baseado na espécie
+                let icon = '<i class="fas fa-dog"></i>';
+                if (paciente.especie.toLowerCase().includes('gato')) icon = '<i class="fas fa-cat"></i>';
+                // else if (paciente.especie.toLowerCase().includes('ave')) icon = '<i class="fas fa-dove"></i>';
+
+                // Cor aleatória ou baseada na espécie
+                const cores = ['#FFD6E0', '#C1FBA4', '#7BF1A8', '#90F1EF', '#FFB7FF'];
+                let cor = cores[Math.floor(Math.random() * cores.length)];
+
+                let card = `
+                    <div class="patient-card">
+                        <div class="patient-avatar" style="background-color: ${cor};">
+                            ${icon}
+                        </div>
+                        <div class="patient-info">
+                            <h3>${paciente.nmPaciente}</h3>
+                            <p class="meta">${paciente.raca} • ${paciente.idade}</p>
+                            <p class="owner">Tutor: ${paciente.nmTutor}</p>
+                            <div class="status-badge ${paciente.statusVacinacao === 'ativo' ? 'active' : 'inactive'}">
+                                ${paciente.statusVacinacao === 'ativo' ? 'Ativo' : 'Inativo'}
+                            </div>
+                        </div>
+                        <div class="patient-actions">
+                            <button class="icon-btn view"><i class="fas fa-eye"></i></button>
+                            <button class="icon-btn edit"><i class="fas fa-edit"></i></button>
+                            <button class="icon-btn more"><i class="fas fa-ellipsis-v"></i></button>
+                        </div>
+                    </div>
+                `;
+
+                container.append(card);
+            });
+
+            // Adicionar botão de novo paciente
+            container.append(`
+                <div class="add-patient-card">
+                    <button class="add-patient-btn">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>Adicionar Paciente</span>
+                    </button>
+                </div>
+            `);
+        },
+        error: function () {
+            alert('Erro ao carregar os pacientes.');
+        }
+    });
         
-    });    
+});    
 </script>
 </body>
 </html>
