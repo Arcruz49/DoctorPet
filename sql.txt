@@ -1,0 +1,28 @@
+CREATE DATABASE petCare
+
+CREATE TABLE cadUsuario (
+    cdUsuario INT PRIMARY KEY AUTO_INCREMENT,
+    nmUsuario VARCHAR(500),
+    login VARCHAR(256),
+    senha VARCHAR(256),
+	imagemPerfil LONGBLOB,
+    dtCriacao DATETIME
+);
+
+CREATE TABLE cadPaciente(
+	cdPaciente int PRIMARY KEY AUTO_INCREMENT,
+	nmPaciente varchar(256),
+    especie varchar(20),
+    raca varchar(256),
+    idade varchar(256),
+    sexo varchar(20),
+    peso DECIMAL(5,2),
+    nmTutor varchar(256),
+    telefone varchar(256),
+    email varchar(256),
+    endereco varchar(256),
+    obs TEXT,
+    statusVacinacao varchar(10),
+    dtCriacao DATETIME,
+    imgPaciente varchar(500)
+)

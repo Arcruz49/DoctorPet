@@ -1,0 +1,211 @@
+:root {
+        --primary: #A5D8FF;
+        --primary-dark: #7CC1FF;
+        --secondary: #B2F2BB;
+        --background: #F8F9FC;
+        --text: #2D3748;
+        --text-light: #718096;
+    }
+
+    body {
+        font-family: 'Nunito', sans-serif;
+        background-color: var(--background);
+        color: var(--text);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .login-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .login-illustration {
+        background: linear-gradient(135deg, var(--primary), var(--secondary));
+        padding: 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: white;
+    }
+
+    .login-illustration img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .login-form {
+        background-color: white;
+        padding: 60px 40px;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 30px;
+    }
+
+    .logo-icon {
+        font-size: 2.5rem;
+        color: var(--primary-dark);
+        margin-right: 15px;
+    }
+
+    .logo-text {
+        font-size: 2rem;
+        font-weight: 700;
+    }
+
+    .welcome-title {
+        font-weight: 700;
+        font-size: 1.8rem;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .welcome-subtitle {
+        color: var(--text-light);
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .form-control {
+        padding: 12px 15px;
+        border-radius: 10px;
+        border: 1px solid #E2E8F0;
+        margin-bottom: 20px;
+    }
+
+    .form-control:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(165, 216, 255, 0.3);
+    }
+
+    .btn-login {
+        background-color: var(--primary);
+        border: none;
+        color: #1a1a1a;
+        font-weight: 600;
+        padding: 12px;
+        border-radius: 10px;
+        width: 100%;
+        transition: all 0.2s;
+        margin-top: 10px;
+    }
+
+    .btn-login:hover {
+        background-color: var(--primary-dark);
+        color: #1a1a1a;
+    }
+
+    .remember-forgot {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .form-check-input:checked {
+        background-color: var(--primary);
+        border-color: var(--primary);
+    }
+
+    .forgot-password {
+        color: var(--text-light);
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+
+    .forgot-password:hover {
+        color: var(--primary-dark);
+    }
+
+    .divider {
+        display: flex;
+        align-items: center;
+        margin: 25px 0;
+        color: var(--text-light);
+    }
+
+    .divider::before, .divider::after {
+        content: "";
+        flex: 1;
+        border-bottom: 1px solid #E2E8F0;
+    }
+
+    .divider::before {
+        margin-right: 15px;
+    }
+
+    .divider::after {
+        margin-left: 15px;
+    }
+
+    .social-login {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+
+    .social-btn {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: white;
+        border: 1px solid #E2E8F0;
+        color: var(--text);
+        transition: all 0.2s;
+    }
+
+    .social-btn:hover {
+        background-color: var(--background);
+        color: var(--primary-dark);
+    }
+
+    .register-link {
+        text-align: center;
+        color: var(--text-light);
+    }
+
+    .register-link a {
+        color: var(--primary-dark);
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.2s;
+    }
+
+    .register-link a:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 992px) {
+        .login-illustration {
+            display: none;
+        }
+        
+        .login-form {
+            padding: 40px 30px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .login-form {
+            padding: 30px 20px;
+        }
+        
+        .welcome-title {
+            font-size: 1.5rem;
+        }
+    }
