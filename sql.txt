@@ -26,3 +26,78 @@ CREATE TABLE cadPaciente(
     dtCriacao DATETIME,
     imgPaciente varchar(500)
 )
+
+
+ALTER TABLE cadPaciente
+-- Saúde Reprodutiva
+ADD castrado BIT,
+ADD dtCastracao DATE,
+ADD considerouCastracao BIT,
+ADD ciosRegulares VARCHAR(20), -- 'sim', 'nao', 'na'
+ADD ficouGestante BIT,
+ADD gestacaoPsicologica BIT,
+
+-- Alimentação
+ADD tipoAlimentacao VARCHAR(20), -- 'racao', 'caseira', 'natural'
+ADD tipoAlimentacaoOutro VARCHAR(256),
+ADD usaSuplemento BIT,
+ADD tipoSuplemento VARCHAR(256),
+ADD incluiProcessados BIT,
+
+-- Controle de Ectoparasitas
+ADD controleEctoparasita BIT,
+ADD nomeProdutoEctoparasita VARCHAR(256),
+ADD frequenciaEctoparasita VARCHAR(256),
+
+-- Vermifugação
+ADD usoVermifugo BIT,
+ADD nomeProdutoVermifugo VARCHAR(256),
+ADD frequenciaVermifugo VARCHAR(256),
+
+-- Vacinação
+ADD vacinadoAnualmente BIT,
+ADD vacinasAplicadas VARCHAR(512),
+ADD dataUltimaVacinacao DATE,
+ADD vacinacaoEmClinica BIT,
+ADD localVacinacao VARCHAR(256),
+
+-- Exposição Solar
+ADD exposicaoSol BIT,
+ADD tempoExposicaoSol VARCHAR(100),
+ADD periodoExposicaoSol VARCHAR(100),
+ADD usaProtetorSolar BIT,
+ADD tipoProtetorSolar VARCHAR(100),
+ADD frequenciaProtetorSolar VARCHAR(100),
+
+-- Acesso à Rua
+ADD acessoRuaSozinho BIT,
+ADD tempoAcessoRua VARCHAR(100),
+ADD frequenciaAcessoRua VARCHAR(100),
+
+-- Produtos Químicos e Poluentes
+ADD exposicaoQuimicos BIT,
+ADD fumantePassivo BIT,
+ADD pertoIndustria BIT,
+
+-- Contracepção
+ADD usoInjecaoContraceptiva BIT,
+ADD frequenciaInjecaoContraceptiva VARCHAR(100),
+ADD dataUltimaInjecaoContraceptiva DATE,
+
+-- Histórico de Saúde
+ADD problemaPele BIT,
+ADD tipoProblemaPele VARCHAR(256),
+ADD recidivaPele BIT,
+ADD possuiDoenca BIT,
+ADD doencaTratada BIT,
+ADD respostaTratamento TEXT,
+ADD medicacaoContinua BIT,
+ADD tipoMedicacao VARCHAR(256),
+ADD inicioMedicacao DATE,
+
+-- Exames
+ADD examesLaboratoriais BIT,
+ADD examesImagem BIT,
+
+-- Histórico Familiar
+ADD historicoCancerFamiliar VARCHAR(20); -- 'sim', 'nao', 'nao_sei'

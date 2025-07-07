@@ -20,7 +20,7 @@
                     <i class="fas fa-bars"></i>
                 </button>
             </div>
-            
+
             <nav class="sidebar-nav">
                 <ul>
                     <li class="active">
@@ -55,7 +55,7 @@
                     </li>
                 </ul>
             </nav>
-            
+
             <div class="user-profile">
                 <div class="avatar">
                     <img src="{{ asset('images/default-profile-pic.jpg') }}" alt="Veterinária">
@@ -72,6 +72,9 @@
             </div>
         </aside>
 
+        <!-- Overlay que aparece quando a sidebar está aberta em mobile -->
+        <div class="sidebar-overlay"></div>
+
         <!-- Conteúdo principal -->
         <main class="main-content">
             <header class="main-header">
@@ -87,7 +90,7 @@
                     </button>
                 </div>
             </header>
-            
+
             <div class="content-wrapper">
                 <!-- Filtros -->
                 <div class="filters">
@@ -117,14 +120,14 @@
                         </select>
                     </div>
                 </div>
-                
+
                 <!-- Lista de pacientes -->
                 <div class="patients-grid" id="patientsContainer">
                     <!-- Os cards virão aqui via JavaScript -->
                 </div>
             </div>
         </main>
-        
+
         <!-- Modal de cadastro -->
         <div class="modal-overlay" id="patientModal">
         <div class="modal-container">
@@ -138,7 +141,7 @@
                     <button class="tab-button active" data-tab="data">Dados</button>
                     <button class="tab-button" data-tab="questionnaire">Questionário</button>
                 </div>
-                
+
                 <form id="patientForm">
                     <!-- Aba Dados -->
                     <div id="data-tab" class="tab-content active">
@@ -181,7 +184,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="form-section">
                             <h3>Informações do Responsável</h3>
                             <div class="form-grid">
@@ -203,7 +206,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="form-section">
                             <h3>Histórico Médico</h3>
                             <div class="form-group">
@@ -226,7 +229,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- Aba Questionário -->
                     <div id="questionnaire-tab" class="tab-content">
                         <div class="form-section">
@@ -249,7 +252,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="question-group">
                                 <label>Os cios são regulares?</label>
                                 <div class="radio-group">
@@ -258,7 +261,7 @@
                                     <label><input type="radio" name="regular_cycles" id="regular_cycles" value="na"> Não se aplica</label>
                                 </div>
                             </div>
-                            
+
                             <div class="question-group">
                                 <label>Já ficou gestante?</label>
                                 <div class="radio-group">
@@ -266,7 +269,7 @@
                                     <label><input type="radio" name="pregnant" id="pregnant" value="no"> Não</label>
                                 </div>
                             </div>
-                            
+
                             <div class="question-group">
                                 <label>Apresentou gestação psicológica (pseudociese)?</label>
                                 <div class="radio-group">
@@ -275,7 +278,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="form-section">
                             <h3>Alimentação</h3>
                             <div class="question-group">
@@ -290,7 +293,7 @@
                                     <input type="text" id="food_type_spec" name="food_type_spec" placeholder="Especificar tipo de alimentação">
                                 </div>
                             </div>
-                            
+
                             <div class="question-group">
                                 <label>Faz uso de suplemento alimentar ou vitaminas como parte da dieta?</label>
                                 <div class="radio-group">
@@ -302,7 +305,7 @@
                                     <input type="text" id="supplements_type" name="supplements_type" placeholder="Especificar suplementos">
                                 </div>
                             </div>
-                            
+
                             <div class="question-group">
                                 <label>A alimentação inclui alimentos processados, conservantes ou corantes artificiais?</label>
                                 <div class="radio-group">
@@ -311,7 +314,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="form-section">
                             <h3>Controle de Ectoparasitas</h3>
                             <div class="question-group">
@@ -328,7 +331,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="form-section">
                             <h3>Vermifugação</h3>
                             <div class="question-group">
@@ -345,7 +348,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="form-section">
                             <h3>Vacinação</h3>
                             <div class="question-group">
@@ -369,7 +372,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="form-section">
                             <h3>Exposição Solar</h3>
                             <div class="question-group">
@@ -385,7 +388,7 @@
                                     <input type="text" id="sun_exposure_period" name="sun_exposure_period" placeholder="Período do dia">
                                 </div>
                             </div>
-                            
+
                             <div class="question-group">
                                 <label>Usa proteção solar?</label>
                                 <div class="radio-group">
@@ -400,7 +403,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="form-section">
                             <h3>Acesso à Rua</h3>
                             <div class="question-group">
@@ -417,7 +420,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="form-section">
                             <h3>Exposição a Produtos Químicos</h3>
                             <div class="question-group">
@@ -427,7 +430,7 @@
                                     <label><input type="radio" name="chemical_exposure" id="chemical_exposure" value="no"> Não</label>
                                 </div>
                             </div>
-                            
+
                             <div class="question-group">
                                 <label>O animal é fumante passivo? (convive com algum fumante)</label>
                                 <div class="radio-group">
@@ -435,7 +438,7 @@
                                     <label><input type="radio" name="passive_smoker" id="passive_smoker" value="no"> Não</label>
                                 </div>
                             </div>
-                            
+
                             <div class="question-group">
                                 <label>Mora perto de alguma indústria, fábrica (cimento, telha, fibra, etc)?</label>
                                 <div class="radio-group">
@@ -444,7 +447,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="form-section">
                             <h3>Contracepção</h3>
                             <div class="question-group">
@@ -461,7 +464,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="form-section">
                             <h3>Histórico de Saúde</h3>
                             <div class="question-group">
@@ -480,7 +483,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="question-group">
                                 <label>O animal tem alguma doença?</label>
                                 <div class="radio-group">
@@ -497,7 +500,7 @@
                                     <input type="text" id="treatment_response" name="treatment_response" placeholder="Avaliação do tratamento">
                                 </div>
                             </div>
-                            
+
                             <div class="question-group">
                                 <label>Faz uso de alguma medicação de forma contínua?</label>
                                 <div class="radio-group">
@@ -512,7 +515,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="form-section">
                             <h3>Exames</h3>
                             <div class="question-group">
@@ -522,7 +525,7 @@
                                     <label><input type="radio" name="lab_tests" id="lab_tests" value="no"> Não</label>
                                 </div>
                             </div>
-                            
+
                             <div class="question-group">
                                 <label>O animal já foi submetido a exames de imagem (como radiografias, ultrassonografias) para monitorar sua saúde?</label>
                                 <div class="radio-group">
@@ -531,7 +534,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="form-section">
                             <h3>Histórico Familiar</h3>
                             <div class="question-group">
@@ -556,10 +559,29 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(document).ready(function() {
-        // Toggle sidebar em telas pequenas
-        $('.menu-toggle').click(function() {
+        $(document).ready(function() {
+            // Toggle sidebar em telas pequenas
+            $('.menu-toggle').click(function(e) {
+            e.stopPropagation();
             $('.sidebar').toggleClass('active');
+        });
+
+        // Fechar sidebar ao clicar no overlay ou fora
+        $('.sidebar-overlay').click(function() {
+            $('.sidebar').removeClass('active');
+        });
+
+        $(document).click(function(e) {
+            if (!$(e.target).closest('.sidebar').length && !$(e.target).is('.menu-toggle')) {
+                $('.sidebar').removeClass('active');
+            }
+        });
+
+        // Fechar sidebar ao redimensionar para tela maior
+        $(window).resize(function() {
+            if ($(window).width() > 992) {
+                $('.sidebar').removeClass('active');
+            }
         });
 
         // Abrir modal de novo paciente
@@ -625,10 +647,10 @@
         // Remove a classe active de todos os botões e conteúdos
         $('.tab-button').removeClass('active');
         $('.tab-content').removeClass('active');
-        
+
         // Adiciona a classe active ao botão clicado
         $(this).addClass('active');
-        
+
         // Mostra o conteúdo correspondente
         const tabId = $(this).data('tab') + '-tab';
         $('#' + tabId).addClass('active');
@@ -638,13 +660,13 @@
     $('input[type="radio"]').change(function() {
         const name = $(this).attr('name');
         const value = $(this).val();
-        
+
         // Oculta todos os campos condicionais para este grupo
         $(`.conditional-field[data-condition="${name}"]`).hide();
-        
+
         // Mostra apenas o campo condicional correspondente
         $(`.conditional-field[data-condition="${name}"][data-value="${value}"]`).show();
-        
+
         // Se não tem data-value, mostra para qualquer valor
         $(`.conditional-field[data-condition="${name}"]:not([data-value])`).show();
     });
@@ -704,8 +726,8 @@
             alert('Erro ao carregar os pacientes.');
         }
     });
-        
-});    
+
+});
 </script>
 </body>
 </html>

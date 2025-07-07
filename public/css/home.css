@@ -36,6 +36,10 @@ body {
 /* Sidebar estilizado */
 .sidebar {
     width: 280px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
     background-color: var(--sidebar);
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
     display: flex;
@@ -118,9 +122,9 @@ body {
 .user-profile {
     margin-top: auto;
     padding: 20px;
-    border-top: 1px solid var(--border);
     display: flex;
     align-items: center;
+    border-top: 1px solid var(--border);
 }
 
 .avatar {
@@ -132,9 +136,10 @@ body {
 }
 
 .avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 12px;
 }
 
 .user-info {
@@ -157,15 +162,18 @@ body {
     background: none;
     border: none;
     color: var(--text-light);
-    font-size: 1.1rem;
     cursor: pointer;
+    font-size: 1.2rem;
 }
 
 /* Conteúdo principal */
 .main-content {
-    flex: 1;
+    margin-left: 280px; /* Igual à largura da sidebar */
+    width: calc(100% - 280px);
     padding: 20px;
     transition: all 0.3s ease;
+    position: relative;
+    min-height: 100vh;
 }
 
 .main-header {
@@ -581,19 +589,44 @@ body {
 /* Responsividade */
 @media (max-width: 992px) {
     .sidebar {
-        position: fixed;
         left: -280px;
-        height: 100vh;
+        transition: left 0.3s ease;
     }
-    
+
     .sidebar.active {
         left: 0;
     }
-    
+
     .menu-toggle {
         display: block;
+        position: fixed;
+        left: 20px;
+        top: 20px;
+        z-index: 99;
+        background: var(--sidebar);
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
-    
+
+    .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 90;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .sidebar.active + .sidebar-overlay {
+        opacity: 1;
+        visibility: visible;
+    }
+
     .main-content {
         margin-left: 0;
         width: 100%;
@@ -604,20 +637,20 @@ body {
     .header-actions {
         width: 100%;
     }
-    
+
     .search-box input {
         flex: 1;
     }
-    
+
     .filters {
         flex-direction: column;
         gap: 10px;
     }
-    
+
     .filter-group {
         width: 100%;
     }
-    
+
     .filter-group select {
         flex: 1;
     }
@@ -627,11 +660,11 @@ body {
     .modal-footer {
         flex-direction: column;
     }
-    
+
     .modal-footer .btn {
         width: 100%;
     }
-}  
+}
 
 .tabs {
     display: flex;
