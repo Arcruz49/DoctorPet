@@ -78,7 +78,7 @@ class LoginController extends Controller
                 'success' => false,
                 'message' => 'error: ' . $e->getMessage(),
                 'usuario' => $usuario
-            ], 201);
+            ]);
         }
     }
 

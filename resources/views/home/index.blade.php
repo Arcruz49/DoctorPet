@@ -6,7 +6,10 @@
     <title>PetCare | Sistema Veterinário</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+
     <link rel="stylesheet" href="{{ asset('css/home.css') }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
     <div class="app-container">
@@ -130,440 +133,34 @@
 
         <!-- Modal de cadastro -->
         <div class="modal-overlay" id="patientModal">
-        <div class="modal-container">
-            <div class="modal-header">
-                <h2>Novo Paciente</h2>
-                <button class="close-modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <!-- Navegação por abas -->
-                <div class="tabs">
-                    <button class="tab-button active" data-tab="data">Dados</button>
-                    <button class="tab-button" data-tab="questionnaire">Questionário</button>
-                </div>
+            @include('modal.modalPaciente')
 
-                <form id="patientForm">
-                    <!-- Aba Dados -->
-                    <div id="data-tab" class="tab-content active">
-                        <div class="form-section">
-                            <h3>Informações do Animal</h3>
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label for="petName">Nome</label>
-                                    <input type="text" id="petName" placeholder="Ex: Rex" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="species">Espécie</label>
-                                    <select id="species" required>
-                                        <option value="" disabled selected>Selecione</option>
-                                        <option value="dog">Cão</option>
-                                        <option value="cat">Gato</option>
-                                        <option value="bird">Ave</option>
-                                        <option value="other">Outro</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="breed">Raça</label>
-                                    <input type="text" id="breed" placeholder="Ex: Labrador">
-                                </div>
-                                <div class="form-group">
-                                    <label for="age">Idade (anos)</label>
-                                    <input type="number" id="age" min="0" max="30">
-                                </div>
-                                <div class="form-group">
-                                    <label for="gender">Sexo</label>
-                                    <select id="gender">
-                                        <option value="" disabled selected>Selecione</option>
-                                        <option value="male">Macho</option>
-                                        <option value="female">Fêmea</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="weight">Peso (kg)</label>
-                                    <input type="number" id="weight" step="0.1" min="0">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-section">
-                            <h3>Informações do Responsável</h3>
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label for="ownerName">Nome Completo</label>
-                                    <input type="text" id="ownerName" placeholder="Ex: João Silva" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="ownerPhone">Telefone</label>
-                                    <input type="tel" id="ownerPhone" placeholder="(00) 00000-0000" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="ownerEmail">E-mail</label>
-                                    <input type="email" id="ownerEmail" placeholder="exemplo@email.com">
-                                </div>
-                                <div class="form-group">
-                                    <label for="ownerAddress">Endereço</label>
-                                    <input type="text" id="ownerAddress" placeholder="Rua, número - Cidade">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-section">
-                            <h3>Histórico Médico</h3>
-                            <div class="form-group">
-                                <label for="medicalNotes">Observações</label>
-                                <textarea id="medicalNotes" rows="3" placeholder="Alergias, condições pré-existentes, etc."></textarea>
-                            </div>
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label for="vaccineStatus">Status de Vacinação</label>
-                                    <select id="vaccineStatus">
-                                        <option value="updated">Em dia</option>
-                                        <option value="pending">Pendente</option>
-                                        <option value="unknown">Desconhecido</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="lastVisit">Última Consulta</label>
-                                    <input type="date" id="lastVisit">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Aba Questionário -->
-                    <div id="questionnaire-tab" class="tab-content">
-                        <div class="form-section">
-                            <h3>Saúde Reprodutiva</h3>
-                            <div class="question-group">
-                                <label>O animal é castrado?</label>
-                                <div class="radio-group">
-                                    <label><input type="radio" name="castrated" id="castrated" value="yes"> Sim</label>
-                                    <label><input type="radio" name="castrated" id="castrated" value="no"> Não</label>
-                                </div>
-                                <div class="conditional-field" data-condition="castrated" data-value="yes">
-                                    <label>Se sim, quando?</label>
-                                    <input type="date" id="castration_date" name="castration_date">
-                                </div>
-                                <div class="conditional-field" data-condition="castrated" data-value="no">
-                                    <label>Já considerou a castração como medida preventiva contra certos tipos de câncer?</label>
-                                    <div class="radio-group">
-                                        <label><input type="radio" name="considered_castration" id="considered_castration" value="yes"> Sim</label>
-                                        <label><input type="radio" name="considered_castration" id="considered_castration" value="no"> Não</label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="question-group">
-                                <label>Os cios são regulares?</label>
-                                <div class="radio-group">
-                                    <label><input type="radio" name="regular_cycles" id="regular_cycles" value="yes"> Sim</label>
-                                    <label><input type="radio" name="regular_cycles" id="regular_cycles" value="no"> Não</label>
-                                    <label><input type="radio" name="regular_cycles" id="regular_cycles" value="na"> Não se aplica</label>
-                                </div>
-                            </div>
-
-                            <div class="question-group">
-                                <label>Já ficou gestante?</label>
-                                <div class="radio-group">
-                                    <label><input type="radio" name="pregnant" id="pregnant" value="yes"> Sim</label>
-                                    <label><input type="radio" name="pregnant" id="pregnant" value="no"> Não</label>
-                                </div>
-                            </div>
-
-                            <div class="question-group">
-                                <label>Apresentou gestação psicológica (pseudociese)?</label>
-                                <div class="radio-group">
-                                    <label><input type="radio" name="pseudopregnancy" id="pseudopregnancy" value="yes"> Sim</label>
-                                    <label><input type="radio" name="pseudopregnancy" id="pseudopregnancy" value="no"> Não</label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-section">
-                            <h3>Alimentação</h3>
-                            <div class="question-group">
-                                <label>Qual tipo de alimentação o animal consome?</label>
-                                <div class="radio-group">
-                                    <label><input type="radio" name="food_type" id="food_type" value="commercial"> Ração</label>
-                                    <label><input type="radio" name="food_type" id="food_type" value="homemade"> Caseira</label>
-                                    <label><input type="radio" name="food_type" id="food_type" value="natural"> Natural</label>
-                                </div>
-                                <div class="conditional-field" data-condition="food_type">
-                                    <label>Qual?</label>
-                                    <input type="text" id="food_type_spec" name="food_type_spec" placeholder="Especificar tipo de alimentação">
-                                </div>
-                            </div>
-
-                            <div class="question-group">
-                                <label>Faz uso de suplemento alimentar ou vitaminas como parte da dieta?</label>
-                                <div class="radio-group">
-                                    <label><input type="radio" name="supplements" id="supplements" value="yes"> Sim</label>
-                                    <label><input type="radio" name="supplements" id="supplements" value="no"> Não</label>
-                                </div>
-                                <div class="conditional-field" data-condition="supplements" data-value="yes">
-                                    <label>Qual?</label>
-                                    <input type="text" id="supplements_type" name="supplements_type" placeholder="Especificar suplementos">
-                                </div>
-                            </div>
-
-                            <div class="question-group">
-                                <label>A alimentação inclui alimentos processados, conservantes ou corantes artificiais?</label>
-                                <div class="radio-group">
-                                    <label><input type="radio" name="preservatives" id="preservatives" value="yes"> Sim</label>
-                                    <label><input type="radio" name="preservatives" id="preservatives" value="no"> Não</label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-section">
-                            <h3>Controle de Ectoparasitas</h3>
-                            <div class="question-group">
-                                <label>O animal faz controle de ectoparasitas?</label>
-                                <div class="radio-group">
-                                    <label><input type="radio" name="ectoparasite_control" id="ectoparasite_control" value="yes"> Sim</label>
-                                    <label><input type="radio" name="ectoparasite_control" id="ectoparasite_control" value="no"> Não</label>
-                                </div>
-                                <div class="conditional-field" data-condition="ectoparasite_control" data-value="yes">
-                                    <label>Nome do produto:</label>
-                                    <input type="text" id="ectoparasite_product" name="ectoparasite_product" placeholder="Nome do produto">
-                                    <label>Qual frequência?</label>
-                                    <input type="text" id="ectoparasite_frequency" name="ectoparasite_frequency" placeholder="Frequência de uso">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-section">
-                            <h3>Vermifugação</h3>
-                            <div class="question-group">
-                                <label>O animal faz uso de vermífugo?</label>
-                                <div class="radio-group">
-                                    <label><input type="radio" name="deworming" id="deworming" value="yes"> Sim</label>
-                                    <label><input type="radio" name="deworming" id="deworming" value="no"> Não</label>
-                                </div>
-                                <div class="conditional-field" data-condition="deworming" data-value="yes">
-                                    <label>Nome do produto:</label>
-                                    <input type="text" id="deworming_product" name="deworming_product" placeholder="Nome do produto">
-                                    <label>Qual frequência?</label>
-                                    <input type="text" id="deworming_frequency" name="deworming_frequency" placeholder="Frequência de uso">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-section">
-                            <h3>Vacinação</h3>
-                            <div class="question-group">
-                                <label>O animal é vacinado anualmente?</label>
-                                <div class="radio-group">
-                                    <label><input type="radio" name="vaccinated" id="vaccinated" value="yes"> Sim</label>
-                                    <label><input type="radio" name="vaccinated" id="vaccinated" value="no"> Não</label>
-                                </div>
-                                <div class="conditional-field" data-condition="vaccinated" data-value="yes">
-                                    <label>Com quais vacinas?</label>
-                                    <input type="text" id="vaccines" name="vaccines" placeholder="Lista de vacinas">
-                                    <label>Qual foi a última vez que foi vacinado?</label>
-                                    <input type="date" id="last_vaccine_date" name="last_vaccine_date">
-                                    <label>Vacinação é feita em clínica veterinária?</label>
-                                    <div class="radio-group">
-                                        <label><input type="radio" name="vet_clinic_vaccine" id="vet_clinic_vaccine" value="yes"> Sim</label>
-                                        <label><input type="radio" name="vet_clinic_vaccine" id="vet_clinic_vaccine" value="no"> Não</label>
-                                    </div>
-                                    <label>Em qual local do corpo do animal é feita a vacinação?</label>
-                                    <input type="text" id="vaccine_location" name="vaccine_location" placeholder="Local da vacinação">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-section">
-                            <h3>Exposição Solar</h3>
-                            <div class="question-group">
-                                <label>O animal fica exposto ao sol em algum período do dia?</label>
-                                <div class="radio-group">
-                                    <label><input type="radio" name="sun_exposure" id="sun_exposure" value="yes"> Sim</label>
-                                    <label><input type="radio" name="sun_exposure" id="sun_exposure" value="no"> Não</label>
-                                </div>
-                                <div class="conditional-field" data-condition="sun_exposure" data-value="yes">
-                                    <label>Por quanto tempo/dia?</label>
-                                    <input type="text" id="sun_exposure_time" name="sun_exposure_time" placeholder="Tempo de exposição">
-                                    <label>Qual período do dia o animal fica mais exposto?</label>
-                                    <input type="text" id="sun_exposure_period" name="sun_exposure_period" placeholder="Período do dia">
-                                </div>
-                            </div>
-
-                            <div class="question-group">
-                                <label>Usa proteção solar?</label>
-                                <div class="radio-group">
-                                    <label><input type="radio" name="sunscreen" id="sunscreen" value="yes"> Sim</label>
-                                    <label><input type="radio" name="sunscreen" id="sunscreen" value="no"> Não</label>
-                                </div>
-                                <div class="conditional-field" data-condition="sunscreen" data-value="yes">
-                                    <label>Qual tipo?</label>
-                                    <input type="text" id="sunscreen_type" name="sunscreen_type" placeholder="Tipo de protetor">
-                                    <label>Com que frequência?</label>
-                                    <input type="text" id="sunscreen_frequency" name="sunscreen_frequency" placeholder="Frequência de uso">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-section">
-                            <h3>Acesso à Rua</h3>
-                            <div class="question-group">
-                                <label>O animal tem acesso a rua desacompanhado?</label>
-                                <div class="radio-group">
-                                    <label><input type="radio" name="street_access" id="street_access" value="yes"> Sim</label>
-                                    <label><input type="radio" name="street_access" id="street_access" value="no"> Não</label>
-                                </div>
-                                <div class="conditional-field" data-condition="street_access" data-value="yes">
-                                    <label>Por quanto tempo?</label>
-                                    <input type="text" id="street_access_time" name="street_access_time" placeholder="Tempo de acesso">
-                                    <label>Com que frequência?</label>
-                                    <input type="text" id="street_access_frequency" name="street_access_frequency" placeholder="Frequência de acesso">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-section">
-                            <h3>Exposição a Produtos Químicos</h3>
-                            <div class="question-group">
-                                <label>O animal tem acesso a áreas onde são aplicados produtos químicos para o controle de pragas, como gramados tratados com pesticidas ou algum outro poluente ambiental?</label>
-                                <div class="radio-group">
-                                    <label><input type="radio" name="chemical_exposure" id="chemical_exposure" value="yes"> Sim</label>
-                                    <label><input type="radio" name="chemical_exposure" id="chemical_exposure" value="no"> Não</label>
-                                </div>
-                            </div>
-
-                            <div class="question-group">
-                                <label>O animal é fumante passivo? (convive com algum fumante)</label>
-                                <div class="radio-group">
-                                    <label><input type="radio" name="passive_smoker" id="passive_smoker" value="yes"> Sim</label>
-                                    <label><input type="radio" name="passive_smoker" id="passive_smoker" value="no"> Não</label>
-                                </div>
-                            </div>
-
-                            <div class="question-group">
-                                <label>Mora perto de alguma indústria, fábrica (cimento, telha, fibra, etc)?</label>
-                                <div class="radio-group">
-                                    <label><input type="radio" name="near_industry" id="near_industry" value="yes"> Sim</label>
-                                    <label><input type="radio" name="near_industry" id="near_industry" value="no"> Não</label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-section">
-                            <h3>Contracepção</h3>
-                            <div class="question-group">
-                                <label>O animal já fez/faz uso de injeção contraceptiva?</label>
-                                <div class="radio-group">
-                                    <label><input type="radio" name="contraceptive_injection" id="contraceptive_injection" value="yes"> Sim</label>
-                                    <label><input type="radio" name="contraceptive_injection" id="contraceptive_injection" value="no"> Não</label>
-                                </div>
-                                <div class="conditional-field" data-condition="contraceptive_injection" data-value="yes">
-                                    <label>Qual a frequência da administração?</label>
-                                    <input type="text" id="contraceptive_frequency" name="contraceptive_frequency" placeholder="Frequência">
-                                    <label>Qual a data da última aplicação?</label>
-                                    <input type="date" id="last_contraceptive_date" name="last_contraceptive_date">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-section">
-                            <h3>Histórico de Saúde</h3>
-                            <div class="question-group">
-                                <label>O animal já apresentou algum problema de pele?</label>
-                                <div class="radio-group">
-                                    <label><input type="radio" name="skin_problems" id="skin_problems" value="yes"> Sim</label>
-                                    <label><input type="radio" name="skin_problems" id="skin_problems" value="no"> Não</label>
-                                </div>
-                                <div class="conditional-field" data-condition="skin_problems" data-value="yes">
-                                    <label>Qual?</label>
-                                    <input type="text" id="skin_problem_type" name="skin_problem_type" placeholder="Problema de pele">
-                                    <label>Teve recidiva?</label>
-                                    <div class="radio-group">
-                                        <label><input type="radio" name="skin_recurrence" id="skin_recurrence" value="yes"> Sim</label>
-                                        <label><input type="radio" name="skin_recurrence" id="skin_recurrence" value="no"> Não</label>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="question-group">
-                                <label>O animal tem alguma doença?</label>
-                                <div class="radio-group">
-                                    <label><input type="radio" name="has_disease" id="has_disease" value="yes"> Sim</label>
-                                    <label><input type="radio" name="has_disease" id="has_disease" value="no"> Não</label>
-                                </div>
-                                <div class="conditional-field" data-condition="has_disease" data-value="yes">
-                                    <label>Se sim, está sendo tratada?</label>
-                                    <div class="radio-group">
-                                        <label><input type="radio" name="disease_treated" id="disease_treated" value="yes"> Sim</label>
-                                        <label><input type="radio" name="disease_treated" id="disease_treated" value="no"> Não</label>
-                                    </div>
-                                    <label>Como você avalia a resposta do animal ao tratamento?</label>
-                                    <input type="text" id="treatment_response" name="treatment_response" placeholder="Avaliação do tratamento">
-                                </div>
-                            </div>
-
-                            <div class="question-group">
-                                <label>Faz uso de alguma medicação de forma contínua?</label>
-                                <div class="radio-group">
-                                    <label><input type="radio" name="continuous_medication" id="continuous_medication" value="yes"> Sim</label>
-                                    <label><input type="radio" name="continuous_medication" id="continuous_medication" value="no"> Não</label>
-                                </div>
-                                <div class="conditional-field" data-condition="continuous_medication" data-value="yes">
-                                    <label>Qual?</label>
-                                    <input type="text" id="medication_type" name="medication_type" placeholder="Medicação">
-                                    <label>Quando teve início?</label>
-                                    <input type="date" id="medication_start_date" name="medication_start_date">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-section">
-                            <h3>Exames</h3>
-                            <div class="question-group">
-                                <label>O animal é submetido a exames de sangue ou outros testes laboratoriais para avaliar sua saúde geral?</label>
-                                <div class="radio-group">
-                                    <label><input type="radio" name="lab_tests" id="lab_tests" value="yes"> Sim</label>
-                                    <label><input type="radio" name="lab_tests" id="lab_tests" value="no"> Não</label>
-                                </div>
-                            </div>
-
-                            <div class="question-group">
-                                <label>O animal já foi submetido a exames de imagem (como radiografias, ultrassonografias) para monitorar sua saúde?</label>
-                                <div class="radio-group">
-                                    <label><input type="radio" name="imaging_tests" id="imaging_tests" value="yes"> Sim</label>
-                                    <label><input type="radio" name="imaging_tests" id="imaging_tests" value="no"> Não</label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-section">
-                            <h3>Histórico Familiar</h3>
-                            <div class="question-group">
-                                <label>O animal tem histórico familiar de câncer?</label>
-                                <div class="radio-group">
-                                    <label><input type="radio" name="family_cancer_history" id="family_cancer_history" value="yes"> Sim</label>
-                                    <label><input type="radio" name="family_cancer_history" id="family_cancer_history" value="no"> Não</label>
-                                    <label><input type="radio" name="family_cancer_history" id="family_cancer_history" value="dont_know"> Não sei</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn secondary">Cancelar</button>
-                <button class="btn primary">Salvar Paciente</button>
-            </div>
         </div>
     </div>
-</div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+
 <script>
-        $(document).ready(function() {
-            // Toggle sidebar em telas pequenas
-            $('.menu-toggle').click(function(e) {
+
+    
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+
+    $(document).ready(function() {
+
+        carregarPacientes();
+
+
+        // Toggle sidebar em telas pequenas
+        $('.menu-toggle').click(function(e) {
             e.stopPropagation();
             $('.sidebar').toggleClass('active');
+
         });
 
         // Fechar sidebar ao clicar no overlay ou fora
@@ -586,6 +183,9 @@
 
         // Abrir modal de novo paciente
         $('.new-patient, .add-patient-btn').click(function() {
+            $('#modalTitle').text('Novo Paciente');
+            $('.modal-footer').show();  
+            limparFormulario();
             $('#patientModal').addClass('active');
         });
 
@@ -644,90 +244,394 @@
 
 
         $('.tab-button').click(function() {
-        // Remove a classe active de todos os botões e conteúdos
-        $('.tab-button').removeClass('active');
-        $('.tab-content').removeClass('active');
+            // Remove a classe active de todos os botões e conteúdos
+            $('.tab-button').removeClass('active');
+            $('.tab-content').removeClass('active');
 
-        // Adiciona a classe active ao botão clicado
-        $(this).addClass('active');
+            // Adiciona a classe active ao botão clicado
+            $(this).addClass('active');
 
-        // Mostra o conteúdo correspondente
-        const tabId = $(this).data('tab') + '-tab';
-        $('#' + tabId).addClass('active');
+            // Mostra o conteúdo correspondente
+            const tabId = $(this).data('tab') + '-tab';
+            $('#' + tabId).addClass('active');
+        });
+
+        // Mostrar/ocultar campos condicionais
+        $('input[type="radio"]').change(function() {
+            const name = $(this).attr('name');
+            const value = $(this).val();
+
+            // Oculta todos os campos condicionais para este grupo
+            $(`.conditional-field[data-condition="${name}"]`).hide();
+
+            // Mostra apenas o campo condicional correspondente
+            $(`.conditional-field[data-condition="${name}"][data-value="${value}"]`).show();
+
+            // Se não tem data-value, mostra para qualquer valor
+            $(`.conditional-field[data-condition="${name}"]:not([data-value])`).show();
+        });
+
+        
+
+        $('#btnAddPaciente').on('click', function () {
+            const form = $('#patientForm');
+            const formData = new FormData(form[0]);
+
+            const notyf = new Notyf();
+
+            let url = '/createPaciente';
+
+            if ($('#cdPaciente').val() !== "") {
+                url = '/editPaciente';
+            }
+            $.ajax({
+                url: url,
+                method: 'POST',
+                data: formData,
+                processData: false,  
+                contentType: false, 
+                success: function (response) {
+                    if (response.success === true) {
+                        notyf.success(response.message);
+                        $('#patientModal').removeClass('active');
+                        carregarPacientes();
+                    } else {
+                        notyf.error(response.message || 'Ocorreu um erro ao salvar.');
+                    }
+                },
+                error: function () {
+                    notyf.error('Erro ao salvar paciente.');
+                }
+            });
+        });
+
+
     });
 
-    // Mostrar/ocultar campos condicionais
-    $('input[type="radio"]').change(function() {
-        const name = $(this).attr('name');
-        const value = $(this).val();
 
-        // Oculta todos os campos condicionais para este grupo
-        $(`.conditional-field[data-condition="${name}"]`).hide();
+    function visualizarPaciente(cdPaciente, editar) {
+        $.ajax({
+            url: `/getPaciente/${cdPaciente}`,
+            method: 'GET',
+            success: function (paciente) {
+                preencherFormulario(paciente, editar);
+                if(editar == true){
+                    $('#modalTitle').text('Editar Paciente');
+                    $('.modal-footer').show();  
+                }
+                else{
+                    $('#modalTitle').text('Paciente');
+                    $('.modal-footer').hide();   
+                }
+       
+                $('#patientModal').addClass('active');  
+            },
+            error: function () {
+                new Notyf().error('Erro ao carregar dados do paciente.');
+            }
+        });
+    }
 
-        // Mostra apenas o campo condicional correspondente
-        $(`.conditional-field[data-condition="${name}"][data-value="${value}"]`).show();
+    function preencherFormulario(paciente, edit) {
+        // Aba Dados
+        limparFormulario();
+        $('#cdPaciente').val(paciente.cdPaciente || '');
+        $('#petName').val(paciente.nmPaciente);
+        $('#species').val(paciente.especie);
+        $('#breed').val(paciente.raca);
+        $('#age').val(paciente.idade);
+        $('#gender').val(paciente.sexo);
+        $('#weight').val(paciente.peso);
 
-        // Se não tem data-value, mostra para qualquer valor
-        $(`.conditional-field[data-condition="${name}"]:not([data-value])`).show();
-    });
+        $('#ownerName').val(paciente.nmTutor);
+        $('#ownerPhone').val(paciente.telefone || '');
+        $('#ownerEmail').val(paciente.email || '');
+        $('#ownerAddress').val(paciente.endereco || '');
 
-    $.ajax({
-        url: '/getPacientes',
-        method: 'GET',
-        success: function (pacientes) {
-            let container = $('#patientsContainer');
-            container.empty();
+        $('#medicalNotes').val(paciente.obs || '');
+        $('#vaccineStatus').val(paciente.statusVacinacao || 'unknown');
+        // Se quiser preencher a última consulta, crie um campo e faça aqui
+        // $('#lastVisit').val(paciente.ultimaConsulta || '');
 
-            pacientes.forEach(paciente => {
-                // Ícone baseado na espécie
-                let icon = '<i class="fas fa-dog"></i>';
-                if (paciente.especie.toLowerCase().includes('gato')) icon = '<i class="fas fa-cat"></i>';
-                // else if (paciente.especie.toLowerCase().includes('ave')) icon = '<i class="fas fa-dove"></i>';
+        // Aba Questionário
 
-                // Cor aleatória ou baseada na espécie
-                const cores = ['#FFD6E0', '#C1FBA4', '#7BF1A8', '#90F1EF', '#FFB7FF'];
-                let cor = cores[Math.floor(Math.random() * cores.length)];
+        // Castrado
+        if (paciente.castrado == 1) {
+            $('input[name="castrated"][value="yes"]').prop('checked', true).trigger('change');
+        } else {
+            $('input[name="castrated"][value="no"]').prop('checked', true).trigger('change');
+        }
+        $('#castration_date').val(paciente.dtCastracao || '');
+        
+        // Considerou castração (yes/no)
+        if (paciente.considerouCastracao === 'yes' || paciente.considerouCastracao === 1) {
+            $('input[name="considered_castration"][value="yes"]').prop('checked', true).trigger('change');
+        } else if (paciente.considerouCastracao === 'no' || paciente.considerouCastracao === 0) {
+            $('input[name="considered_castration"][value="no"]').prop('checked', true).trigger('change');
+        } else {
+            $('input[name="considered_castration"]').prop('checked', false).trigger('change');
+        }
 
-                let card = `
-                    <div class="patient-card">
-                        <div class="patient-avatar" style="background-color: ${cor};">
-                            ${icon}
-                        </div>
-                        <div class="patient-info">
-                            <h3>${paciente.nmPaciente}</h3>
-                            <p class="meta">${paciente.raca} • ${paciente.idade}</p>
-                            <p class="owner">Tutor: ${paciente.nmTutor}</p>
-                            <div class="status-badge ${paciente.statusVacinacao === 'ativo' ? 'active' : 'inactive'}">
-                                ${paciente.statusVacinacao === 'ativo' ? 'Ativo' : 'Inativo'}
+        // Cios regulares (yes/no/na)
+        if (paciente.ciosRegulares === 1 || paciente.ciosRegulares === true) {
+            $('input[name="regular_cycles"][value="yes"]').prop('checked', true).trigger('change');
+        } else if (paciente.ciosRegulares === 0 || paciente.ciosRegulares === false) {
+            $('input[name="regular_cycles"][value="no"]').prop('checked', true).trigger('change');
+        } else {
+            $('input[name="regular_cycles"][value="na"]').prop('checked', true).trigger('change');
+        }
+
+        // Ficou gestante
+        if (paciente.ficouGestante == 1) {
+            $('input[name="pregnant"][value="yes"]').prop('checked', true).trigger('change');
+        } else {
+            $('input[name="pregnant"][value="no"]').prop('checked', true).trigger('change');
+        }
+
+        // Gestação psicológica
+        if (paciente.gestacaoPsicologica == 1) {
+            $('input[name="pseudopregnancy"][value="yes"]').prop('checked', true).trigger('change');
+        } else {
+            $('input[name="pseudopregnancy"][value="no"]').prop('checked', true).trigger('change');
+        }
+
+        // Tipo de alimentação
+        $('input[name="food_type"][value="' + paciente.tipoAlimentacao + '"]').prop('checked', true).trigger('change');
+        $('#food_type_spec').val(paciente.tipoAlimentacaoOutro || '');
+
+        // Usa suplemento
+        if (paciente.usaSuplemento == 1) {
+            $('input[name="supplements"][value="yes"]').prop('checked', true).trigger('change');
+        } else {
+            $('input[name="supplements"][value="no"]').prop('checked', true).trigger('change');
+        }
+        $('#supplements_type').val(paciente.tipoSuplemento || '');
+
+        // Inclui processados
+        if (paciente.incluiProcessados == 1) {
+            $('input[name="preservatives"][value="yes"]').prop('checked', true);
+        } else {
+            $('input[name="preservatives"][value="no"]').prop('checked', true);
+        }
+
+        // Controle de ectoparasitas
+        if (paciente.controleEctoparasita == 1) {
+            $('input[name="ectoparasite_control"][value="yes"]').prop('checked', true).trigger('change');
+        } else {
+            $('input[name="ectoparasite_control"][value="no"]').prop('checked', true).trigger('change');
+        }
+        $('#ectoparasite_product').val(paciente.nomeProdutoEctoparasita || '');
+        $('#ectoparasite_frequency').val(paciente.frequenciaEctoparasita || '');
+
+        // Uso vermífugo
+        if (paciente.usoVermifugo == 1) {
+            $('input[name="deworming"][value="yes"]').prop('checked', true).trigger('change');
+        } else {
+            $('input[name="deworming"][value="no"]').prop('checked', true).trigger('change');
+        }
+        $('#deworming_product').val(paciente.nomeProdutoVermifugo || '');
+        $('#deworming_frequency').val(paciente.frequenciaVermifugo || '');
+
+        // Vacinação anualmente
+        if (paciente.vacinadoAnualmente == 1) {
+            $('input[name="vaccinated"][value="yes"]').prop('checked', true).trigger('change');
+        } else {
+            $('input[name="vaccinated"][value="no"]').prop('checked', true).trigger('change');
+        }
+        $('#vaccines').val(paciente.vacinasAplicadas || '');
+        $('#last_vaccine_date').val(paciente.dataUltimaVacinacao || '');
+        if (paciente.vacinacaoEmClinica == 1) {
+            $('input[name="vet_clinic_vaccine"][value="yes"]').prop('checked', true).trigger('change');
+        } else {
+            $('input[name="vet_clinic_vaccine"][value="no"]').prop('checked', true).trigger('change');
+        }
+        $('#vaccine_location').val(paciente.localVacinacao || '');
+
+        // Exposição solar
+        if (paciente.exposicaoSol == 1) {
+            $('input[name="sun_exposure"][value="yes"]').prop('checked', true).trigger('change');
+        } else {
+            $('input[name="sun_exposure"][value="no"]').prop('checked', true).trigger('change');
+        }
+        $('#sun_exposure_time').val(paciente.tempoExposicaoSol || '');
+        $('#sun_exposure_period').val(paciente.periodoExposicaoSol || '');
+
+        // Usa protetor solar
+        if (paciente.usaProtetorSolar == 1) {
+            $('input[name="sunscreen"][value="yes"]').prop('checked', true).trigger('change');
+        } else {
+            $('input[name="sunscreen"][value="no"]').prop('checked', true).trigger('change');
+        }
+        $('#sunscreen_type').val(paciente.tipoProtetorSolar || '');
+        $('#sunscreen_frequency').val(paciente.frequenciaProtetorSolar || '');
+
+        // Acesso à rua desacompanhado
+        if (paciente.acessoRuaSozinho == 1) {
+            $('input[name="street_access"][value="yes"]').prop('checked', true).trigger('change');
+        } else {
+            $('input[name="street_access"][value="no"]').prop('checked', true).trigger('change');
+        }
+        $('#street_access_time').val(paciente.tempoAcessoRua || '');
+        $('#street_access_frequency').val(paciente.frequenciaAcessoRua || '');
+
+        // Exposição a produtos químicos
+        if (paciente.exposicaoQuimicos == 1) {
+            $('input[name="chemical_exposure"][value="yes"]').prop('checked', true);
+        } else {
+            $('input[name="chemical_exposure"][value="no"]').prop('checked', true);
+        }
+
+        // Fumante passivo
+        if (paciente.fumantePassivo == 1) {
+            $('input[name="passive_smoker"][value="yes"]').prop('checked', true);
+        } else {
+            $('input[name="passive_smoker"][value="no"]').prop('checked', true);
+        }
+
+        // Perto indústria
+        if (paciente.pertoIndustria == 1) {
+            $('input[name="near_industry"][value="yes"]').prop('checked', true);
+        } else {
+            $('input[name="near_industry"][value="no"]').prop('checked', true);
+        }
+
+        // Injeção contraceptiva
+        if (paciente.usoInjecaoContraceptiva == 1) {
+            $('input[name="contraceptive_injection"][value="yes"]').prop('checked', true).trigger('change');
+        } else {
+            $('input[name="contraceptive_injection"][value="no"]').prop('checked', true).trigger('change');
+        }
+        $('#contraceptive_frequency').val(paciente.frequenciaInjecaoContraceptiva || '');
+        $('#last_contraceptive_date').val(paciente.dataUltimaInjecaoContraceptiva || '');
+
+        // Problemas de pele
+        if (paciente.problemaPele == 1) {
+            $('input[name="skin_problems"][value="yes"]').prop('checked', true).trigger('change');
+        } else {
+            $('input[name="skin_problems"][value="no"]').prop('checked', true).trigger('change');
+        }
+        $('#skin_problem_type').val(paciente.tipoProblemaPele || '');
+
+        if (paciente.recidivaPele == 1) {
+            $('input[name="skin_recurrence"][value="yes"]').prop('checked', true);
+        } else {
+            $('input[name="skin_recurrence"][value="no"]').prop('checked', true);
+        }
+
+        // Doença
+        if (paciente.possuiDoenca == 1) {
+            $('input[name="has_disease"][value="yes"]').prop('checked', true).trigger('change');
+        } else {
+            $('input[name="has_disease"][value="no"]').prop('checked', true).trigger('change');
+        }
+        if (paciente.doencaTratada == 1) {
+            $('input[name="disease_treated"][value="yes"]').prop('checked', true);
+        } else {
+            $('input[name="disease_treated"][value="no"]').prop('checked', true);
+        }
+        $('#treatment_response').val(paciente.respostaTratamento || '');
+
+        // Medicação contínua
+        if (paciente.medicacaoContinua == 1) {
+            $('input[name="continuous_medication"][value="yes"]').prop('checked', true).trigger('change');
+        } else {
+            $('input[name="continuous_medication"][value="no"]').prop('checked', true).trigger('change');
+        }
+        $('#medication_type').val(paciente.tipoMedicacao || '');
+        $('#medication_start_date').val(paciente.inicioMedicacao || '');
+
+        // Exames laboratoriais
+        if (paciente.examesLaboratoriais == 1) {
+            $('input[name="lab_tests"][value="yes"]').prop('checked', true);
+        } else {
+            $('input[name="lab_tests"][value="no"]').prop('checked', true);
+        }
+
+        // Exames de imagem
+        if (paciente.examesImagem == 1) {
+            $('input[name="imaging_tests"][value="yes"]').prop('checked', true);
+        } else {
+            $('input[name="imaging_tests"][value="no"]').prop('checked', true);
+        }
+
+        // Histórico familiar de câncer
+        $('input[name="family_cancer_history"][value="' + (paciente.historicoCancerFamiliar || 'dont_know') + '"]').prop('checked', true);
+
+        $('#patientForm')
+        .find('input, select, textarea')
+        .prop('disabled', !edit);
+    }
+
+
+    function carregarPacientes() {
+        $.ajax({
+            url: '/getPacientes',
+            method: 'GET',
+            success: function (pacientes) {
+                let container = $('#patientsContainer');
+                container.empty();
+
+                pacientes.forEach(paciente => {
+                    let icon = '<i class="fas fa-dog"></i>';
+                    if (paciente.especie.toLowerCase().includes('gato')) icon = '<i class="fas fa-cat"></i>';
+
+                    const cores = ['#FFD6E0', '#C1FBA4', '#7BF1A8', '#90F1EF', '#FFB7FF'];
+                    let cor = cores[Math.floor(Math.random() * cores.length)];
+
+                    let card = `
+                        <div class="patient-card">
+                            <div class="patient-avatar" style="background-color: ${cor};">
+                                ${icon}
+                            </div>
+                            <div class="patient-info">
+                                <h3>${paciente.nmPaciente}</h3>
+                                <p class="meta">${paciente.raca} • ${paciente.idade}</p>
+                                <p class="owner">Tutor: ${paciente.nmTutor}</p>
+                                <div class="status-badge ${paciente.statusVacinacao === 'ativo' ? 'active' : 'inactive'}">
+                                    ${paciente.statusVacinacao === 'ativo' ? 'Ativo' : 'Inativo'}
+                                </div>
+                            </div>
+                            <div class="patient-actions">
+                                <button class="icon-btn view" onclick="visualizarPaciente(${paciente.cdPaciente}, false)">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="icon-btn edit" onclick="visualizarPaciente(${paciente.cdPaciente}, true)">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="icon-btn more"><i class="fas fa-ellipsis-v"></i></button>
                             </div>
                         </div>
-                        <div class="patient-actions">
-                            <button class="icon-btn view"><i class="fas fa-eye"></i></button>
-                            <button class="icon-btn edit"><i class="fas fa-edit"></i></button>
-                            <button class="icon-btn more"><i class="fas fa-ellipsis-v"></i></button>
-                        </div>
+                    `;
+
+                    container.append(card);
+                });
+
+                container.append(`
+                    <div class="add-patient-card">
+                        <button class="add-patient-btn">
+                            <i class="fas fa-plus-circle"></i>
+                            <span>Adicionar Paciente</span>
+                        </button>
                     </div>
-                `;
+                `);
+            },
+            error: function () {
+                alert('Erro ao carregar os pacientes.');
+            }
+        });
+    }
 
-                container.append(card);
-            });
+    function limparFormulario() {
+        $('#patientForm')[0].reset(); 
+        $('#cdPaciente').val('');
+        $('#patientForm').find('input[type="text"], input[type="number"], input[type="email"], input[type="tel"], textarea, select').val(''); 
 
-            // Adicionar botão de novo paciente
-            container.append(`
-                <div class="add-patient-card">
-                    <button class="add-patient-btn">
-                        <i class="fas fa-plus-circle"></i>
-                        <span>Adicionar Paciente</span>
-                    </button>
-                </div>
-            `);
-        },
-        error: function () {
-            alert('Erro ao carregar os pacientes.');
-        }
-    });
+        $('#patientForm').find('input[type="radio"], input[type="checkbox"]').prop('checked', false);
 
-});
+        $('#patientForm').find('input, select').trigger('change');
+    }
+
+
 </script>
 </body>
 </html>

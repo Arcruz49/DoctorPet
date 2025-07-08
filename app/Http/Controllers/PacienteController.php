@@ -12,4 +12,271 @@ class PacienteController extends Controller
 
         return response()->json($pacientes);
     }
+
+    public function GetPaciente($id){
+        $paciente = cadPaciente::where("cdPaciente",$id)->first();
+
+        return response()->json($paciente);
+    }
+
+
+    public function CreatePaciente(Request $request){
+
+        $errorMessage = '';
+
+        if (empty($request->nmPaciente)) $errorMessage .= "Nome inválido<br>";
+        if (empty($request->especie))   $errorMessage .= "Espécie inválida<br>";
+        if (empty($request->raca))      $errorMessage .= "Raça inválida<br>";
+        if (empty($request->idade))     $errorMessage .= "Idade inválida<br>";
+        if (empty($request->sexo))      $errorMessage .= "Sexo inválido<br>";
+        if (empty($request->peso))      $errorMessage .= "Peso inválido<br>";
+        if (empty($request->nmTutor))   $errorMessage .= "Responsável inválido<br>";
+
+        if($errorMessage != ""){
+            return response()->json([
+                "success" => false,
+                "message"=> $errorMessage
+            ]);
+        }
+
+        try
+        {
+            $paciente = cadPaciente::create([
+                'nmPaciente' => $request->nmPaciente,
+                'especie' => $request->especie,
+                'raca' => $request->raca,
+                'idade' => $request->idade,
+                'sexo' => $request->sexo,
+                'peso' => $request->peso,
+                'nmTutor' => $request->nmTutor,
+                'telefone' => $request->telefone,
+                'email' => $request->email,
+                'endereco' => $request->endereco,
+                'obs' => $request->obs,
+                'statusVacinacao' => $request->statusVacinacao,
+                'dtCriacao' => now(),
+
+                // Castração e Reprodução
+                'castrado' => $request->castrated === 'yes' ? 1 : ($request->castrated === 'no' ? 0 : null),
+                'dtCastracao' => $request->castration_date,
+                'considerouCastracao' => $request->considered_castration === 'yes' ? 1 : ($request->considered_castration === 'no' ? 0 : null),
+                'ciosRegulares' => $request->regular_cycles === 'yes' ? 1 : ($request->regular_cycles === 'no' ? 0 : null),
+                'ficouGestante' => $request->pregnant === 'yes' ? 1 : ($request->pregnant === 'no' ? 0 : null),
+                'gestacaoPsicologica' => $request->pseudopregnancy === 'yes' ? 1 : ($request->pseudopregnancy === 'no' ? 0 : null),
+
+                // Alimentação
+                'tipoAlimentacao' => $request->food_type,
+                'tipoAlimentacaoOutro' => $request->food_type_spec,
+                'usaSuplemento' => $request->supplements === 'yes' ? 1 : ($request->supplements === 'no' ? 0 : null),
+                'tipoSuplemento' => $request->supplements_type,
+                'incluiProcessados' => $request->preservatives === 'yes' ? 1 : ($request->preservatives === 'no' ? 0 : null),
+
+                // Ectoparasitas
+                'controleEctoparasita' => $request->ectoparasite_control === 'yes' ? 1 : ($request->ectoparasite_control === 'no' ? 0 : null),
+                'nomeProdutoEctoparasita' => $request->ectoparasite_product,
+                'frequenciaEctoparasita' => $request->ectoparasite_frequency,
+
+                // Vermifugação
+                'usoVermifugo' => $request->deworming === 'yes' ? 1 : ($request->deworming === 'no' ? 0 : null),
+                'nomeProdutoVermifugo' => $request->deworming_product,
+                'frequenciaVermifugo' => $request->deworming_frequency,
+
+                // Vacinação
+                'vacinadoAnualmente' => $request->vaccinated === 'yes' ? 1 : ($request->vaccinated === 'no' ? 0 : null),
+                'vacinasAplicadas' => $request->vaccines,
+                'dataUltimaVacinacao' => $request->last_vaccine_date,
+                'vacinacaoEmClinica' => $request->vet_clinic_vaccine === 'yes' ? 1 : ($request->vet_clinic_vaccine === 'no' ? 0 : null),
+                'localVacinacao' => $request->vaccine_location,
+
+                // Exposição Solar
+                'exposicaoSol' => $request->sun_exposure === 'yes' ? 1 : ($request->sun_exposure === 'no' ? 0 : null),
+                'tempoExposicaoSol' => $request->sun_exposure_time,
+                'periodoExposicaoSol' => $request->sun_exposure_period,
+                'usaProtetorSolar' => $request->sunscreen === 'yes' ? 1 : ($request->sunscreen === 'no' ? 0 : null),
+                'tipoProtetorSolar' => $request->sunscreen_type,
+                'frequenciaProtetorSolar' => $request->sunscreen_frequency,
+
+                // Acesso à Rua
+                'acessoRuaSozinho' => $request->street_access === 'yes' ? 1 : ($request->street_access === 'no' ? 0 : null),
+                'tempoAcessoRua' => $request->street_access_time,
+                'frequenciaAcessoRua' => $request->street_access_frequency,
+
+                // Produtos Químicos e Poluentes
+                'exposicaoQuimicos' => $request->chemical_exposure === 'yes' ? 1 : ($request->chemical_exposure === 'no' ? 0 : null),
+                'fumantePassivo' => $request->passive_smoker === 'yes' ? 1 : ($request->passive_smoker === 'no' ? 0 : null),
+                'pertoIndustria' => $request->near_industry === 'yes' ? 1 : ($request->near_industry === 'no' ? 0 : null),
+
+                // Contracepção
+                'usoInjecaoContraceptiva' => $request->contraceptive_injection === 'yes' ? 1 : ($request->contraceptive_injection === 'no' ? 0 : null),
+                'frequenciaInjecaoContraceptiva' => $request->contraceptive_frequency,
+                'dataUltimaInjecaoContraceptiva' => $request->last_contraceptive_date,
+
+                // Histórico de Saúde
+                'problemaPele' => $request->skin_problems === 'yes' ? 1 : ($request->skin_problems === 'no' ? 0 : null),
+                'tipoProblemaPele' => $request->skin_problem_type,
+                'recidivaPele' => $request->skin_recurrence === 'yes' ? 1 : ($request->skin_recurrence === 'no' ? 0 : null),
+                'possuiDoenca' => $request->has_disease === 'yes' ? 1 : ($request->has_disease === 'no' ? 0 : null),
+                'doencaTratada' => $request->disease_treated === 'yes' ? 1 : ($request->disease_treated === 'no' ? 0 : null),
+                'respostaTratamento' => $request->treatment_response,
+                'medicacaoContinua' => $request->continuous_medication === 'yes' ? 1 : ($request->continuous_medication === 'no' ? 0 : null),
+                'tipoMedicacao' => $request->medication_type,
+                'inicioMedicacao' => $request->medication_start_date,
+
+                // Exames
+                'examesLaboratoriais' => $request->lab_tests === 'yes' ? 1 : ($request->lab_tests === 'no' ? 0 : null),
+                'examesImagem' => $request->imaging_tests === 'yes' ? 1 : ($request->imaging_tests === 'no' ? 0 : null),
+
+                // Histórico Familiar
+                'historicoCancerFamiliar' => $request->family_cancer_history,
+            ]);
+
+            return response()->json([
+                'success'=> true,
+                'message'=> 'Paciente cadastrado com sucesso!',
+                // 'paciente' => $paciente
+            ]) ;
+
+        }
+        catch(\Exception $e)
+        {
+            return response()->json([
+                'success'=> false,
+                'message'=> 'Erro: ' . $e->getMessage()
+            ]) ;
+        }
+    }
+
+    public function EditPaciente(Request $request){
+
+        $errorMessage = '';
+
+        $paciente = cadPaciente::find($request->cdPaciente);
+
+        if (!$paciente) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Paciente não encontrado.'
+            ], 404);
+        }
+
+        if (empty($request->nmPaciente)) $errorMessage .= "Nome inválido<br>";
+        if (empty($request->especie))   $errorMessage .= "Espécie inválida<br>";
+        if (empty($request->raca))      $errorMessage .= "Raça inválida<br>";
+        if (empty($request->idade))     $errorMessage .= "Idade inválida<br>";
+        if (empty($request->sexo))      $errorMessage .= "Sexo inválido<br>";
+        if (empty($request->peso))      $errorMessage .= "Peso inválido<br>";
+        if (empty($request->nmTutor))   $errorMessage .= "Responsável inválido<br>";
+
+        if($errorMessage != ""){
+            return response()->json([
+                "success" => false,
+                "message"=> $errorMessage
+            ]);
+        }
+
+        try
+        {
+            $paciente->update([
+                'nmPaciente' => $request->nmPaciente,
+                'especie' => $request->especie,
+                'raca' => $request->raca,
+                'idade' => $request->idade,
+                'sexo' => $request->sexo,
+                'peso' => $request->peso,
+                'nmTutor' => $request->nmTutor,
+                'telefone' => $request->telefone,
+                'email' => $request->email,
+                'endereco' => $request->endereco,
+                'obs' => $request->obs,
+                'statusVacinacao' => $request->statusVacinacao,
+
+                // Castração e Reprodução
+                'castrado' => $request->castrated === 'yes' ? 1 : ($request->castrated === 'no' ? 0 : null),
+                'dtCastracao' => $request->castration_date,
+                'considerouCastracao' => $request->considered_castration === 'yes' ? 1 : ($request->considered_castration === 'no' ? 0 : null),
+                'ciosRegulares' => $request->regular_cycles === 'yes' ? 1 : ($request->regular_cycles === 'no' ? 0 : null),
+                'ficouGestante' => $request->pregnant === 'yes' ? 1 : ($request->pregnant === 'no' ? 0 : null),
+                'gestacaoPsicologica' => $request->pseudopregnancy === 'yes' ? 1 : ($request->pseudopregnancy === 'no' ? 0 : null),
+
+                // Alimentação
+                'tipoAlimentacao' => $request->food_type,
+                'tipoAlimentacaoOutro' => $request->food_type_spec,
+                'usaSuplemento' => $request->supplements === 'yes' ? 1 : ($request->supplements === 'no' ? 0 : null),
+                'tipoSuplemento' => $request->supplements_type,
+                'incluiProcessados' => $request->preservatives === 'yes' ? 1 : ($request->preservatives === 'no' ? 0 : null),
+
+                // Ectoparasitas
+                'controleEctoparasita' => $request->ectoparasite_control === 'yes' ? 1 : ($request->ectoparasite_control === 'no' ? 0 : null),
+                'nomeProdutoEctoparasita' => $request->ectoparasite_product,
+                'frequenciaEctoparasita' => $request->ectoparasite_frequency,
+
+                // Vermifugação
+                'usoVermifugo' => $request->deworming === 'yes' ? 1 : ($request->deworming === 'no' ? 0 : null),
+                'nomeProdutoVermifugo' => $request->deworming_product,
+                'frequenciaVermifugo' => $request->deworming_frequency,
+
+                // Vacinação
+                'vacinadoAnualmente' => $request->vaccinated === 'yes' ? 1 : ($request->vaccinated === 'no' ? 0 : null),
+                'vacinasAplicadas' => $request->vaccines,
+                'dataUltimaVacinacao' => $request->last_vaccine_date,
+                'vacinacaoEmClinica' => $request->vet_clinic_vaccine === 'yes' ? 1 : ($request->vet_clinic_vaccine === 'no' ? 0 : null),
+                'localVacinacao' => $request->vaccine_location,
+
+                // Exposição Solar
+                'exposicaoSol' => $request->sun_exposure === 'yes' ? 1 : ($request->sun_exposure === 'no' ? 0 : null),
+                'tempoExposicaoSol' => $request->sun_exposure_time,
+                'periodoExposicaoSol' => $request->sun_exposure_period,
+                'usaProtetorSolar' => $request->sunscreen === 'yes' ? 1 : ($request->sunscreen === 'no' ? 0 : null),
+                'tipoProtetorSolar' => $request->sunscreen_type,
+                'frequenciaProtetorSolar' => $request->sunscreen_frequency,
+
+                // Acesso à Rua
+                'acessoRuaSozinho' => $request->street_access === 'yes' ? 1 : ($request->street_access === 'no' ? 0 : null),
+                'tempoAcessoRua' => $request->street_access_time,
+                'frequenciaAcessoRua' => $request->street_access_frequency,
+
+                // Produtos Químicos e Poluentes
+                'exposicaoQuimicos' => $request->chemical_exposure === 'yes' ? 1 : ($request->chemical_exposure === 'no' ? 0 : null),
+                'fumantePassivo' => $request->passive_smoker === 'yes' ? 1 : ($request->passive_smoker === 'no' ? 0 : null),
+                'pertoIndustria' => $request->near_industry === 'yes' ? 1 : ($request->near_industry === 'no' ? 0 : null),
+
+                // Contracepção
+                'usoInjecaoContraceptiva' => $request->contraceptive_injection === 'yes' ? 1 : ($request->contraceptive_injection === 'no' ? 0 : null),
+                'frequenciaInjecaoContraceptiva' => $request->contraceptive_frequency,
+                'dataUltimaInjecaoContraceptiva' => $request->last_contraceptive_date,
+
+                // Histórico de Saúde
+                'problemaPele' => $request->skin_problems === 'yes' ? 1 : ($request->skin_problems === 'no' ? 0 : null),
+                'tipoProblemaPele' => $request->skin_problem_type,
+                'recidivaPele' => $request->skin_recurrence === 'yes' ? 1 : ($request->skin_recurrence === 'no' ? 0 : null),
+                'possuiDoenca' => $request->has_disease === 'yes' ? 1 : ($request->has_disease === 'no' ? 0 : null),
+                'doencaTratada' => $request->disease_treated === 'yes' ? 1 : ($request->disease_treated === 'no' ? 0 : null),
+                'respostaTratamento' => $request->treatment_response,
+                'medicacaoContinua' => $request->continuous_medication === 'yes' ? 1 : ($request->continuous_medication === 'no' ? 0 : null),
+                'tipoMedicacao' => $request->medication_type,
+                'inicioMedicacao' => $request->medication_start_date,
+
+                // Exames
+                'examesLaboratoriais' => $request->lab_tests === 'yes' ? 1 : ($request->lab_tests === 'no' ? 0 : null),
+                'examesImagem' => $request->imaging_tests === 'yes' ? 1 : ($request->imaging_tests === 'no' ? 0 : null),
+
+                // Histórico Familiar
+                'historicoCancerFamiliar' => $request->family_cancer_history,
+            ]);
+
+            return response()->json([
+                'success'=> true,
+                'message'=> 'Paciente editado com sucesso!',
+                // 'paciente' => $paciente
+            ]) ;
+
+        }
+        catch(\Exception $e)
+        {
+            return response()->json([
+                'success'=> false,
+                'message'=> 'Erro: ' . $e->getMessage()
+            ]) ;
+        }
+    }
 }
