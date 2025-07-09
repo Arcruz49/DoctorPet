@@ -9,15 +9,15 @@
 
 @section('content')
     <header class="main-header">
-        <h1>Pacientes</h1>
+        <h1>Clínicas</h1>
         <div class="header-actions">
             <div class="search-box">
-                <input type="text" id="search" placeholder="Buscar paciente...">
+                <input type="text" id="search" placeholder="Buscar clínica...">
                 <button><i class="fas fa-search"></i></button>
             </div>
             <button class="btn primary new-patient">
                 <i class="fas fa-plus"></i>
-                Novo Paciente
+                Nova Clínica
             </button>
         </div>
     </header>
@@ -25,22 +25,6 @@
     <div class="content-wrapper">
         <!-- Filtros -->
         <div class="filters">
-            <div class="filter-group">
-                <label>Espécie:</label>
-                <select class="filter" id="searchEspecie">
-                    <option value="-1">Todas</option>
-                    <option value="c">Cães</option>
-                    <option value="g">Gatos</option>
-                </select>
-            </div>
-            <div class="filter-group">
-                <label>Status:</label>
-                <select class="filter" id="searchStatus">
-                    <option value="-1">Todos</option>
-                    <option value="1">Ativos</option>
-                    <option value="0">Inativos</option>
-                </select>
-            </div>
             <div class="filter-group">
                 <label>Ordenar por:</label>
                 <select class="filter" id="searchOrder">
@@ -536,7 +520,7 @@
                         <div class="add-patient-card">
                             <button class="add-patient-btn">
                                 <i class="fas fa-plus-circle"></i>
-                                <span>Adicionar Paciente</span>
+                                <span>Adicionar Clínica</span>
                             </button>
                         </div>
                     `);

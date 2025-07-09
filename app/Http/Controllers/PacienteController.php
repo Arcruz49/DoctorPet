@@ -8,8 +8,39 @@ use App\Models\cadPaciente;
 class PacienteController extends Controller
 {
     public function GetPacientes(Request $request){
-        $pacientes = cadPaciente::all();
 
+        $search = $request->query('search');
+        $especie = $request->query('especie');
+        $order = $request->query('order');
+        $exibir = $request->query('exibir');
+        // dd($search, $especie, $order, $exibir);
+
+        $query = cadPaciente::query();
+
+        if (!empty($search)) {
+            $query->where('nmPaciente', 'like', '%' . $search . '%');
+        }
+        if (!empty($especie) && $especie != '-1') {
+            if($especie == 'c') {
+                $query->where('especie', 'dog');
+            }
+            else if($especie == 'g') {
+                $query->where('especie', 'cat');
+            }
+        }
+        if ($exibir != '-1' && !empty($exibir)) {
+            $query->limit((int)$exibir);
+        }
+        if ($order === 'recentes') {
+            $query->orderBy('dtCriacao', 'desc');
+        } elseif ($order === 'antigos') {
+            $query->orderBy('dtCriacao', 'asc');
+        } elseif ($order === 'nome') {
+            $query->orderBy('nmPaciente', 'asc');
+        }
+
+        $pacientes = $query->get();
+        
         return response()->json($pacientes);
     }
 
@@ -41,6 +72,10 @@ class PacienteController extends Controller
 
         try
         {
+
+            $cores = ['#FFD6E0', '#C1FBA4', '#7BF1A8', '#90F1EF', '#FFB7FF'];
+            $corAleatoria = $cores[array_rand($cores)];
+
             $paciente = cadPaciente::create([
                 'nmPaciente' => $request->nmPaciente,
                 'especie' => $request->especie,
@@ -128,6 +163,9 @@ class PacienteController extends Controller
 
                 // Histórico Familiar
                 'historicoCancerFamiliar' => $request->family_cancer_history,
+
+
+                'color' => $corAleatoria
             ]);
 
             return response()->json([

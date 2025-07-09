@@ -100,4 +100,17 @@ ADD examesLaboratoriais BIT,
 ADD examesImagem BIT,
 
 -- Histórico Familiar
-ADD historicoCancerFamiliar VARCHAR(20); -- 'sim', 'nao', 'nao_sei'
+ADD historicoCancerFamiliar VARCHAR(20); -- 'sim', 'nao', 'nao_sei',
+ADD color varchar(32);
+
+alter table cadusuario 
+add genero varchar(10);
+
+
+
+create table cadClinica
+(
+	cdClinica int primary key auto_increment,
+	nmClinica varchar(100),
+	endereco varchar(500)
+)

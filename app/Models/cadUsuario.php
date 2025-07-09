@@ -22,6 +22,8 @@ class cadUsuario extends Authenticatable
         'nmUsuario',
         'login',
         'senha',
-        'imagemPerfil'
+        'imagemPerfil',
+        'genero',
+        'dtCriacao',
     ];
 }

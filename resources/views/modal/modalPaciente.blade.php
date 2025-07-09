@@ -8,6 +8,10 @@
                 <div class="tabs">
                     <button class="tab-button active" data-tab="data">Dados</button>
                     <button class="tab-button" data-tab="questionnaire">Questionário</button>
+                    <button class="tab-button" data-tab="consultas">Consultas</button>
+                    <button class="tab-button" data-tab="exames">Exames</button>
+                    <button class="tab-button" data-tab="documentos">Documentos</button>
+                    <button class="tab-button" data-tab="imagens">Imagens</button>
                 </div>
 
                 <form id="patientForm">
@@ -28,8 +32,6 @@
                                         <option value="" disabled selected>Selecione</option>
                                         <option value="dog">Cão</option>
                                         <option value="cat">Gato</option>
-                                        <option value="bird">Ave</option>
-                                        <option value="other">Outro</option>
                                     </select>
                                 </div>
                                 <div class="form-group">

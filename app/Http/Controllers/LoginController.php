@@ -63,6 +63,7 @@ class LoginController extends Controller
                 'login' => $request->login,
                 'senha' => Hash::make($request->senha),
                 'nmUsuario' => $request->nome,
+                'genero' => strtoupper($request->genero), // M ou F
                 'dtCriacao' => now(),
             ]);
 

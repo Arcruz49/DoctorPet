@@ -100,5 +100,7 @@ class cadPaciente extends Model
 
         // Histórico Familiar
         'historicoCancerFamiliar',
+
+        'color',
     ];
 }
