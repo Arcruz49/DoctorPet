@@ -72,7 +72,7 @@
 @push('scripts')
     <script>
 
-        
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -92,11 +92,11 @@
                 carregarPacientes();
             });
 
-            
+
             // Abrir modal de novo paciente
             $(document).on('click', '.new-patient, .add-patient-btn', function() {
                 $('#modalTitle').text('Novo Paciente');
-                $('.modal-footer').show();  
+                $('.modal-footer').show();
                 limparFormulario();
                 $('#patientModal').addClass('active');
             });
@@ -183,7 +183,7 @@
                 $(`.conditional-field[data-condition="${name}"]:not([data-value])`).show();
             });
 
-            
+
 
             $('#btnAddPaciente').on('click', function () {
                 const form = $('#patientForm');
@@ -200,8 +200,8 @@
                     url: url,
                     method: 'POST',
                     data: formData,
-                    processData: false,  
-                    contentType: false, 
+                    processData: false,
+                    contentType: false,
                     success: function (response) {
                         if (response.success === true) {
                             notyf.success(response.message);
@@ -229,14 +229,14 @@
                     preencherFormulario(paciente, editar);
                     if(editar == true){
                         $('#modalTitle').text('Editar Paciente');
-                        $('.modal-footer').show();  
+                        $('.modal-footer').show();
                     }
                     else{
                         $('#modalTitle').text('Paciente');
-                        $('.modal-footer').hide();   
+                        $('.modal-footer').hide();
                     }
-        
-                    $('#patientModal').addClass('active');  
+
+                    $('#patientModal').addClass('active');
                 },
                 error: function () {
                     new Notyf().error('Erro ao carregar dados do paciente.');
@@ -274,7 +274,7 @@
                 $('input[name="castrated"][value="no"]').prop('checked', true).trigger('change');
             }
             $('#castration_date').val(paciente.dtCastracao || '');
-            
+
             // Considerou castração (yes/no)
             if (paciente.considerouCastracao === 'yes' || paciente.considerouCastracao === 1) {
                 $('input[name="considered_castration"][value="yes"]').prop('checked', true).trigger('change');
@@ -498,10 +498,10 @@
                         let icon = '<i class="fas fa-dog"></i>';
                         let cor = paciente.color;
                         if (paciente.especie.toLowerCase().includes('gato')) icon = '<i class="fas fa-cat"></i>';
-                        
+
                         if(paciente.color == '' || paciente.color == null || paciente.color == undefined){
                             const cores = ['#FFD6E0', '#C1FBA4', '#7BF1A8', '#90F1EF', '#FFB7FF'];
-                            let cor = cores[Math.floor(Math.random() * cores.length)];
+                            cor = cores[Math.floor(Math.random() * cores.length)];
                         }
 
                         let card = `
@@ -548,9 +548,9 @@
         }
 
         function limparFormulario() {
-            $('#patientForm')[0].reset(); 
+            $('#patientForm')[0].reset();
             $('#cdPaciente').val('');
-            $('#patientForm').find('input[type="text"], input[type="number"], input[type="email"], input[type="tel"], textarea, select').val(''); 
+            $('#patientForm').find('input[type="text"], input[type="number"], input[type="email"], input[type="tel"], textarea, select').val('');
 
             $('#patientForm').find('input[type="radio"], input[type="checkbox"]').prop('checked', false);
 
