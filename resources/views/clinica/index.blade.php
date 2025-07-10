@@ -15,7 +15,7 @@
                 <input type="text" id="search" placeholder="Buscar clínica...">
                 <button><i class="fas fa-search"></i></button>
             </div>
-            <button class="btn primary new-patient">
+            <button class="btn primary new-clinic">
                 <i class="fas fa-plus"></i>
                 Nova Clínica
             </button>
@@ -47,8 +47,8 @@
         <div class="patients-grid" id="patientsContainer"></div>
     </div>
 
-    <div class="modal-overlay" id="patientModal">
-        @include('modal.modalPaciente')
+    <div class="modal-overlay" id="clinicModal">
+        @include('modal.modalClinica')
     </div>
 
 @endsection
@@ -66,44 +66,44 @@
 
         $(document).ready(function() {
 
-            carregarPacientes();
+            carregarClinicas();
 
             $('.filter').on('change', function () {
-                carregarPacientes();
+                carregarClinicas();
             });
 
             $('#search').on('input', function () {
-                carregarPacientes();
+                carregarClinicas();
             });
 
             
-            // Abrir modal de novo paciente
-            $(document).on('click', '.new-patient, .add-patient-btn', function() {
-                $('#modalTitle').text('Novo Paciente');
+            // Abrir modal de novo clinica
+            $(document).on('click', '.new-clinic, .add-clinic-btn', function() {
+                $('#modalTitle').text('Nova Clínica');
                 $('.modal-footer').show();  
                 limparFormulario();
-                $('#patientModal').addClass('active');
+                $('#clinicModal').addClass('active');
             });
 
             // Fechar modal
             $('.close-modal, .btn.secondary').click(function() {
-                $('#patientModal').removeClass('active');
+                $('#clinicModal').removeClass('active');
             });
 
-            // Visualizar paciente
+            // Visualizar clinica
             $('.icon-btn.view').click(function() {
-                // Aqui você implementaria a lógica para visualizar um paciente
+                // Aqui você implementaria a lógica para visualizar clinica
                 alert('Visualizar paciente - implementar lógica');
             });
 
-            // Editar paciente
+            // Editar clinica
             $('.icon-btn.edit').click(function() {
-                // Aqui você implementaria a lógica para editar um paciente
-                $('#patientModal').addClass('active');
+                // Aqui você implementaria a lógica para editar clinica
+                $('#clinicModal').addClass('active');
                 $('.modal-header h2').text('Editar Paciente');
             });
 
-            // Buscar pacientes
+            // Buscar clinicas
             $('.search-box button').click(function() {
                 const searchTerm = $('.search-box input').val().toLowerCase();
                 if (searchTerm) {
@@ -124,19 +124,19 @@
             });
 
             // Fechar modal ao clicar fora
-            $(document).click(function(e) {
-                if ($(e.target).hasClass('modal-overlay')) {
-                    $('#patientModal').removeClass('active');
-                }
-            });
+            // $(document).click(function(e) {
+            //     if ($(e.target).hasClass('modal-overlay')) {
+            //         $('#clinicModal').removeClass('active');
+            //     }
+            // });
 
-            // Simular envio do formulário
-            $('#patientForm').submit(function(e) {
-                e.preventDefault();
-                // Aqui você implementaria o AJAX para salvar o paciente
-                alert('Paciente salvo com sucesso! (implementar lógica de envio)');
-                $('#patientModal').removeClass('active');
-            });
+            // // Simular envio do formulário
+            // $('#clinicModal').submit(function(e) {
+            //     e.preventDefault();
+            //     // Aqui você implementaria o AJAX para salvar o paciente
+            //     alert('Paciente salvo com sucesso! (implementar lógica de envio)');
+            //     $('#clinicModal').removeClass('active');
+            // });
 
 
             $('.tab-button').click(function() {
@@ -152,33 +152,16 @@
                 $('#' + tabId).addClass('active');
             });
 
-            // Mostrar/ocultar campos condicionais
-            $('input[type="radio"]').change(function() {
-                const name = $(this).attr('name');
-                const value = $(this).val();
-
-                // Oculta todos os campos condicionais para este grupo
-                $(`.conditional-field[data-condition="${name}"]`).hide();
-
-                // Mostra apenas o campo condicional correspondente
-                $(`.conditional-field[data-condition="${name}"][data-value="${value}"]`).show();
-
-                // Se não tem data-value, mostra para qualquer valor
-                $(`.conditional-field[data-condition="${name}"]:not([data-value])`).show();
-            });
-
             
-
-            $('#btnAddPaciente').on('click', function () {
-                const form = $('#patientForm');
-                const formData = new FormData(form[0]);
-
+            $('#btnAddClinica').on('click', function () {
+                const form = $('#clinicForm')[0];
+                const formData = new FormData(form);
                 const notyf = new Notyf();
 
-                let url = '/createPaciente';
+                let url = '/createClinica';
 
-                if ($('#cdPaciente').val() !== "") {
-                    url = '/editPaciente';
+                if ($('#cdClinica').val() !== "") {
+                    url = '/editClinica';
                 }
                 $.ajax({
                     url: url,
@@ -189,14 +172,14 @@
                     success: function (response) {
                         if (response.success === true) {
                             notyf.success(response.message);
-                            $('#patientModal').removeClass('active');
-                            carregarPacientes();
+                            $('#clinicModal').removeClass('active');
+                            carregarClinicas();
                         } else {
                             notyf.error(response.message || 'Ocorreu um erro ao salvar.');
                         }
                     },
                     error: function () {
-                        notyf.error('Erro ao salvar paciente.');
+                        notyf.error('Erro ao salvar clínica.');
                     }
                 });
             });
@@ -205,268 +188,50 @@
         });
 
 
-        function visualizarPaciente(cdPaciente, editar) {
+        function visualizarClinica(cdClinica, editar) {
             $.ajax({
-                url: `/getPaciente/${cdPaciente}`,
+                url: `/getClinica/${cdClinica}`,
                 method: 'GET',
-                success: function (paciente) {
-                    preencherFormulario(paciente, editar);
+                success: function (clinica) {
+                    preencherFormulario(clinica, editar);
                     if(editar == true){
-                        $('#modalTitle').text('Editar Paciente');
+                        $('#modalTitle').text('Editar Clínica');
                         $('.modal-footer').show();  
                     }
                     else{
-                        $('#modalTitle').text('Paciente');
+                        $('#modalTitle').text('Clínica');
                         $('.modal-footer').hide();   
                     }
         
-                    $('#patientModal').addClass('active');  
+                    $('#clinicModal').addClass('active');  
                 },
                 error: function () {
-                    new Notyf().error('Erro ao carregar dados do paciente.');
+                    new Notyf().error('Erro ao carregar dados da clínica.');
                 }
             });
         }
 
-        function preencherFormulario(paciente, edit) {
+        function preencherFormulario(clinica, edit) {
             // Aba Dados
             limparFormulario();
-            $('#cdPaciente').val(paciente.cdPaciente || '');
-            $('#petName').val(paciente.nmPaciente);
-            $('#species').val(paciente.especie);
-            $('#breed').val(paciente.raca);
-            $('#age').val(paciente.idade);
-            $('#gender').val(paciente.sexo);
-            $('#weight').val(paciente.peso);
+            $('#cdClinica').val(clinica.cdClinica || '');
+            $('#nmClinica').val(clinica.nmClinica);
+            $('#endereco').val(clinica.endereco);
 
-            $('#ownerName').val(paciente.nmTutor);
-            $('#ownerPhone').val(paciente.telefone || '');
-            $('#ownerEmail').val(paciente.email || '');
-            $('#ownerAddress').val(paciente.endereco || '');
-
-            $('#medicalNotes').val(paciente.obs || '');
-            $('#vaccineStatus').val(paciente.statusVacinacao || 'unknown');
-            // Se quiser preencher a última consulta, crie um campo e faça aqui
-            // $('#lastVisit').val(paciente.ultimaConsulta || '');
-
-            // Aba Questionário
-
-            // Castrado
-            if (paciente.castrado == 1) {
-                $('input[name="castrated"][value="yes"]').prop('checked', true).trigger('change');
-            } else {
-                $('input[name="castrated"][value="no"]').prop('checked', true).trigger('change');
-            }
-            $('#castration_date').val(paciente.dtCastracao || '');
-            
-            // Considerou castração (yes/no)
-            if (paciente.considerouCastracao === 'yes' || paciente.considerouCastracao === 1) {
-                $('input[name="considered_castration"][value="yes"]').prop('checked', true).trigger('change');
-            } else if (paciente.considerouCastracao === 'no' || paciente.considerouCastracao === 0) {
-                $('input[name="considered_castration"][value="no"]').prop('checked', true).trigger('change');
-            } else {
-                $('input[name="considered_castration"]').prop('checked', false).trigger('change');
-            }
-
-            // Cios regulares (yes/no/na)
-            if (paciente.ciosRegulares === 1 || paciente.ciosRegulares === true) {
-                $('input[name="regular_cycles"][value="yes"]').prop('checked', true).trigger('change');
-            } else if (paciente.ciosRegulares === 0 || paciente.ciosRegulares === false) {
-                $('input[name="regular_cycles"][value="no"]').prop('checked', true).trigger('change');
-            } else {
-                $('input[name="regular_cycles"][value="na"]').prop('checked', true).trigger('change');
-            }
-
-            // Ficou gestante
-            if (paciente.ficouGestante == 1) {
-                $('input[name="pregnant"][value="yes"]').prop('checked', true).trigger('change');
-            } else {
-                $('input[name="pregnant"][value="no"]').prop('checked', true).trigger('change');
-            }
-
-            // Gestação psicológica
-            if (paciente.gestacaoPsicologica == 1) {
-                $('input[name="pseudopregnancy"][value="yes"]').prop('checked', true).trigger('change');
-            } else {
-                $('input[name="pseudopregnancy"][value="no"]').prop('checked', true).trigger('change');
-            }
-
-            // Tipo de alimentação
-            $('input[name="food_type"][value="' + paciente.tipoAlimentacao + '"]').prop('checked', true).trigger('change');
-            $('#food_type_spec').val(paciente.tipoAlimentacaoOutro || '');
-
-            // Usa suplemento
-            if (paciente.usaSuplemento == 1) {
-                $('input[name="supplements"][value="yes"]').prop('checked', true).trigger('change');
-            } else {
-                $('input[name="supplements"][value="no"]').prop('checked', true).trigger('change');
-            }
-            $('#supplements_type').val(paciente.tipoSuplemento || '');
-
-            // Inclui processados
-            if (paciente.incluiProcessados == 1) {
-                $('input[name="preservatives"][value="yes"]').prop('checked', true);
-            } else {
-                $('input[name="preservatives"][value="no"]').prop('checked', true);
-            }
-
-            // Controle de ectoparasitas
-            if (paciente.controleEctoparasita == 1) {
-                $('input[name="ectoparasite_control"][value="yes"]').prop('checked', true).trigger('change');
-            } else {
-                $('input[name="ectoparasite_control"][value="no"]').prop('checked', true).trigger('change');
-            }
-            $('#ectoparasite_product').val(paciente.nomeProdutoEctoparasita || '');
-            $('#ectoparasite_frequency').val(paciente.frequenciaEctoparasita || '');
-
-            // Uso vermífugo
-            if (paciente.usoVermifugo == 1) {
-                $('input[name="deworming"][value="yes"]').prop('checked', true).trigger('change');
-            } else {
-                $('input[name="deworming"][value="no"]').prop('checked', true).trigger('change');
-            }
-            $('#deworming_product').val(paciente.nomeProdutoVermifugo || '');
-            $('#deworming_frequency').val(paciente.frequenciaVermifugo || '');
-
-            // Vacinação anualmente
-            if (paciente.vacinadoAnualmente == 1) {
-                $('input[name="vaccinated"][value="yes"]').prop('checked', true).trigger('change');
-            } else {
-                $('input[name="vaccinated"][value="no"]').prop('checked', true).trigger('change');
-            }
-            $('#vaccines').val(paciente.vacinasAplicadas || '');
-            $('#last_vaccine_date').val(paciente.dataUltimaVacinacao || '');
-            if (paciente.vacinacaoEmClinica == 1) {
-                $('input[name="vet_clinic_vaccine"][value="yes"]').prop('checked', true).trigger('change');
-            } else {
-                $('input[name="vet_clinic_vaccine"][value="no"]').prop('checked', true).trigger('change');
-            }
-            $('#vaccine_location').val(paciente.localVacinacao || '');
-
-            // Exposição solar
-            if (paciente.exposicaoSol == 1) {
-                $('input[name="sun_exposure"][value="yes"]').prop('checked', true).trigger('change');
-            } else {
-                $('input[name="sun_exposure"][value="no"]').prop('checked', true).trigger('change');
-            }
-            $('#sun_exposure_time').val(paciente.tempoExposicaoSol || '');
-            $('#sun_exposure_period').val(paciente.periodoExposicaoSol || '');
-
-            // Usa protetor solar
-            if (paciente.usaProtetorSolar == 1) {
-                $('input[name="sunscreen"][value="yes"]').prop('checked', true).trigger('change');
-            } else {
-                $('input[name="sunscreen"][value="no"]').prop('checked', true).trigger('change');
-            }
-            $('#sunscreen_type').val(paciente.tipoProtetorSolar || '');
-            $('#sunscreen_frequency').val(paciente.frequenciaProtetorSolar || '');
-
-            // Acesso à rua desacompanhado
-            if (paciente.acessoRuaSozinho == 1) {
-                $('input[name="street_access"][value="yes"]').prop('checked', true).trigger('change');
-            } else {
-                $('input[name="street_access"][value="no"]').prop('checked', true).trigger('change');
-            }
-            $('#street_access_time').val(paciente.tempoAcessoRua || '');
-            $('#street_access_frequency').val(paciente.frequenciaAcessoRua || '');
-
-            // Exposição a produtos químicos
-            if (paciente.exposicaoQuimicos == 1) {
-                $('input[name="chemical_exposure"][value="yes"]').prop('checked', true);
-            } else {
-                $('input[name="chemical_exposure"][value="no"]').prop('checked', true);
-            }
-
-            // Fumante passivo
-            if (paciente.fumantePassivo == 1) {
-                $('input[name="passive_smoker"][value="yes"]').prop('checked', true);
-            } else {
-                $('input[name="passive_smoker"][value="no"]').prop('checked', true);
-            }
-
-            // Perto indústria
-            if (paciente.pertoIndustria == 1) {
-                $('input[name="near_industry"][value="yes"]').prop('checked', true);
-            } else {
-                $('input[name="near_industry"][value="no"]').prop('checked', true);
-            }
-
-            // Injeção contraceptiva
-            if (paciente.usoInjecaoContraceptiva == 1) {
-                $('input[name="contraceptive_injection"][value="yes"]').prop('checked', true).trigger('change');
-            } else {
-                $('input[name="contraceptive_injection"][value="no"]').prop('checked', true).trigger('change');
-            }
-            $('#contraceptive_frequency').val(paciente.frequenciaInjecaoContraceptiva || '');
-            $('#last_contraceptive_date').val(paciente.dataUltimaInjecaoContraceptiva || '');
-
-            // Problemas de pele
-            if (paciente.problemaPele == 1) {
-                $('input[name="skin_problems"][value="yes"]').prop('checked', true).trigger('change');
-            } else {
-                $('input[name="skin_problems"][value="no"]').prop('checked', true).trigger('change');
-            }
-            $('#skin_problem_type').val(paciente.tipoProblemaPele || '');
-
-            if (paciente.recidivaPele == 1) {
-                $('input[name="skin_recurrence"][value="yes"]').prop('checked', true);
-            } else {
-                $('input[name="skin_recurrence"][value="no"]').prop('checked', true);
-            }
-
-            // Doença
-            if (paciente.possuiDoenca == 1) {
-                $('input[name="has_disease"][value="yes"]').prop('checked', true).trigger('change');
-            } else {
-                $('input[name="has_disease"][value="no"]').prop('checked', true).trigger('change');
-            }
-            if (paciente.doencaTratada == 1) {
-                $('input[name="disease_treated"][value="yes"]').prop('checked', true);
-            } else {
-                $('input[name="disease_treated"][value="no"]').prop('checked', true);
-            }
-            $('#treatment_response').val(paciente.respostaTratamento || '');
-
-            // Medicação contínua
-            if (paciente.medicacaoContinua == 1) {
-                $('input[name="continuous_medication"][value="yes"]').prop('checked', true).trigger('change');
-            } else {
-                $('input[name="continuous_medication"][value="no"]').prop('checked', true).trigger('change');
-            }
-            $('#medication_type').val(paciente.tipoMedicacao || '');
-            $('#medication_start_date').val(paciente.inicioMedicacao || '');
-
-            // Exames laboratoriais
-            if (paciente.examesLaboratoriais == 1) {
-                $('input[name="lab_tests"][value="yes"]').prop('checked', true);
-            } else {
-                $('input[name="lab_tests"][value="no"]').prop('checked', true);
-            }
-
-            // Exames de imagem
-            if (paciente.examesImagem == 1) {
-                $('input[name="imaging_tests"][value="yes"]').prop('checked', true);
-            } else {
-                $('input[name="imaging_tests"][value="no"]').prop('checked', true);
-            }
-
-            // Histórico familiar de câncer
-            $('input[name="family_cancer_history"][value="' + (paciente.historicoCancerFamiliar || 'dont_know') + '"]').prop('checked', true);
-
-            $('#patientForm')
+            $('#clinicModal')
             .find('input, select, textarea')
             .prop('disabled', !edit);
         }
 
 
-        function carregarPacientes() {
+        function carregarClinicas() {
             let search = $('#search').val();
             let searchEspecie = $('#searchEspecie').val();
             let searchOrder = $('#searchOrder').val();
             let searchExibir = $('#searchExibir').val();
 
             $.ajax({
-                url: '/getPacientes',
+                url: '/getClinicas',
                 method: 'GET',
                 data: {
                     search: search,
@@ -474,18 +239,16 @@
                     order: searchOrder,
                     exibir: searchExibir
                 },
-                success: function (pacientes) {
+                success: function (clinicas) {
                     let container = $('#patientsContainer');
                     container.empty();
 
-                    pacientes.forEach(paciente => {
-                        let icon = '<i class="fas fa-dog"></i>';
-                        let cor = paciente.color;
-                        if (paciente.especie.toLowerCase().includes('gato')) icon = '<i class="fas fa-cat"></i>';
-                        
-                        if(paciente.color == '' || paciente.color == null || paciente.color == undefined){
+                    clinicas.forEach(clinica => {
+                        let icon = '<i class="fa-solid fa-house-chimney-medical"></i>';
+                        let cor = clinica.color;
+                        if(clinica.color == '' || clinica.color == null || clinica.color == undefined){
                             const cores = ['#FFD6E0', '#C1FBA4', '#7BF1A8', '#90F1EF', '#FFB7FF'];
-                            let cor = cores[Math.floor(Math.random() * cores.length)];
+                            cor = cores[Math.floor(Math.random() * cores.length)];
                         }
 
                         let card = `
@@ -494,18 +257,14 @@
                                     ${icon}
                                 </div>
                                 <div class="patient-info">
-                                    <h3>${paciente.nmPaciente}</h3>
-                                    <p class="meta">${paciente.raca} • ${paciente.idade}</p>
-                                    <p class="owner">Tutor: ${paciente.nmTutor}</p>
-                                    <div class="status-badge ${paciente.statusVacinacao === 'ativo' ? 'active' : 'inactive'}">
-                                        ${paciente.statusVacinacao === 'ativo' ? 'Ativo' : 'Inativo'}
-                                    </div>
+                                    <h3>${clinica.nmClinica}</h3>
+                                    <p class="meta">${clinica.endereco}</p>
                                 </div>
                                 <div class="patient-actions">
-                                    <button class="icon-btn view" onclick="visualizarPaciente(${paciente.cdPaciente}, false)">
+                                    <button class="icon-btn view" onclick="visualizarClinica(${clinica.cdClinica}, false)">
                                         <i class="fas fa-eye"></i>
                                     </button>
-                                    <button class="icon-btn edit" onclick="visualizarPaciente(${paciente.cdPaciente}, true)">
+                                    <button class="icon-btn edit" onclick="visualizarClinica(${clinica.cdClinica}, true)">
                                         <i class="fas fa-edit"></i>
                                     </button>
                                     <button class="icon-btn more"><i class="fas fa-ellipsis-v"></i></button>
@@ -518,7 +277,7 @@
 
                     container.append(`
                         <div class="add-patient-card">
-                            <button class="add-patient-btn">
+                            <button class="add-clinic-btn">
                                 <i class="fas fa-plus-circle"></i>
                                 <span>Adicionar Clínica</span>
                             </button>
@@ -532,13 +291,13 @@
         }
 
         function limparFormulario() {
-            $('#patientForm')[0].reset(); 
+            $('#clinicForm')[0].reset(); 
             $('#cdPaciente').val('');
-            $('#patientForm').find('input[type="text"], input[type="number"], input[type="email"], input[type="tel"], textarea, select').val(''); 
+            $('#clinicModal').find('input[type="text"], input[type="number"], input[type="email"], input[type="tel"], textarea, select').val(''); 
 
-            $('#patientForm').find('input[type="radio"], input[type="checkbox"]').prop('checked', false);
+            $('#clinicModal').find('input[type="radio"], input[type="checkbox"]').prop('checked', false);
 
-            $('#patientForm').find('input, select').trigger('change');
+            $('#clinicModal').find('input, select').trigger('change');
         }
 
 

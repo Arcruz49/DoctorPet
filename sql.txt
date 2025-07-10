@@ -114,3 +114,7 @@ create table cadClinica
 	nmClinica varchar(100),
 	endereco varchar(500)
 )
+
+alter table cadclinica 
+add dtCriacao datetime,
+    color varchar(20)

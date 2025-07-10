@@ -139,12 +139,12 @@
                 }
             });
 
-            // Fechar modal ao clicar fora
-            $(document).click(function(e) {
-                if ($(e.target).hasClass('modal-overlay')) {
-                    $('#patientModal').removeClass('active');
-                }
-            });
+            // // Fechar modal ao clicar fora
+            // $(document).click(function(e) {
+            //     if ($(e.target).hasClass('modal-overlay')) {
+            //         $('#patientModal').removeClass('active');
+            //     }
+            // });
 
             // Simular envio do formulário
             $('#patientForm').submit(function(e) {

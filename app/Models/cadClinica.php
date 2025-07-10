@@ -18,6 +18,8 @@ class cadClinica extends Model
 
     protected $fillable = [
         'nmClinica',
-        'endereco'
+        'endereco',
+        'dtCriacao',
+        'color'
     ];
 }

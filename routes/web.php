@@ -17,3 +17,9 @@ Route::post('/editPaciente', [\App\Http\Controllers\PacienteController::class, '
 
 // Clínica
 Route::get('/Clinicas', [\App\Http\Controllers\ClinicaController::class, 'Index'])->name('Clinicas');
+Route::get('/getClinicas', [\App\Http\Controllers\ClinicaController::class, 'GetClinicas'])->name('GetClinicas');
+Route::post('/createClinica', [\App\Http\Controllers\ClinicaController::class, 'createClinica'])->name('createClinica');
+Route::get('/getClinica/{id}', [\App\Http\Controllers\ClinicaController::class, 'GetClinica'])->name('GetClinica');
+Route::post('/editClinica', [\App\Http\Controllers\ClinicaController::class, 'EditClinica'])->name('EditClinica');
+
+
