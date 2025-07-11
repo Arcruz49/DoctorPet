@@ -102,5 +102,12 @@ class cadPaciente extends Model
         'historicoCancerFamiliar',
 
         'color',
+        'cdClinica',
     ];
+
+    public function clinica()
+    {
+        return $this->belongsTo(cadClinica::class, 'cdClinica', 'cdClinica');
+    }
+
 }

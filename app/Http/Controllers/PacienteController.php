@@ -9,10 +9,12 @@ class PacienteController extends Controller
 {
     public function GetPacientes(Request $request){
 
+
         $search = $request->query('search');
         $especie = $request->query('especie');
         $order = $request->query('order');
         $exibir = $request->query('exibir');
+        $clinica = $request->query('searchClinica');
         // dd($search, $especie, $order, $exibir);
 
         $query = cadPaciente::query();
@@ -27,6 +29,9 @@ class PacienteController extends Controller
             else if($especie == 'g') {
                 $query->where('especie', 'cat');
             }
+        }
+        if (!empty($clinica) && $clinica != '-1') {
+            $query->where('cdClinica', $clinica);
         }
         if ($exibir != '-1' && !empty($exibir)) {
             $query->limit((int)$exibir);
@@ -62,6 +67,8 @@ class PacienteController extends Controller
         if (empty($request->sexo))      $errorMessage .= "Sexo inválido<br>";
         if (empty($request->peso))      $errorMessage .= "Peso inválido<br>";
         if (empty($request->nmTutor))   $errorMessage .= "Responsável inválido<br>";
+        if (empty($request->cdClinica))   $errorMessage .= "Clínica inválida<br>";
+
 
         if($errorMessage != ""){
             return response()->json([
@@ -89,6 +96,7 @@ class PacienteController extends Controller
                 'endereco' => $request->endereco,
                 'obs' => $request->obs,
                 'statusVacinacao' => $request->statusVacinacao,
+                'cdClinica' => $request->cdClinica,
                 'dtCriacao' => now(),
 
                 // Castração e Reprodução
@@ -185,7 +193,6 @@ class PacienteController extends Controller
     }
 
     public function EditPaciente(Request $request){
-
         $errorMessage = '';
 
         $paciente = cadPaciente::find($request->cdPaciente);
@@ -204,6 +211,7 @@ class PacienteController extends Controller
         if (empty($request->sexo))      $errorMessage .= "Sexo inválido<br>";
         if (empty($request->peso))      $errorMessage .= "Peso inválido<br>";
         if (empty($request->nmTutor))   $errorMessage .= "Responsável inválido<br>";
+        if (empty($request->cdClinica))   $errorMessage .= "Clínica inválida<br>";
 
         if($errorMessage != ""){
             return response()->json([
@@ -227,6 +235,7 @@ class PacienteController extends Controller
                 'endereco' => $request->endereco,
                 'obs' => $request->obs,
                 'statusVacinacao' => $request->statusVacinacao,
+                'cdClinica' => $request->cdClinica,
 
                 // Castração e Reprodução
                 'castrado' => $request->castrated === 'yes' ? 1 : ($request->castrated === 'no' ? 0 : null),

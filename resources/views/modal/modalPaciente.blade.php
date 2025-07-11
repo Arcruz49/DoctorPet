@@ -95,9 +95,15 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="lastVisit">Última Consulta</label>
-                                    <input type="date" id="lastVisit">
+                                    <label for="cdClinica">Clínica</label>
+                                    <select id="cdClinica" name="cdClinica" class="form-control">
+                                        <option value="">Selecione a clínica</option>
+                                        @foreach($clinicas as $clinica)
+                                            <option value="{{ $clinica->cdClinica }}">{{ $clinica->nmClinica }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
+
                             </div>
                         </div>
                     </div>

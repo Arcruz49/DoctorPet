@@ -34,11 +34,12 @@
                 </select>
             </div>
             <div class="filter-group">
-                <label>Status:</label>
-                <select class="filter" id="searchStatus">
-                    <option value="-1">Todos</option>
-                    <option value="1">Ativos</option>
-                    <option value="0">Inativos</option>
+                <label>Clínica:</label>
+                <select id="searchClinica" class="filter">
+                    <option value="-1">Todas</option>
+                    @foreach($clinicas as $clinica)
+                        <option value="{{ $clinica->cdClinica }}">{{ $clinica->nmClinica }}</option>
+                    @endforeach
                 </select>
             </div>
             <div class="filter-group">
@@ -58,6 +59,9 @@
                     <option value="-1">Todos</option>
                 </select>
             </div>
+
+
+
         </div>
 
         <div class="patients-grid" id="patientsContainer"></div>
@@ -262,8 +266,7 @@
 
             $('#medicalNotes').val(paciente.obs || '');
             $('#vaccineStatus').val(paciente.statusVacinacao || 'unknown');
-            // Se quiser preencher a última consulta, crie um campo e faça aqui
-            // $('#lastVisit').val(paciente.ultimaConsulta || '');
+            $('#cdClinica').val(paciente.cdClinica);
 
             // Aba Questionário
 
@@ -480,6 +483,7 @@
             let searchEspecie = $('#searchEspecie').val();
             let searchOrder = $('#searchOrder').val();
             let searchExibir = $('#searchExibir').val();
+            let searchClinica = $('#searchClinica').val();
 
             $.ajax({
                 url: '/getPacientes',
@@ -488,7 +492,8 @@
                     search: search,
                     especie: searchEspecie,
                     order: searchOrder,
-                    exibir: searchExibir
+                    exibir: searchExibir,
+                    searchClinica: searchClinica
                 },
                 success: function (pacientes) {
                     let container = $('#patientsContainer');
@@ -513,9 +518,7 @@
                                     <h3>${paciente.nmPaciente}</h3>
                                     <p class="meta">${paciente.raca} • ${paciente.idade}</p>
                                     <p class="owner">Tutor: ${paciente.nmTutor}</p>
-                                    <div class="status-badge ${paciente.statusVacinacao === 'ativo' ? 'active' : 'inactive'}">
-                                        ${paciente.statusVacinacao === 'ativo' ? 'Ativo' : 'Inativo'}
-                                    </div>
+                                    
                                 </div>
                                 <div class="patient-actions">
                                     <button class="icon-btn view" onclick="visualizarPaciente(${paciente.cdPaciente}, false)">

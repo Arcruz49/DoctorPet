@@ -72,7 +72,7 @@
                 </div>
                 <div class="user-info">
                     <span class="name">{{ $nomeUsuario }}</span>
-                    <span class="role">Veterinária</span>
+                    <span class="role">{{ $perfilUsuario }}</span>
                 </div>
                 <button class="logout-btn">
                     <a href="{{ route('LogOut') }}" class="logout-btn">

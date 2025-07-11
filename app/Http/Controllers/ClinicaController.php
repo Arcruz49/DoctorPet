@@ -9,9 +9,14 @@ use Illuminate\Http\Request;
 class ClinicaController extends Controller
 {
     public function Index(){
-        $usuario = Auth::user();
 
-        return view("clinica.index", ['nomeUsuario' => $usuario->nmUsuario]);
+        $usuario = Auth::user()->load('perfil'); 
+
+        return view('clinica.index', [
+            'nomeUsuario' => $usuario->nmUsuario,
+            'perfilUsuario' => $usuario->genero == 'M' ? $usuario->perfil->nmPerfil : $usuario->perfil->nmPerfilF
+        ]);
+
     }
 
     public function GetClinicas(Request $request){

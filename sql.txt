@@ -1,120 +1,148 @@
-CREATE DATABASE petCare
+-- Criação segura do banco de dados
+CREATE DATABASE IF NOT EXISTS petCare2;
+USE petCare2;
 
-CREATE TABLE cadUsuario (
-    cdUsuario INT PRIMARY KEY AUTO_INCREMENT,
+-- Tabela de Perfis
+CREATE TABLE IF NOT EXISTS cadPerfil (
+    cdPerfil INT AUTO_INCREMENT PRIMARY KEY,
+    nmPerfil VARCHAR(256),
+    nmPerfilF VARCHAR(256),
+    dtCriacao DATETIME,
+    administrador BIT
+);
+
+-- Inserção dos Perfis (apenas se não existirem)
+INSERT INTO cadPerfil (nmPerfil, nmPerfilF, dtCriacao, administrador)
+SELECT * FROM (SELECT 'Administrador', 'Administradora', NOW(), 1) AS tmp
+WHERE NOT EXISTS (
+    SELECT 1 FROM cadPerfil WHERE nmPerfil = 'Administrador'
+) LIMIT 1;
+
+INSERT INTO cadPerfil (nmPerfil, nmPerfilF, dtCriacao, administrador)
+SELECT * FROM (SELECT 'Veterinário', 'Veterinária', NOW(), 0) AS tmp
+WHERE NOT EXISTS (
+    SELECT 1 FROM cadPerfil WHERE nmPerfil = 'Veterinário'
+) LIMIT 1;
+
+-- Tabela de Usuários
+CREATE TABLE IF NOT EXISTS cadUsuario (
+    cdUsuario INT AUTO_INCREMENT PRIMARY KEY,
     nmUsuario VARCHAR(500),
     login VARCHAR(256),
     senha VARCHAR(256),
-	imagemPerfil LONGBLOB,
-    dtCriacao DATETIME
+    imagemPerfil LONGBLOB,
+    dtCriacao DATETIME,
+    genero VARCHAR(10),
+    cdPerfil INT,
+    CONSTRAINT fk_cadUsuario_cdPerfil FOREIGN KEY (cdPerfil) REFERENCES cadPerfil(cdPerfil)
 );
 
-CREATE TABLE cadPaciente(
-	cdPaciente int PRIMARY KEY AUTO_INCREMENT,
-	nmPaciente varchar(256),
-    especie varchar(20),
-    raca varchar(256),
-    idade varchar(256),
-    sexo varchar(20),
-    peso DECIMAL(5,2),
-    nmTutor varchar(256),
-    telefone varchar(256),
-    email varchar(256),
-    endereco varchar(256),
-    obs TEXT,
-    statusVacinacao varchar(10),
+-- Tabela de Clínicas
+CREATE TABLE IF NOT EXISTS cadClinica (
+    cdClinica INT AUTO_INCREMENT PRIMARY KEY,
+    nmClinica VARCHAR(100),
+    endereco VARCHAR(500),
     dtCriacao DATETIME,
-    imgPaciente varchar(500)
-)
+    color VARCHAR(20)
+);
+
+-- Tabela de Pacientes
+CREATE TABLE IF NOT EXISTS cadPaciente (
+    cdPaciente INT AUTO_INCREMENT PRIMARY KEY,
+    nmPaciente VARCHAR(256),
+    especie VARCHAR(20),
+    raca VARCHAR(256),
+    idade VARCHAR(256),
+    sexo VARCHAR(20),
+    peso DECIMAL(5,2),
+    nmTutor VARCHAR(256),
+    telefone VARCHAR(256),
+    email VARCHAR(256),
+    endereco VARCHAR(256),
+    obs TEXT,
+    statusVacinacao VARCHAR(10),
+    dtCriacao DATETIME,
+    imgPaciente VARCHAR(500),
+    color VARCHAR(32),
+
+    -- Saúde Reprodutiva
+    castrado BIT,
+    dtCastracao DATE,
+    considerouCastracao BIT,
+    ciosRegulares VARCHAR(20),
+    ficouGestante BIT,
+    gestacaoPsicologica BIT,
+
+    -- Alimentação
+    tipoAlimentacao VARCHAR(20),
+    tipoAlimentacaoOutro VARCHAR(256),
+    usaSuplemento BIT,
+    tipoSuplemento VARCHAR(256),
+    incluiProcessados BIT,
+
+    -- Controle de Ectoparasitas
+    controleEctoparasita BIT,
+    nomeProdutoEctoparasita VARCHAR(256),
+    frequenciaEctoparasita VARCHAR(256),
+
+    -- Vermifugação
+    usoVermifugo BIT,
+    nomeProdutoVermifugo VARCHAR(256),
+    frequenciaVermifugo VARCHAR(256),
+
+    -- Vacinação
+    vacinadoAnualmente BIT,
+    vacinasAplicadas VARCHAR(512),
+    dataUltimaVacinacao DATE,
+    vacinacaoEmClinica BIT,
+    localVacinacao VARCHAR(256),
+
+    -- Exposição Solar
+    exposicaoSol BIT,
+    tempoExposicaoSol VARCHAR(100),
+    periodoExposicaoSol VARCHAR(100),
+    usaProtetorSolar BIT,
+    tipoProtetorSolar VARCHAR(100),
+    frequenciaProtetorSolar VARCHAR(100),
+
+    -- Acesso à Rua
+    acessoRuaSozinho BIT,
+    tempoAcessoRua VARCHAR(100),
+    frequenciaAcessoRua VARCHAR(100),
+
+    -- Produtos Químicos e Poluentes
+    exposicaoQuimicos BIT,
+    fumantePassivo BIT,
+    pertoIndustria BIT,
+
+    -- Contracepção
+    usoInjecaoContraceptiva BIT,
+    frequenciaInjecaoContraceptiva VARCHAR(100),
+    dataUltimaInjecaoContraceptiva DATE,
+
+    -- Histórico de Saúde
+    problemaPele BIT,
+    tipoProblemaPele VARCHAR(256),
+    recidivaPele BIT,
+    possuiDoenca BIT,
+    doencaTratada BIT,
+    respostaTratamento TEXT,
+    medicacaoContinua BIT,
+    tipoMedicacao VARCHAR(256),
+    inicioMedicacao DATE,
+
+    -- Exames
+    examesLaboratoriais BIT,
+    examesImagem BIT,
+
+    -- Histórico Familiar
+    historicoCancerFamiliar VARCHAR(20)
+);
 
 
 ALTER TABLE cadPaciente
--- Saúde Reprodutiva
-ADD castrado BIT,
-ADD dtCastracao DATE,
-ADD considerouCastracao BIT,
-ADD ciosRegulares VARCHAR(20), -- 'sim', 'nao', 'na'
-ADD ficouGestante BIT,
-ADD gestacaoPsicologica BIT,
-
--- Alimentação
-ADD tipoAlimentacao VARCHAR(20), -- 'racao', 'caseira', 'natural'
-ADD tipoAlimentacaoOutro VARCHAR(256),
-ADD usaSuplemento BIT,
-ADD tipoSuplemento VARCHAR(256),
-ADD incluiProcessados BIT,
-
--- Controle de Ectoparasitas
-ADD controleEctoparasita BIT,
-ADD nomeProdutoEctoparasita VARCHAR(256),
-ADD frequenciaEctoparasita VARCHAR(256),
-
--- Vermifugação
-ADD usoVermifugo BIT,
-ADD nomeProdutoVermifugo VARCHAR(256),
-ADD frequenciaVermifugo VARCHAR(256),
-
--- Vacinação
-ADD vacinadoAnualmente BIT,
-ADD vacinasAplicadas VARCHAR(512),
-ADD dataUltimaVacinacao DATE,
-ADD vacinacaoEmClinica BIT,
-ADD localVacinacao VARCHAR(256),
-
--- Exposição Solar
-ADD exposicaoSol BIT,
-ADD tempoExposicaoSol VARCHAR(100),
-ADD periodoExposicaoSol VARCHAR(100),
-ADD usaProtetorSolar BIT,
-ADD tipoProtetorSolar VARCHAR(100),
-ADD frequenciaProtetorSolar VARCHAR(100),
-
--- Acesso à Rua
-ADD acessoRuaSozinho BIT,
-ADD tempoAcessoRua VARCHAR(100),
-ADD frequenciaAcessoRua VARCHAR(100),
-
--- Produtos Químicos e Poluentes
-ADD exposicaoQuimicos BIT,
-ADD fumantePassivo BIT,
-ADD pertoIndustria BIT,
-
--- Contracepção
-ADD usoInjecaoContraceptiva BIT,
-ADD frequenciaInjecaoContraceptiva VARCHAR(100),
-ADD dataUltimaInjecaoContraceptiva DATE,
-
--- Histórico de Saúde
-ADD problemaPele BIT,
-ADD tipoProblemaPele VARCHAR(256),
-ADD recidivaPele BIT,
-ADD possuiDoenca BIT,
-ADD doencaTratada BIT,
-ADD respostaTratamento TEXT,
-ADD medicacaoContinua BIT,
-ADD tipoMedicacao VARCHAR(256),
-ADD inicioMedicacao DATE,
-
--- Exames
-ADD examesLaboratoriais BIT,
-ADD examesImagem BIT,
-
--- Histórico Familiar
-ADD historicoCancerFamiliar VARCHAR(20); -- 'sim', 'nao', 'nao_sei',
-ADD color varchar(32);
-
-alter table cadusuario 
-add genero varchar(10);
+ADD cdClinica INT,
+ADD CONSTRAINT fk_cadPaciente_cdClinica
+FOREIGN KEY (cdClinica) REFERENCES cadClinica(cdClinica);
 
 
-
-create table cadClinica
-(
-	cdClinica int primary key auto_increment,
-	nmClinica varchar(100),
-	endereco varchar(500)
-)
-
-alter table cadclinica 
-add dtCriacao datetime,
-    color varchar(20)
