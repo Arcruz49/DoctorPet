@@ -44,10 +44,10 @@
                             <span>Consultas</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="#">
+                    <li class="{{ Route::is('Modelos') ? 'active' : '' }}">
+                        <a href="{{ route('Modelos') }}">
                             <i class="fas fa-file-medical"></i>
-                            <span>Prontuários</span>
+                            <span>Documentos</span>
                         </a>
                     </li>
                     <li>

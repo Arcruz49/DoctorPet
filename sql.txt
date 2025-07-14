@@ -146,3 +146,11 @@ ADD CONSTRAINT fk_cadPaciente_cdClinica
 FOREIGN KEY (cdClinica) REFERENCES cadClinica(cdClinica);
 
 
+CREATE TABLE cadModeloDocumento (
+    cdModeloDocumento INT PRIMARY KEY AUTO_INCREMENT,
+    nmModeloDocumento VARCHAR(500),
+    html LONGTEXT,
+    dtCriacao DATETIME,
+    color VARCHAR(20),
+    descModeloDocumento varchar(500)
+);

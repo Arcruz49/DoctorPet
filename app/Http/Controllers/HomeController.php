@@ -10,11 +10,14 @@ class HomeController extends Controller
 {
     public function Index()
     {
-        if (!Auth::check()) {
-            return redirect()->route('login'); 
+        $usuario = Auth::user();
+
+        if (!$usuario) {
+            // Redireciona para login ou mostra erro
+            return redirect()->route('login')->withErrors('Sessão expirada. Faça login novamente.');
         }
 
-        $usuario = Auth::user()->load('perfil'); 
+        $usuario->load('perfil');
         $clinicas = cadClinica::all(); // busca todas as clínicas
 
         return view('home.index', [

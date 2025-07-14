@@ -22,4 +22,7 @@ Route::post('/createClinica', [\App\Http\Controllers\ClinicaController::class, '
 Route::get('/getClinica/{id}', [\App\Http\Controllers\ClinicaController::class, 'GetClinica'])->name('GetClinica');
 Route::post('/editClinica', [\App\Http\Controllers\ClinicaController::class, 'EditClinica'])->name('EditClinica');
 
+//Modelo Documento
+Route::get('/Modelos', [\App\Http\Controllers\ModeloDocumentoController::class, 'Index'])->name('Modelos');
+Route::get('/getModelos', [\App\Http\Controllers\ModeloDocumentoController::class, 'GetModelos'])->name('GetModelos');
 
