@@ -416,7 +416,7 @@ body {
     border-color: var(--primary);
 }
 
-.add-patient-btn, .add-clinic-btn{
+.add-patient-btn, .add-clinic-btn, .add-doc-btn{
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -430,12 +430,12 @@ body {
     width: 100%;
 }
 
-.add-patient-btn i, .add-clinic-btn i {
+.add-patient-btn i, .add-clinic-btn i, .add-doc-btn i {
     font-size: 1.8rem;
     color: var(--primary);
 }
 
-.add-patient-btn:hover, .add-clinic-btn:hover {
+.add-patient-btn:hover, .add-clinic-btn:hover, .add-doc-btn:hover {
     color: var(--text);
 }
 

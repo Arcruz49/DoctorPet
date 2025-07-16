@@ -35,7 +35,7 @@ class ModeloDocumentoController extends Controller
             $query = CadModeloDocumento::query();
         
         if (!empty($search)) {
-            $query->where('nmClinica', 'like', '%' . $search . '%');
+            $query->where('nmModeloDocumento', 'like', '%' . $search . '%');
         }
         if (!empty($especie) && $especie != '-1') {
             if($especie == 'c') {
@@ -53,11 +53,103 @@ class ModeloDocumentoController extends Controller
         } elseif ($order === 'antigos') {
             $query->orderBy('dtCriacao', 'asc');
         } elseif ($order === 'nome') {
-            $query->orderBy('nmClinica', 'asc');
+            $query->orderBy('nmModeloDocumento', 'asc');
         }
 
         $clinicas = $query->get();
         
         return response()->json($clinicas);
+    }
+
+    public function GetModelo($id){
+        $modelo = CadModeloDocumento::where('cdModeloDocumento', $id)->first();
+        return response()->json($modelo);
+    }
+
+    public function CreateDocumento(Request $request){
+         $errorMessage = '';
+
+        if (empty($request->nmModeloDocumento)) $errorMessage .= "Nome inválido<br>";
+        if (empty($request->html)) $errorMessage .= "HTML inválido<br>";
+
+
+        if($errorMessage != ""){
+            return response()->json([
+                "success" => false,
+                "message"=> $errorMessage
+            ]);
+        }
+        try
+        {
+            $cores = ['#FFD6E0', '#C1FBA4', '#7BF1A8', '#90F1EF', '#FFB7FF'];
+            $corAleatoria = $cores[array_rand($cores)];
+
+            $clinicas = CadModeloDocumento::create([
+                'nmModeloDocumento' => $request->nmModeloDocumento,
+                'descModeloDocumento' => $request->descModeloDocumento,
+                'html' => $request->html,
+                'dtCriacao' => now(),
+                'color' => $corAleatoria,
+                ]); 
+
+            return response()->json([
+                "success" => true,
+                'message'=> 'Modelo cadastrado com sucesso!',
+            ]);
+        }
+        catch (\Exception $ex) 
+        {
+            return response()->json([
+                "success" => false,
+                "message"=> $ex->getMessage()
+            ]);
+        }
+    }
+
+
+    public function EditDocumento(Request $request)
+    {
+        try
+        {
+            $errorMessage = '';
+
+            $modelo = CadModeloDocumento::find($request->cdModeloDocumento);
+
+            if (!$modelo) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Modelo não encontrado.'
+                ], 404);
+            }
+
+            if (empty($request->nmModeloDocumento)) $errorMessage .= "Nome inválido<br>";
+            if (empty($request->html)) $errorMessage .= "HTML inválido<br>";            
+
+            if($errorMessage != ""){
+                return response()->json([
+                    "success" => false,
+                    "message"=> $errorMessage
+                ]);
+            }
+
+            $modelo->update([
+                'nmModeloDocumento' => $request->nmModeloDocumento,
+                'descModeloDocumento' => $request->descModeloDocumento,
+                'html' => $request->html,
+            ]);
+
+            return response()->json([
+                    "success" => true,
+                    "message"=> "Modelo atualizado com sucesso!"
+                ]);
+
+        }
+        catch (\Exception $ex)
+        {
+            return response()->json([
+                    "success" => false,
+                    "message"=> $ex->getMessage()
+                ]);
+        }
     }
 }

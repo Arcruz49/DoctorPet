@@ -557,6 +557,11 @@
 
             $('#patientForm').find('input[type="radio"], input[type="checkbox"]').prop('checked', false);
 
+            
+            $('#patientModal')
+            .find('input, select, textarea')
+            .prop('disabled', false);
+
             $('#patientForm').find('input, select').trigger('change');
         }
 

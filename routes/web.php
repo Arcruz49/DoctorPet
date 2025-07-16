@@ -25,4 +25,8 @@ Route::post('/editClinica', [\App\Http\Controllers\ClinicaController::class, 'Ed
 //Modelo Documento
 Route::get('/Modelos', [\App\Http\Controllers\ModeloDocumentoController::class, 'Index'])->name('Modelos');
 Route::get('/getModelos', [\App\Http\Controllers\ModeloDocumentoController::class, 'GetModelos'])->name('GetModelos');
+Route::get('/getModelo/{id}', [\App\Http\Controllers\ModeloDocumentoController::class, 'GetModelo'])->name('GetModelo');
+Route::post('/createDocumento', [\App\Http\Controllers\ModeloDocumentoController::class, 'CreateDocumento'])->name('CreateDocumento');
+Route::post('/editDocumento', [\App\Http\Controllers\ModeloDocumentoController::class, 'EditDocumento'])->name('EditDocumento');
+
 

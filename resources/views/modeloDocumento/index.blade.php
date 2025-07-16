@@ -15,7 +15,7 @@
                 <input type="text" id="search" placeholder="Buscar modelo...">
                 <button><i class="fas fa-search"></i></button>
             </div>
-            <button class="btn primary new-clinic">
+            <button class="btn primary new-doc">
                 <i class="fas fa-plus"></i>
                 Novo Modelo
             </button>
@@ -47,7 +47,7 @@
         <div class="patients-grid" id="patientsContainer"></div>
     </div>
 
-    <div class="modal-overlay" id="clinicModal">
+    <div class="modal-overlay" id="docModal">
         @include('modal.modalDocumento')
     </div>
 
@@ -66,6 +66,15 @@
 
         $(document).ready(function() {
 
+
+
+
+
+
+
+
+
+
             carregarModelos();
 
             $('.filter').on('change', function () {
@@ -77,27 +86,27 @@
             });
 
             
-            // Abrir modal de novo clinica
-            $(document).on('click', '.new-clinic, .add-clinic-btn', function() {
+            // Abrir modal de novo documento
+            $(document).on('click', '.new-doc, .add-doc-btn', function() {
                 $('#modalTitle').text('Novo Modelo');
                 $('.modal-footer').show();  
                 limparFormulario();
-                $('#clinicModal').addClass('active');
+                $('#docModal').addClass('active');
             });
 
             // Fechar modal
             $('.close-modal, .btn.secondary').click(function() {
-                $('#clinicModal').removeClass('active');
+                $('#docModal').removeClass('active');
             });
 
 
-            // Editar clinica
+            // Editar documento
             $('.icon-btn.edit').click(function() {
-                $('#clinicModal').addClass('active');
+                $('#docModal').addClass('active');
                 $('.modal-header h2').text('Editar Modelo');
             });
 
-            // Buscar clinicas
+            // Buscar documentos
             $('.search-box button').click(function() {
                 const searchTerm = $('.search-box input').val().toLowerCase();
                 if (searchTerm) {
@@ -120,16 +129,16 @@
             // Fechar modal ao clicar fora
             // $(document).click(function(e) {
             //     if ($(e.target).hasClass('modal-overlay')) {
-            //         $('#clinicModal').removeClass('active');
+            //         $('#docModal').removeClass('active');
             //     }
             // });
 
             // // Simular envio do formulário
-            // $('#clinicModal').submit(function(e) {
+            // $('#docModal').submit(function(e) {
             //     e.preventDefault();
             //     // Aqui você implementaria o AJAX para salvar o paciente
             //     alert('Paciente salvo com sucesso! (implementar lógica de envio)');
-            //     $('#clinicModal').removeClass('active');
+            //     $('#docModal').removeClass('active');
             // });
 
 
@@ -147,15 +156,15 @@
             });
 
             
-            $('#btnAddClinica').on('click', function () {
+            $('#btnSalvarDocumento').on('click', function () {
                 const form = $('#documentForm')[0];
                 const formData = new FormData(form);
                 const notyf = new Notyf();
 
-                let url = '/createClinica';
+                let url = '/createDocumento';
 
-                if ($('#cdClinica').val() !== "") {
-                    url = '/editClinica';
+                if ($('#cdModeloDocumento').val() !== "") {
+                    url = '/editDocumento';
                 }
                 $.ajax({
                     url: url,
@@ -166,7 +175,7 @@
                     success: function (response) {
                         if (response.success === true) {
                             notyf.success(response.message);
-                            $('#clinicModal').removeClass('active');
+                            $('#docModal').removeClass('active');
                             carregarModelos();
                         } else {
                             notyf.error(response.message || 'Ocorreu um erro ao salvar.');
@@ -182,12 +191,12 @@
         });
 
 
-        function visualizarModelo(cdClinica, editar) {
+        function visualizarModelo(cdModelo, editar) {
             $.ajax({
-                url: `/getClinica/${cdClinica}`,
+                url: `/getModelo/${cdModelo}`,
                 method: 'GET',
-                success: function (clinica) {
-                    preencherFormulario(clinica, editar);
+                success: function (modelo) {
+                    preencherFormulario(modelo, editar);
                     if(editar == true){
                         $('#modalTitle').text('Editar Modelo');
                         $('.modal-footer').show();  
@@ -197,7 +206,7 @@
                         $('.modal-footer').hide();   
                     }
         
-                    $('#clinicModal').addClass('active');  
+                    $('#docModal').addClass('active');  
                 },
                 error: function () {
                     new Notyf().error('Erro ao carregar dados da clínica.');
@@ -205,14 +214,16 @@
             });
         }
 
-        function preencherFormulario(clinica, edit) {
+        function preencherFormulario(modelo, edit) {
             // Aba Dados
             limparFormulario();
-            $('#cdClinica').val(clinica.cdClinica || '');
-            $('#nmClinica').val(clinica.nmClinica);
-            $('#endereco').val(clinica.endereco);
+            $('#cdModeloDocumento').val(modelo.cdModeloDocumento || '');
+            $('#nmModeloDocumento').val(modelo.nmModeloDocumento);
+            $('#descModeloDocumento').val(modelo.descModeloDocumento);
+            $('#html').val(modelo.html);
 
-            $('#clinicModal')
+
+            $('#docModal')
             .find('input, select, textarea')
             .prop('disabled', !edit);
         }
@@ -271,7 +282,7 @@
 
                     container.append(`
                         <div class="add-patient-card">
-                            <button class="add-clinic-btn">
+                            <button class="add-doc-btn">
                                 <i class="fas fa-plus-circle"></i>
                                 <span>Adicionar Modelo</span>
                             </button>
@@ -287,11 +298,16 @@
         function limparFormulario() {
             $('#documentForm')[0].reset(); 
             $('#cdPaciente').val('');
-            $('#clinicModal').find('input[type="text"], input[type="number"], input[type="email"], input[type="tel"], textarea, select').val(''); 
+            $('#docModal').find('input[type="text"], input[type="number"], input[type="email"], input[type="tel"], textarea, select').val(''); 
 
-            $('#clinicModal').find('input[type="radio"], input[type="checkbox"]').prop('checked', false);
+            $('#docModal').find('input[type="radio"], input[type="checkbox"]').prop('checked', false);
 
-            $('#clinicModal').find('input, select').trigger('change');
+            $('#docModal')
+            .find('input, select, textarea')
+            .prop('disabled', false);
+
+
+            $('#docModal').find('input, select').trigger('change');
         }
 
 

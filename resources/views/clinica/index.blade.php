@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-
+    
 </head>
 <body>
 
@@ -296,6 +296,10 @@
             $('#clinicModal').find('input[type="text"], input[type="number"], input[type="email"], input[type="tel"], textarea, select').val(''); 
 
             $('#clinicModal').find('input[type="radio"], input[type="checkbox"]').prop('checked', false);
+
+            $('#clinicModal')
+            .find('input, select, textarea')
+            .prop('disabled', false);
 
             $('#clinicModal').find('input, select').trigger('change');
         }
