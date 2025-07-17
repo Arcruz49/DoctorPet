@@ -1,6 +1,6 @@
 -- Criação segura do banco de dados
-CREATE DATABASE IF NOT EXISTS petCare2;
-USE petCare2;
+CREATE DATABASE IF NOT EXISTS DoctorPet;
+USE DoctorPet;
 
 -- Tabela de Perfis
 CREATE TABLE IF NOT EXISTS cadPerfil (

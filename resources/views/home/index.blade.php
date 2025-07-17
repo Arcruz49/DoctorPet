@@ -527,7 +527,17 @@
                                     <button class="icon-btn edit" onclick="visualizarPaciente(${paciente.cdPaciente}, true)">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button class="icon-btn more"><i class="fas fa-ellipsis-v"></i></button>
+                                    <div class="dropdown">
+                                        <button class="icon-btn more" onclick="toggleDropdown(this)">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <button onclick="deletarPaciente(${paciente.cdPaciente})">
+                                                <i class="fas fa-trash-alt"></i> Excluir
+                                            </button>
+                                            <!-- Você pode adicionar mais ações aqui -->
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         `;
@@ -564,6 +574,18 @@
 
             $('#patientForm').find('input, select').trigger('change');
         }
+
+        function toggleDropdown(btn) {
+            $('.dropdown-menu').not($(btn).siblings('.dropdown-menu')).hide(); // fecha outros
+            $(btn).siblings('.dropdown-menu').toggle(); // abre/fecha o atual
+        }
+
+        $(document).on('click', function (e) {
+            if (!$(e.target).closest('.dropdown').length) {
+                $('.dropdown-menu').hide(); // fecha ao clicar fora
+            }
+        });
+
 
 
     </script>
