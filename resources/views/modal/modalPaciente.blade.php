@@ -8,10 +8,10 @@
                 <div class="tabs">
                     <button class="tab-button active" data-tab="data">Dados</button>
                     <button class="tab-button" data-tab="questionnaire">Questionário</button>
-                    <button class="tab-button" data-tab="consultas">Consultas</button>
-                    <button class="tab-button" data-tab="exames">Exames</button>
-                    <button class="tab-button" data-tab="documentos">Documentos</button>
-                    <button class="tab-button" data-tab="imagens">Imagens</button>
+                    <button class="tab-button hideOnCreate" data-tab="consultas">Consultas</button>
+                    <button class="tab-button hideOnCreate" data-tab="exames">Exames</button>
+                    <button class="tab-button hideOnCreate" data-tab="documentos">Documentos</button>
+                    <button class="tab-button hideOnCreate" data-tab="imagens">Imagens</button>
                 </div>
 
                 <form id="patientForm">

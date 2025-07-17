@@ -102,6 +102,7 @@
                 $('#modalTitle').text('Novo Paciente');
                 $('.modal-footer').show();
                 limparFormulario();
+                $('.hideOnCreate').hide();
                 $('#patientModal').addClass('active');
             });
 
@@ -231,8 +232,11 @@
                 method: 'GET',
                 success: function (paciente) {
                     preencherFormulario(paciente, editar);
+                    $('.hideOnCreate').show();
+
                     if(editar == true){
                         $('#modalTitle').text('Editar Paciente');
+
                         $('.modal-footer').show();
                     }
                     else{
