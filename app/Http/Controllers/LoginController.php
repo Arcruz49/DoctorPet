@@ -79,14 +79,13 @@ class LoginController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'error: ' . $e->getMessage(),
-                'usuario' => $usuario
             ]);
         }
     }
 
     public function LogOut(){
         Auth::logout();
-        return redirect()->route('login');     
+        return redirect()->route('login');
     }
 
 }
