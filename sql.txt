@@ -154,3 +154,21 @@ CREATE TABLE cadModeloDocumento (
     color VARCHAR(20),
     descModeloDocumento varchar(500)
 );
+
+create table cadConsulta (
+    cdConsulta int primary key auto_increment,
+    cdPaciente int,
+    dtConsulta datetime,
+    dtCriacao datetime,
+    queixaPrincipal TEXT,
+    inicio TEXT,
+    preogressao TEXT,
+    sinais TEXT,
+    medidas TEXT,
+    obs TEXT,
+    examesSolicitados TEXT,
+    sugestoes TEXT,
+    prescricoes TEXT,
+    objetivos TEXT,
+    foreign key (cdPaciente) references cadPaciente(cdPaciente)
+);

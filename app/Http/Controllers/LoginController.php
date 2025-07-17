@@ -65,6 +65,7 @@ class LoginController extends Controller
                 'nmUsuario' => $request->nome,
                 'genero' => strtoupper($request->genero), // M ou F
                 'dtCriacao' => now(),
+                'cdPerfil' => $request->cdPerfil,
             ]);
 
             return response()->json([
