@@ -29,4 +29,6 @@ Route::get('/getModelo/{id}', [\App\Http\Controllers\ModeloDocumentoController::
 Route::post('/createDocumento', [\App\Http\Controllers\ModeloDocumentoController::class, 'CreateDocumento'])->name('CreateDocumento');
 Route::post('/editDocumento', [\App\Http\Controllers\ModeloDocumentoController::class, 'EditDocumento'])->name('EditDocumento');
 
+//Consulta
+Route::get('/Consultas', [\App\Http\Controllers\ConsultaController::class, 'Index'])->name('Consultas');
 

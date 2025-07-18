@@ -168,7 +168,8 @@ body {
 
 /* Conteúdo principal */
 .main-content {
-    margin-left: 280px; /* Igual à largura da sidebar */
+    margin-left: 280px;
+    /* Igual à largura da sidebar */
     width: calc(100% - 280px);
     padding: 20px;
     transition: all 0.3s ease;
@@ -416,7 +417,9 @@ body {
     border-color: var(--primary);
 }
 
-.add-patient-btn, .add-clinic-btn, .add-doc-btn{
+.add-patient-btn,
+.add-clinic-btn,
+.add-doc-btn {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -430,12 +433,16 @@ body {
     width: 100%;
 }
 
-.add-patient-btn i, .add-clinic-btn i, .add-doc-btn i {
+.add-patient-btn i,
+.add-clinic-btn i,
+.add-doc-btn i {
     font-size: 1.8rem;
     color: var(--primary);
 }
 
-.add-patient-btn:hover, .add-clinic-btn:hover, .add-doc-btn:hover {
+.add-patient-btn:hover,
+.add-clinic-btn:hover,
+.add-doc-btn:hover {
     color: var(--text);
 }
 
@@ -610,7 +617,7 @@ body {
         background: var(--sidebar);
         padding: 10px;
         border-radius: 5px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
 
     .sidebar-overlay {
@@ -619,14 +626,14 @@ body {
         left: 0;
         right: 0;
         bottom: 0;
-        background: rgba(0,0,0,0.5);
+        background: rgba(0, 0, 0, 0.5);
         z-index: 90;
         opacity: 0;
         visibility: hidden;
         transition: all 0.3s ease;
     }
 
-    .sidebar.active + .sidebar-overlay {
+    .sidebar.active+.sidebar-overlay {
         opacity: 1;
         visibility: visible;
     }
@@ -818,7 +825,7 @@ body {
     right: 0;
     background-color: white;
     min-width: 120px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     z-index: 1;
     border-radius: 6px;
     overflow: hidden;
@@ -836,4 +843,59 @@ body {
 
 .dropdown-menu button:hover {
     background-color: #f1f1f1;
+}
+
+.status-dot {
+    min-width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.card-appointment {
+    transition: box-shadow 0.2s ease-in-out;
+}
+
+.card-appointment:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1) !important;
+}
+
+.btn-confirm {
+    background-color: #D1FAE5;
+    color: #065F46;
+    font-weight: 600;
+}
+
+.btn-confirm:hover {
+    background-color: #A7F3D0;
+    color: #047857;
+}
+
+.btn-reschedule {
+    color: #4B5563;
+    font-weight: 600;
+}
+
+.btn-reschedule:hover {
+    background-color: #F3F4F6;
+}
+
+.btn-cancel {
+    color: #DC3545;
+    font-weight: 600;
+}
+
+.btn-cancel:hover {
+    background-color: #F8D7DA;
+}
+
+/* Make offcanvas always visible on lg and up */
+@media (min-width: 992px) {
+    .offcanvas-lg {
+        position: relative;
+        transform: none;
+        visibility: visible !important;
+        border-right: 1px solid #dee2e6;
+    }
+
+
 }

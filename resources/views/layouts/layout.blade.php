@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DoctorPet | Sistema Veterinário</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <link rel="stylesheet" href="{{ asset('css/home.css') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
+
 <body>
     <div class="app-container">
         <aside class="sidebar">
@@ -38,8 +42,8 @@
                             <span>Clínicas</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="#">
+                    <li {{ Route::is('Consultas') ? 'active' : '' }}>
+                        <a href="{{ route('Consultas') }}">
                             <i class="fas fa-calendar-check"></i>
                             <span>Consultas</span>
                         </a>
@@ -90,38 +94,39 @@
 
     </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
 
-<script>
+    <script>
 
-    $(document).ready(function() {
-        // Toggle sidebar em telas pequenas
-        $('.menu-toggle').click(function(e) {
-            e.stopPropagation();
-            $('.sidebar').toggleClass('active');
+        $(document).ready(function () {
+            // Toggle sidebar em telas pequenas
+            $('.menu-toggle').click(function (e) {
+                e.stopPropagation();
+                $('.sidebar').toggleClass('active');
 
-        });
+            });
 
-        // Fechar sidebar ao clicar no overlay ou fora
-        $('.sidebar-overlay').click(function() {
-            $('.sidebar').removeClass('active');
-        });
-
-        $(document).click(function(e) {
-            if (!$(e.target).closest('.sidebar').length && !$(e.target).is('.menu-toggle')) {
+            // Fechar sidebar ao clicar no overlay ou fora
+            $('.sidebar-overlay').click(function () {
                 $('.sidebar').removeClass('active');
-            }
-        });
+            });
 
-        // Fechar sidebar ao redimensionar para tela maior
-        $(window).resize(function() {
-            if ($(window).width() > 992) {
-                $('.sidebar').removeClass('active');
-            }
+            $(document).click(function (e) {
+                if (!$(e.target).closest('.sidebar').length && !$(e.target).is('.menu-toggle')) {
+                    $('.sidebar').removeClass('active');
+                }
+            });
+
+            // Fechar sidebar ao redimensionar para tela maior
+            $(window).resize(function () {
+                if ($(window).width() > 992) {
+                    $('.sidebar').removeClass('active');
+                }
+            });
         });
-    });
-</script>
-@stack('scripts')
+    </script>
+    @stack('scripts')
 </body>
+
 </html>

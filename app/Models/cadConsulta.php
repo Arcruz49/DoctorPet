@@ -26,10 +26,16 @@ class cadConsulta extends Model
         'sugestoes',
         'prescricoes',
         'objetivos',
+        'cdStatusConsulta'
     ];
 
     public function paciente()
     {
         return $this->belongsTo(cadPaciente::class, 'cdPaciente', 'cdPaciente');
     }
+    public function status()
+    {
+        return $this->belongsTo(CadStatusConsulta::class, 'cdStatusConsulta', 'cdStatusConsulta');
+    }
+
 }

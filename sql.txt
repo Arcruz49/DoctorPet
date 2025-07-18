@@ -172,3 +172,21 @@ create table cadConsulta (
     objetivos TEXT,
     foreign key (cdPaciente) references cadPaciente(cdPaciente)
 );
+
+
+create table cadStatusConsulta
+(
+	cdStatusConsulta int primary key auto_increment,
+	descStatusConsulta varchar(100)
+)
+
+
+alter table cadconsulta 
+add cdStatusConsulta int
+
+ALTER TABLE cadConsulta
+ADD CONSTRAINT fk_status_consulta
+FOREIGN KEY (cdStatusConsulta) REFERENCES cadStatusConsulta(cdStatusConsulta);
+
+insert into cadStatusConsulta(descStatusConsulta)
+values ('Agendada'), ('Confirmada'), ('Realizada'), ('Cancelada')
