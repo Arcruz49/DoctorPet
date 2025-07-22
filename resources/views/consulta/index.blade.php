@@ -173,9 +173,14 @@
             </div>
         </div>
 
-        <div class="modal-overlay" id="clinicModal">
-            @include('modal.modalClinica')
+        <div class="modal-overlay" id="consultaModal">
+            @include('modal.modalConsulta')
         </div>
+
+        <div class="modal-overlay" id="addPacienteModal">
+            @include('modal.modalAdicionarPaciente')
+        </div>
+
 
     @endsection
 
@@ -193,14 +198,28 @@
 
             $(document).ready(function () {
 
-                carregarClinicas();
+                $('#btnAbrirModalPaciente').on('click', function (e) {
+                    debugger
+                    e.preventDefault();
+                    $('#addPacienteModal').fadeIn(); // ou .show() se preferir sem animação
+                });
+
+                // Para fechar o modal de paciente
+                $(document).on('click', '.close-modal, .modal-overlay', function (e) {
+                    // Verifica se clicou diretamente no overlay (fora do conteúdo)
+                    if ($(e.target).hasClass('modal-overlay') || $(e.target).hasClass('close-modal')) {
+                        $('#addPacienteModal').fadeOut(); // ou .hide()
+                    }
+                });
+
+                carregarPacientes();
 
                 $('.filter').on('change', function () {
-                    carregarClinicas();
+                    carregarPacientes();
                 });
 
                 $('#search').on('input', function () {
-                    carregarClinicas();
+                    carregarPacientes();
                 });
 
 
@@ -209,12 +228,12 @@
                     $('#modalTitle').text('Nova Clínica');
                     $('.modal-footer').show();
                     limparFormulario();
-                    $('#clinicModal').addClass('active');
+                    $('#consultaModal').addClass('active');
                 });
 
                 // Fechar modal
                 $('.close-modal, .btn.secondary').click(function () {
-                    $('#clinicModal').removeClass('active');
+                    $('#consultaModal').removeClass('active');
                 });
 
                 // Visualizar clinica
@@ -226,7 +245,7 @@
                 // Editar clinica
                 $('.icon-btn.edit').click(function () {
                     // Aqui você implementaria a lógica para editar clinica
-                    $('#clinicModal').addClass('active');
+                    $('#consultaModal').addClass('active');
                     $('.modal-header h2').text('Editar Paciente');
                 });
 
@@ -253,16 +272,16 @@
                 // Fechar modal ao clicar fora
                 // $(document).click(function(e) {
                 //     if ($(e.target).hasClass('modal-overlay')) {
-                //         $('#clinicModal').removeClass('active');
+                //         $('#consultaModal').removeClass('active');
                 //     }
                 // });
 
                 // // Simular envio do formulário
-                // $('#clinicModal').submit(function(e) {
+                // $('#consultaModal').submit(function(e) {
                 //     e.preventDefault();
                 //     // Aqui você implementaria o AJAX para salvar o paciente
                 //     alert('Paciente salvo com sucesso! (implementar lógica de envio)');
-                //     $('#clinicModal').removeClass('active');
+                //     $('#consultaModal').removeClass('active');
                 // });
 
 
@@ -281,7 +300,7 @@
 
 
                 $('#btnAddClinica').on('click', function () {
-                    const form = $('#clinicForm')[0];
+                    const form = $('#consultaForm')[0];
                     const formData = new FormData(form);
                     const notyf = new Notyf();
 
@@ -299,8 +318,8 @@
                         success: function (response) {
                             if (response.success === true) {
                                 notyf.success(response.message);
-                                $('#clinicModal').removeClass('active');
-                                carregarClinicas();
+                                $('#consultaModal').removeClass('active');
+                                carregarPacientes();
                             } else {
                                 notyf.error(response.message || 'Ocorreu um erro ao salvar.');
                             }
@@ -330,7 +349,7 @@
                             $('.modal-footer').hide();
                         }
 
-                        $('#clinicModal').addClass('active');
+                        $('#consultaModal').addClass('active');
                     },
                     error: function () {
                         new Notyf().error('Erro ao carregar dados da clínica.');
@@ -345,71 +364,60 @@
                 $('#nmClinica').val(clinica.nmClinica);
                 $('#endereco').val(clinica.endereco);
 
-                $('#clinicModal')
+                $('#consultaModal')
                     .find('input, select, textarea')
                     .prop('disabled', !edit);
             }
 
 
-            function carregarClinicas() {
+            function carregarPacientes() {
                 let search = $('#search').val();
                 let searchEspecie = $('#searchEspecie').val();
                 let searchOrder = $('#searchOrder').val();
                 let searchExibir = $('#searchExibir').val();
+                let searchClinica = $('#searchClinica').val();
 
                 $.ajax({
-                    url: '/getClinicas',
+                    url: '/getPacientes',
                     method: 'GET',
                     data: {
                         search: search,
                         especie: searchEspecie,
                         order: searchOrder,
-                        exibir: searchExibir
+                        exibir: searchExibir,
+                        searchClinica: searchClinica
                     },
-                    success: function (clinicas) {
+                    success: function (pacientes) {
                         let container = $('#patientsContainer');
                         container.empty();
 
-                        clinicas.forEach(clinica => {
-                            let icon = '<i class="fa-solid fa-house-chimney-medical"></i>';
-                            let cor = clinica.color;
-                            if (clinica.color == '' || clinica.color == null || clinica.color == undefined) {
+                        pacientes.forEach(paciente => {
+                            let icon = '<i class="fas fa-dog"></i>';
+                            let cor = paciente.color;
+                            if (paciente.especie.toLowerCase().includes('gato')) icon = '<i class="fas fa-cat"></i>';
+
+                            if(paciente.color == '' || paciente.color == null || paciente.color == undefined){
                                 const cores = ['#FFD6E0', '#C1FBA4', '#7BF1A8', '#90F1EF', '#FFB7FF'];
                                 cor = cores[Math.floor(Math.random() * cores.length)];
                             }
 
                             let card = `
-                                                                                                    <div class="patient-card">
-                                                                                                        <div class="patient-avatar" style="background-color: ${cor};">
-                                                                                                            ${icon}
-                                                                                                        </div>
-                                                                                                        <div class="patient-info">
-                                                                                                            <h3>${clinica.nmClinica}</h3>
-                                                                                                            <p class="meta">${clinica.endereco}</p>
-                                                                                                        </div>
-                                                                                                        <div class="patient-actions">
-                                                                                                            <button class="icon-btn view" onclick="visualizarClinica(${clinica.cdClinica}, false)">
-                                                                                                                <i class="fas fa-eye"></i>
-                                                                                                            </button>
-                                                                                                            <button class="icon-btn edit" onclick="visualizarClinica(${clinica.cdClinica}, true)">
-                                                                                                                <i class="fas fa-edit"></i>
-                                                                                                            </button>
-                                                                                                            <button class="icon-btn more"><i class="fas fa-ellipsis-v"></i></button>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                `;
+                                <div class="patient-card">
+                                    <div class="patient-avatar" style="background-color: ${cor};">
+                                        ${icon}
+                                    </div>
+                                    <div class="patient-info">
+                                        <h3>${paciente.nmPaciente}</h3>
+                                        <p class="meta">${paciente.raca} • ${paciente.idade}</p>
+                                        <p class="owner">Tutor: ${paciente.nmTutor}</p>
+                                        
+                                    </div>
+                                </div>
+                            `;
 
                             container.append(card);
                         });
 
-                        container.append(`
-                                                                                                <div class="add-patient-card">
-                                                                                                    <button class="add-clinic-btn">
-                                                                                                        <i class="fas fa-plus-circle"></i>
-                                                                                                        <span>Adicionar Clínica</span>
-                                                                                                    </button>
-                                                                                                </div>
-                                                                                            `);
                     },
                     error: function () {
                         alert('Erro ao carregar os pacientes.');
@@ -418,17 +426,17 @@
             }
 
             function limparFormulario() {
-                $('#clinicForm')[0].reset();
+                $('#consultaForm')[0].reset();
                 $('#cdPaciente').val('');
-                $('#clinicModal').find('input[type="text"], input[type="number"], input[type="email"], input[type="tel"], textarea, select').val('');
+                $('#consultaModal').find('input[type="text"], input[type="number"], input[type="email"], input[type="tel"], textarea, select').val('');
 
-                $('#clinicModal').find('input[type="radio"], input[type="checkbox"]').prop('checked', false);
+                $('#consultaModal').find('input[type="radio"], input[type="checkbox"]').prop('checked', false);
 
-                $('#clinicModal')
+                $('#consultaModal')
                     .find('input, select, textarea')
                     .prop('disabled', false);
 
-                $('#clinicModal').find('input, select').trigger('change');
+                $('#consultaModal').find('input, select').trigger('change');
             }
 
 

@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Models\cadClinica;
 use App\Models\cadConsulta;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,12 +18,12 @@ class ConsultaController extends Controller
         }
 
         $usuario->load('perfil');
-        $consultas = cadConsulta::all();
+        $clinicas = cadClinica::all();
 
         return view('consulta.index', [
             'nomeUsuario' => $usuario->nmUsuario,
             'perfilUsuario' => $usuario->genero == 'M' ? $usuario->perfil->nmPerfil : $usuario->perfil->nmPerfilF,
-            'consultas' => $consultas
+            'clinicas' => $clinicas
         ]);
     }
 }
