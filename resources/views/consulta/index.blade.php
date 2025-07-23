@@ -198,11 +198,11 @@
 
             $(document).ready(function () {
 
-                $('#btnAbrirModalPaciente').on('click', function (e) {
-                    debugger
-                    e.preventDefault();
-                    $('#addPacienteModal').fadeIn(); // ou .show() se preferir sem animação
-                });
+                // $('#btnAbrirModalPaciente').on('click', function (e) {
+                //     debugger
+                //     e.preventDefault();
+                //     $('#addPacienteModal').fadeIn(); // ou .show() se preferir sem animação
+                // });
 
                 // Para fechar o modal de paciente
                 $(document).on('click', '.close-modal, .modal-overlay', function (e) {
@@ -223,12 +223,28 @@
                 });
 
 
-                // Abrir modal de novo clinica
                 $(document).on('click', '.new-clinic, .add-clinic-btn', function () {
-                    $('#modalTitle').text('Nova Clínica');
+                    $('#modalTitleConsulta').text('Nova Clínica'); // Corrigido o ID do título
                     $('.modal-footer').show();
                     limparFormulario();
+
+                    $('#consultaForm')[0].reset();
+
+                    $('.add-patient-card').html(`
+                        <div id="btnAbrirModalPaciente">
+                            <button type="button" class="add-patient-btn">
+                                <i class="fas fa-plus-circle"></i>
+                                <span>Adicionar Paciente</span>
+                            </button>
+                        </div>
+                    `);
+
                     $('#consultaModal').addClass('active');
+                });
+
+                $(document).on('click', '#btnAbrirModalPaciente', function () {
+                    $('#consultaModal').removeClass('active');
+                    $('#addPacienteModal').addClass('active');
                 });
 
                 // Fechar modal
@@ -299,16 +315,16 @@
                 });
 
 
-                $('#btnAddClinica').on('click', function () {
+                $('#btnSalvarConsulta').on('click', function () {
                     const form = $('#consultaForm')[0];
                     const formData = new FormData(form);
                     const notyf = new Notyf();
 
-                    let url = '/createClinica';
+                    let url = '/createConsulta';
 
-                    if ($('#cdClinica').val() !== "") {
-                        url = '/editClinica';
-                    }
+                    // if ($('#cdClinica').val() !== "") {
+                    //     url = '/editClinica';
+                    // }
                     $.ajax({
                         url: url,
                         method: 'POST',
@@ -325,7 +341,7 @@
                             }
                         },
                         error: function () {
-                            notyf.error('Erro ao salvar clínica.');
+                            notyf.error('Erro ao salvar consulta.');
                         }
                     });
                 });
@@ -394,7 +410,7 @@
                         pacientes.forEach(paciente => {
                             let icon = '<i class="fas fa-dog"></i>';
                             let cor = paciente.color;
-                            if (paciente.especie.toLowerCase().includes('gato')) icon = '<i class="fas fa-cat"></i>';
+                            if (paciente.especie.toLowerCase().includes('cat')) icon = '<i class="fas fa-cat"></i>';
 
                             if(paciente.color == '' || paciente.color == null || paciente.color == undefined){
                                 const cores = ['#FFD6E0', '#C1FBA4', '#7BF1A8', '#90F1EF', '#FFB7FF'];
@@ -402,7 +418,7 @@
                             }
 
                             let card = `
-                                <div class="patient-card">
+                                <div class="patient-card" onclick="addPaciente(this, ${paciente.cdPaciente})" data-cdpaciente="${paciente.cdPaciente}">
                                     <div class="patient-avatar" style="background-color: ${cor};">
                                         ${icon}
                                     </div>
@@ -439,6 +455,26 @@
                 $('#consultaModal').find('input, select').trigger('change');
             }
 
+           function addPaciente(card, cdPaciente) {
+            let container = $('.add-patient-card');
+            container.empty();
+
+            let clone = $(card).clone();
+
+            clone.off('click').on('click', function () {
+                $('#consultaModal').removeClass('active');
+                $('#addPacienteModal').addClass('active');
+            });
+
+            $('#cdPacienteAdicionado').val(cdPaciente);
+
+            container.append(clone);
+
+            $('#addPacienteModal').removeClass('active');
+            $('#consultaModal').addClass('active');
+        }
+
+
 
         </script>
     @endpush
@@ -446,3 +482,9 @@
 </body>
 
 </html>
+
+<style>
+    .patient-card{
+        cursor: pointer;
+    }
+</style>

@@ -13,15 +13,15 @@
                 <h3>Agendar Consulta</h3>
                 <div class="form-grid">
                     <div class="form-group">
-                        <div class="add-patient-card">
-                            <button type="button" class="add-patient-btn" id="btnAbrirModalPaciente">
+                        <div class="add-patient-card" id="btnAbrirModalPaciente">
+                            <button type="button" class="add-patient-btn">
                                 <i class="fas fa-plus-circle"></i>
                                 <span>Adicionar Paciente</span>
                             </button>
                         </div>
                     </div>
 
-                    
+                    <input style="display: none" type="text" id="cdPacienteAdicionado" name="cdPacienteAdicionado">
 
                     <div class="form-group">
                         <label for="dtConsulta">Data da Consulta</label>

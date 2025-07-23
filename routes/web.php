@@ -31,4 +31,5 @@ Route::post('/editDocumento', [\App\Http\Controllers\ModeloDocumentoController::
 
 //Consulta
 Route::get('/Consultas', [\App\Http\Controllers\ConsultaController::class, 'Index'])->name('Consultas');
+Route::post('/createConsulta', [\App\Http\Controllers\ConsultaController::class, 'CreateConsulta'])->name('CreateConsulta');
 

@@ -49,7 +49,7 @@
 </div>
 
 
-<style>
+<style>1
 .patient-card{
     cursor: pointer;
 }

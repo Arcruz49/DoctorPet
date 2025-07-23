@@ -506,7 +506,7 @@
                     pacientes.forEach(paciente => {
                         let icon = '<i class="fas fa-dog"></i>';
                         let cor = paciente.color;
-                        if (paciente.especie.toLowerCase().includes('gato')) icon = '<i class="fas fa-cat"></i>';
+                        if (paciente.especie.toLowerCase().includes('cat')) icon = '<i class="fas fa-cat"></i>';
 
                         if(paciente.color == '' || paciente.color == null || paciente.color == undefined){
                             const cores = ['#FFD6E0', '#C1FBA4', '#7BF1A8', '#90F1EF', '#FFB7FF'];
