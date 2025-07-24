@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\cadClinica;
 use App\Models\cadConsulta;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class ConsultaController extends Controller
@@ -64,5 +64,47 @@ class ConsultaController extends Controller
                 "message"=> $ex->getMessage()
             ]);
         }
+    }
+
+
+    public function GetConsultas(){
+        DB::statement("SET lc_time_names = 'pt_BR'");
+
+        $query = "
+        SELECT 
+            a.cdConsulta, 
+            a.cdPaciente, 
+            b.nmPaciente, 
+            b.nmTutor , 
+            b.raca, 
+            b.especie, 
+            a.cdStatusConsulta, 
+            DATE_FORMAT(a.dtConsulta, '%H:%i') AS horaConsulta,
+            CASE
+                WHEN DATE(a.dtConsulta) = CURDATE() THEN 
+                    CONCAT('HOJE, ', UPPER(DATE_FORMAT(a.dtConsulta, '%d de %M de %Y')))
+                WHEN DATE(a.dtConsulta) = CURDATE() + INTERVAL 1 DAY THEN
+                    CONCAT('AMANHÃ, ', UPPER(DATE_FORMAT(a.dtConsulta, '%d de %M de %Y')))
+                ELSE 
+                    UPPER(DATE_FORMAT(a.dtConsulta, '%d de %M de %Y'))
+            END AS dataConsultaExtenso
+        FROM cadconsulta a
+        LEFT JOIN cadpaciente b ON a.cdPaciente = b.cdPaciente
+        ORDER BY a.dtConsulta;";
+
+
+
+        $consultas = DB::select($query);
+
+        $consultasAgrupadas = [];
+
+        foreach ($consultas as $c) {
+            $data = $c->dataConsultaExtenso;
+            $consultasAgrupadas[$data][] = $c;
+        }
+
+        //dd($consultasAgrupadas);
+
+        return response()->json($consultasAgrupadas);
     }
 }

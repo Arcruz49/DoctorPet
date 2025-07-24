@@ -190,3 +190,6 @@ FOREIGN KEY (cdStatusConsulta) REFERENCES cadStatusConsulta(cdStatusConsulta);
 
 insert into cadStatusConsulta(descStatusConsulta)
 values ('Agendada'), ('Confirmada'), ('Realizada'), ('Cancelada')
+
+
+SET lc_time_names = 'pt_BR';

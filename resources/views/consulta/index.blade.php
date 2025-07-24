@@ -49,123 +49,9 @@
             <div class="consultas-grid" id="ConsultasContainer">
 
                 <div class="space-y-5">
-                    <div>
-                        <h2 class="h6 text-secondary fw-semibold mb-3 pb-2 border-bottom">HOJE, 25 DE JULHO DE 2024</h2>
-                        <!-- Appointment Card 1 -->
-                        <div class="card card-appointment mb-3">
-                            <div class="card-body p-3 d-flex flex-column flex-sm-row align-items-sm-center gap-3">
-                                <div class="text-sm-center" style="flex: 0 0 100px;">
-                                    <p class="fs-5 fw-bold m-0">14:30</p>
-                                    <div
-                                        class="d-flex align-items-center justify-content-start justify-content-sm-center gap-1 mt-1">
-                                        <div class="status-dot bg-primary"></div>
-                                        <span class="small fw-medium text-primary">Agendada</span>
-                                    </div>
-                                </div>
-                                <div class="d-none d-sm-block vr p-0 mx-2"></div>
-                                <div class="flex-grow-1">
-                                    <p class="fw-bold fs-6 m-0">Morgana</p>
-                                    <div class="d-flex flex-column flex-sm-row small text-secondary mt-1"
-                                        style="gap: 0.25rem 1rem;">
-                                        <span><i class="fa-solid fa-paw me-2 text-muted"></i>Galgo Italiano</span>
-                                        <span><i class="fa-solid fa-user-md me-2 text-muted"></i>Dr. Ricardo Alves</span>
-                                        <span><i class="fa-solid fa-user-shield me-2 text-muted"></i>Tutor: Arthur
-                                            Cruz</span>
-                                    </div>
-                                </div>
-                                <div class="d-flex gap-2 mt-2 mt-sm-0">
-                                    <button class="btn btn-sm btn-confirm px-3">Confirmar</button>
-                                    <button class="btn btn-sm btn-reschedule px-3">Reagendar</button>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Appointment Card 2 -->
-                        <div class="card card-appointment mb-3">
-                            <div class="card-body p-3 d-flex flex-column flex-sm-row align-items-sm-center gap-3">
-                                <div class="text-sm-center" style="flex: 0 0 100px;">
-                                    <p class="fs-5 fw-bold m-0">16:00</p>
-                                    <div
-                                        class="d-flex align-items-center justify-content-start justify-content-sm-center gap-1 mt-1">
-                                        <div class="status-dot bg-success"></div>
-                                        <span class="small fw-medium text-success">Confirmada</span>
-                                    </div>
-                                </div>
-                                <div class="d-none d-sm-block vr p-0 mx-2"></div>
-                                <div class="flex-grow-1">
-                                    <p class="fw-bold fs-6 m-0">Biscoito</p>
-                                    <div class="d-flex flex-column flex-sm-row small text-secondary mt-1"
-                                        style="gap: 0.25rem 1rem;">
-                                        <span><i class="fa-solid fa-paw me-2 text-muted"></i>Golden Retriever</span>
-                                        <span><i class="fa-solid fa-user-md me-2 text-muted"></i>Dra. Juliana Martins</span>
-                                        <span><i class="fa-solid fa-user-shield me-2 text-muted"></i>Tutora: Mariana
-                                            Lima</span>
-                                    </div>
-                                </div>
-                                <div class="d-flex gap-2 mt-2 mt-sm-0">
-                                    <button class="btn btn-sm btn-primary px-3">Atender</button>
-                                    <button class="btn btn-sm btn-cancel px-3">Cancelar</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <h2 class="h6 text-secondary fw-semibold mb-3 pb-2 border-bottom">AMANHÃ, 26 DE JULHO DE 2024</h2>
-                        <!-- Appointment Card 3 -->
-                        <div class="card card-appointment mb-3 opacity-75">
-                            <div class="card-body p-3 d-flex flex-column flex-sm-row align-items-sm-center gap-3">
-                                <div class="text-sm-center" style="flex: 0 0 100px;">
-                                    <p class="fs-5 fw-bold m-0 text-decoration-line-through text-muted">09:00</p>
-                                    <div
-                                        class="d-flex align-items-center justify-content-start justify-content-sm-center gap-1 mt-1">
-                                        <div class="status-dot bg-secondary"></div>
-                                        <span class="small fw-medium text-secondary">Realizada</span>
-                                    </div>
-                                </div>
-                                <div class="d-none d-sm-block vr p-0 mx-2"></div>
-                                <div class="flex-grow-1">
-                                    <p class="fw-bold fs-6 m-0 text-muted">Paçoca</p>
-                                    <div class="d-flex flex-column flex-sm-row small text-secondary mt-1"
-                                        style="gap: 0.25rem 1rem;">
-                                        <span><i class="fa-solid fa-paw me-2 text-muted"></i>Vira-lata</span>
-                                        <span><i class="fa-solid fa-user-md me-2 text-muted"></i>Dr. Ricardo Alves</span>
-                                        <span><i class="fa-solid fa-user-shield me-2 text-muted"></i>Tutor: Felipe
-                                            Souza</span>
-                                    </div>
-                                </div>
-                                <div class="d-flex gap-2 mt-2 mt-sm-0">
-                                    <button class="btn btn-sm btn-outline-secondary px-3">Ver Prontuário</button>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Appointment Card 4 -->
-                        <div class="card card-appointment mb-3" style="background-color: #f8d7da30;">
-                            <div
-                                class="card-body p-3 d-flex flex-column flex-sm-row align-items-sm-center gap-3 opacity-75">
-                                <div class="text-sm-center" style="flex: 0 0 100px;">
-                                    <p class="fs-5 fw-bold m-0 text-decoration-line-through text-danger">11:30</p>
-                                    <div
-                                        class="d-flex align-items-center justify-content-start justify-content-sm-center gap-1 mt-1">
-                                        <div class="status-dot bg-danger"></div>
-                                        <span class="small fw-medium text-danger">Cancelada</span>
-                                    </div>
-                                </div>
-                                <div class="d-none d-sm-block vr p-0 mx-2"></div>
-                                <div class="flex-grow-1">
-                                    <p class="fw-bold fs-6 m-0 text-muted">Thor</p>
-                                    <div class="d-flex flex-column flex-sm-row small text-secondary mt-1"
-                                        style="gap: 0.25rem 1rem;">
-                                        <span><i class="fa-solid fa-paw me-2 text-muted"></i>Bulldog Francês</span>
-                                        <span><i class="fa-solid fa-user-md me-2 text-muted"></i>Dr. Fernando Costa</span>
-                                        <span><i class="fa-solid fa-user-shield me-2 text-muted"></i>Tutora: Carla
-                                            Dias</span>
-                                    </div>
-                                </div>
-                                <div class="d-flex gap-2 mt-2 mt-sm-0">
-                                    <button class="btn btn-sm btn-outline-secondary px-3">Ver Detalhes</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    
+                    <div id="consultas-container"></div>
+
                 </div>
 
 
@@ -212,14 +98,18 @@
                     }
                 });
 
-                carregarPacientes();
-
-                $('.filter').on('change', function () {
+                $(document).on('click', '.add-patient-btn', function () {
                     carregarPacientes();
                 });
 
+                carregarConsultas();
+
+                $('.filter').on('change', function () {
+                    carregarConsultas();
+                });
+
                 $('#search').on('input', function () {
-                    carregarPacientes();
+                    carregarConsultas();
                 });
 
 
@@ -335,7 +225,7 @@
                             if (response.success === true) {
                                 notyf.success(response.message);
                                 $('#consultaModal').removeClass('active');
-                                carregarPacientes();
+                                carregarConsultas();
                             } else {
                                 notyf.error(response.message || 'Ocorreu um erro ao salvar.');
                             }
@@ -383,6 +273,100 @@
                 $('#consultaModal')
                     .find('input, select, textarea')
                     .prop('disabled', !edit);
+            }
+
+
+            
+
+            function carregarConsultas() {
+                $.ajax({
+                    url: '/GetConsultas',
+                    method: 'GET',
+                    success: function (data) {
+                        const container = $('#consultas-container');
+                        container.empty();
+
+                        Object.entries(data).forEach(([dataLabel, consultas]) => {
+                            const title = `<h2 class="h6 text-secondary fw-semibold mb-3 pb-2 border-bottom">${dataLabel}</h2>`;
+                            container.append(title);
+
+                            consultas.forEach(consulta => {
+                                let statusLabel = 'Desconhecido';
+                                let statusClass = 'secondary';
+
+                                switch (consulta.cdStatusConsulta) {
+                                    case 1:
+                                        statusLabel = 'Agendada';
+                                        statusClass = 'primary';
+                                        break;
+                                    case 2:
+                                        statusLabel = 'Confirmada';
+                                        statusClass = 'success';
+                                        break;
+                                    case 3:
+                                        statusLabel = 'Realizada';
+                                        statusClass = 'muted';
+                                        break;
+                                    case 4:
+                                        statusLabel = 'Cancelada';
+                                        statusClass = 'danger';
+                                        break;
+                                }
+
+                                const isFinalizada = consulta.cdStatusConsulta === 3 || consulta.cdStatusConsulta === 4;
+                                const isCancelada = consulta.cdStatusConsulta === 4;
+
+                                const horaClasse = isFinalizada
+                                    ? `text-decoration-line-through text-${statusClass}`
+                                    : `text-${statusClass}`;
+
+                                const cardClasse = 'card card-appointment mb-3';
+                                const cardStyle = isCancelada ? 'background-color: #f8d7da30;' : '';
+                                const bodyStyle = isFinalizada ? 'opacity-75' : '';
+
+                                const especie = consulta.especie == 'cat' ? 'Gato' : 'Cachorro';
+
+                                const botoes = !isFinalizada ? `
+                                    <button class="btn btn-sm btn-confirm px-3" data-id="${consulta.cdConsulta}">Atender</button>
+                                    <button class="btn btn-sm btn-outline-danger px-3">Cancelar</button>
+                                ` : `
+                                    <button class="btn btn-sm btn-outline-secondary px-3">Ver Detalhes</button>
+                                `;
+
+                                const card = `
+                                    <div class="${cardClasse}" style="${cardStyle}">
+                                        <div class="card-body p-3 d-flex flex-column flex-sm-row align-items-sm-center gap-3 ${bodyStyle}">
+                                            <div class="text-sm-center" style="flex: 0 0 100px;">
+                                                <p class="fs-5 fw-bold m-0 ${horaClasse}">${consulta.horaConsulta}</p>
+                                                <div class="d-flex align-items-center justify-content-sm-center gap-1 mt-1">
+                                                    <div class="status-dot bg-${statusClass}"></div>
+                                                    <span class="small fw-medium text-${statusClass}">${statusLabel}</span>
+                                                </div>
+                                            </div>
+                                            <div class="d-none d-sm-block vr p-0 mx-2"></div>
+                                            <div class="flex-grow-1">
+                                                <p class="fw-bold fs-6 m-0 text-muted">${consulta.nmPaciente}</p>
+                                                <div class="d-flex flex-column flex-sm-row small text-secondary mt-1" style="gap: 0.25rem 1rem;">
+                                                    <span><i class="fa-solid fa-paw me-2 text-muted"></i>${consulta.raca}</span>
+                                                    <span><i class="fa-solid fa-${consulta.especie} me-2 text-muted"></i>${especie}</span>
+                                                    <span><i class="fa-solid fa-user-shield me-2 text-muted"></i>Tutor: ${consulta.nmTutor}</span>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex gap-2 mt-2 mt-sm-0">
+                                                ${botoes}
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+
+                                container.append(card);
+                            });
+                        });
+                    },
+                    error: function () {
+                        $('#consultas-container').html('<p class="text-danger">Erro ao carregar as consultas.</p>');
+                    }
+                });
             }
 
 
