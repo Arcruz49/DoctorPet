@@ -67,32 +67,41 @@ class ConsultaController extends Controller
     }
 
 
-    public function GetConsultas(){
+    public function GetConsultas(Request $request){
         DB::statement("SET lc_time_names = 'pt_BR'");
 
+        $dtInicio = $request -> dtConsultaInicio ?? '';
+        $dtFim = $request -> dtConsultaFim ?? '';
+        $exibir = $request -> exibir ?? 10;
+        //dd($dtInicio, $dtFim);
         $query = "
-        SELECT 
-            a.cdConsulta, 
-            a.cdPaciente, 
-            b.nmPaciente, 
-            b.nmTutor , 
-            b.raca, 
-            b.especie, 
-            a.cdStatusConsulta, 
-            DATE_FORMAT(a.dtConsulta, '%H:%i') AS horaConsulta,
-            CASE
-                WHEN DATE(a.dtConsulta) = CURDATE() THEN 
-                    CONCAT('HOJE, ', UPPER(DATE_FORMAT(a.dtConsulta, '%d de %M de %Y')))
-                WHEN DATE(a.dtConsulta) = CURDATE() + INTERVAL 1 DAY THEN
-                    CONCAT('AMANHÃ, ', UPPER(DATE_FORMAT(a.dtConsulta, '%d de %M de %Y')))
-                ELSE 
-                    UPPER(DATE_FORMAT(a.dtConsulta, '%d de %M de %Y'))
-            END AS dataConsultaExtenso
-        FROM cadconsulta a
-        LEFT JOIN cadpaciente b ON a.cdPaciente = b.cdPaciente
-        ORDER BY a.dtConsulta;";
+            SELECT 
+                a.cdConsulta, 
+                a.cdPaciente, 
+                b.nmPaciente, 
+                b.nmTutor , 
+                b.raca, 
+                b.especie, 
+                a.cdStatusConsulta, 
+                DATE_FORMAT(a.dtConsulta, '%H:%i') AS horaConsulta,
+                CASE
+                    WHEN DATE(a.dtConsulta) = CURDATE() THEN 
+                        CONCAT('HOJE, ', UPPER(DATE_FORMAT(a.dtConsulta, '%d de %M de %Y')))
+                    WHEN DATE(a.dtConsulta) = CURDATE() + INTERVAL 1 DAY THEN
+                        CONCAT('AMANHÃ, ', UPPER(DATE_FORMAT(a.dtConsulta, '%d de %M de %Y')))
+                    ELSE 
+                        UPPER(DATE_FORMAT(a.dtConsulta, '%d de %M de %Y'))
+                END AS dataConsultaExtenso
+            FROM cadconsulta a
+            LEFT JOIN cadpaciente b ON a.cdPaciente = b.cdPaciente
+            WHERE 1 = 1
+                AND ('{$dtInicio}' = '' OR DATE(a.dtConsulta) >= '{$dtInicio}')
+                AND ('{$dtFim}' = '' OR DATE(a.dtConsulta) <= '{$dtFim}')
+            ORDER BY a.dtConsulta;
+        ";
 
 
+        // dd($query);
 
         $consultas = DB::select($query);
 
@@ -106,5 +115,32 @@ class ConsultaController extends Controller
         //dd($consultasAgrupadas);
 
         return response()->json($consultasAgrupadas);
+    }
+
+    public function CancelarConsulta(Request $request)
+    {
+        try
+        {
+            if (empty($request->cdConsulta)) return response()->json(["success" => false, "message" => "Consulta inválida"]);
+
+            $cdConsulta = $request->cdConsulta;
+
+            $consulta = cadConsulta::find($cdConsulta);
+
+            $consulta->update(["cdStatusConsulta" => 4]);
+
+            return response()->json([
+                'success'=> true,
+                'message'=> 'Consulta cancelada com sucesso!',
+            ]) ;
+
+        }
+        catch(\Exception $ex)
+        {
+            return response()->json([
+                "success" => false,
+                "message"=> $ex->getMessage()
+            ]);
+        }
     }
 }

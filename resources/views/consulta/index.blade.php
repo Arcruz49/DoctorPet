@@ -27,15 +27,18 @@
         <div class="content-wrapper">
             <!-- Filtros -->
             <div class="filters">
+
                 <div class="filter-group">
-                    <label>Ordenar por:</label>
-                    <select class="filter" id="searchOrder">
-                        <option value="recentes">Mais recentes</option>
-                        <option value="antigos">Mais antigos</option>
-                        <option value="nome">Nome (A-Z)</option>
-                    </select>
+                    <label for="dtConsultaInicio">Início</label>
+                    <input type="date" class="filter" id="dtConsultaInicio" name="dtConsultaInicio">
                 </div>
+
                 <div class="filter-group">
+                    <label for="dtConsultaFim">Fim</label>
+                    <input type="date" class="filter" id="dtConsultaFim" name="dtConsultaFim">
+                </div>
+
+                {{-- <div class="filter-group">
                     <label>Exibir:</label>
                     <select class="filter" id="searchExibir">
                         <option value="10">10</option>
@@ -43,7 +46,7 @@
                         <option value="50">50</option>
                         <option value="-1">Todos</option>
                     </select>
-                </div>
+                </div> --}}
             </div>
 
             <div class="consultas-grid" id="ConsultasContainer">
@@ -84,11 +87,19 @@
 
             $(document).ready(function () {
 
-                // $('#btnAbrirModalPaciente').on('click', function (e) {
-                //     debugger
-                //     e.preventDefault();
-                //     $('#addPacienteModal').fadeIn(); // ou .show() se preferir sem animação
-                // });
+                function formatDate(date) {
+                    const year = date.getFullYear();
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const day = String(date.getDate()).padStart(2, '0');
+                    return `${year}-${month}-${day}`;
+                }
+
+                const today = new Date();
+                const nextWeek = new Date();
+                nextWeek.setDate(today.getDate() + 7);
+
+                $('#dtConsultaInicio').val(formatDate(today));
+                $('#dtConsultaFim').val(formatDate(nextWeek));
 
                 // Para fechar o modal de paciente
                 $(document).on('click', '.close-modal, .modal-overlay', function (e) {
@@ -174,22 +185,6 @@
                         $('.search-box button').click();
                     }
                 });
-
-                // Fechar modal ao clicar fora
-                // $(document).click(function(e) {
-                //     if ($(e.target).hasClass('modal-overlay')) {
-                //         $('#consultaModal').removeClass('active');
-                //     }
-                // });
-
-                // // Simular envio do formulário
-                // $('#consultaModal').submit(function(e) {
-                //     e.preventDefault();
-                //     // Aqui você implementaria o AJAX para salvar o paciente
-                //     alert('Paciente salvo com sucesso! (implementar lógica de envio)');
-                //     $('#consultaModal').removeClass('active');
-                // });
-
 
                 $('.tab-button').click(function () {
                     // Remove a classe active de todos os botões e conteúdos
@@ -279,9 +274,20 @@
             
 
             function carregarConsultas() {
+                let dtConsultaInicio = $('#dtConsultaInicio').val();
+                let dtConsultaFim = $('#dtConsultaFim').val();
+                let searchExibir = $('#searchExibir').val();
+                let search = $('#search').val();
+
                 $.ajax({
                     url: '/GetConsultas',
                     method: 'GET',
+                    data: {
+                        dtConsultaInicio: dtConsultaInicio,
+                        dtConsultaFim: dtConsultaFim,
+                        exibir: searchExibir,
+                        search: search
+                    },
                     success: function (data) {
                         const container = $('#consultas-container');
                         container.empty();
@@ -328,8 +334,7 @@
 
                                 const botoes = !isFinalizada ? `
                                     <button class="btn btn-sm btn-confirm px-3" data-id="${consulta.cdConsulta}">Atender</button>
-                                    <button class="btn btn-sm btn-outline-danger px-3">Cancelar</button>
-                                ` : `
+                                    <button class="btn btn-sm btn-outline-danger px-3" onclick="cancelarConsulta(${consulta.cdConsulta})">Cancelar</button>                                ` : `
                                     <button class="btn btn-sm btn-outline-secondary px-3">Ver Detalhes</button>
                                 `;
 
@@ -440,23 +445,60 @@
             }
 
            function addPaciente(card, cdPaciente) {
-            let container = $('.add-patient-card');
-            container.empty();
+                let container = $('.add-patient-card');
+                container.empty();
 
-            let clone = $(card).clone();
+                let clone = $(card).clone();
 
-            clone.off('click').on('click', function () {
-                $('#consultaModal').removeClass('active');
-                $('#addPacienteModal').addClass('active');
-            });
+                clone.off('click').on('click', function () {
+                    $('#consultaModal').removeClass('active');
+                    $('#addPacienteModal').addClass('active');
+                });
 
-            $('#cdPacienteAdicionado').val(cdPaciente);
+                $('#cdPacienteAdicionado').val(cdPaciente);
 
-            container.append(clone);
+                container.append(clone);
 
-            $('#addPacienteModal').removeClass('active');
-            $('#consultaModal').addClass('active');
-        }
+                $('#addPacienteModal').removeClass('active');
+                $('#consultaModal').addClass('active');
+            }
+
+            function cancelarConsulta(cdConsulta){
+                const notyf = new Notyf();
+
+                Swal.fire({
+                    title: "Deseja mesmo cancelar esta consulta?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Sim, cancelar"
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+
+                        $.ajax({
+                            url: "/CancelarConsulta",
+                            method: 'POST',
+                            data: { cdConsulta: cdConsulta },
+                            success: function (response) {
+                                if (response.success === true) {
+                                    notyf.success(response.message);
+                                    carregarConsultas();
+                                } else {
+                                    notyf.error(response.message || 'Ocorreu um erro ao salvar.');
+                                }
+                            },
+                            error: function () {
+                                notyf.error('Erro ao cancelar consulta.');
+                            }
+                        });
+                        
+                    }
+                });
+
+            }
+            
 
 
 

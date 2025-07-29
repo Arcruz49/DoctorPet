@@ -285,7 +285,7 @@ body {
     color: var(--text-light);
 }
 
-.filter-group select {
+.filter-group select, input {
     padding: 8px 12px;
     border-radius: 6px;
     border: 1px solid var(--border);
