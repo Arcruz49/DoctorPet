@@ -300,22 +300,36 @@
                                 let statusLabel = 'Desconhecido';
                                 let statusClass = 'secondary';
 
+                                let botoes = ``;
+
+
                                 switch (consulta.cdStatusConsulta) {
                                     case 1:
                                         statusLabel = 'Agendada';
                                         statusClass = 'primary';
+
+                                        botoes = `<button class="btn btn-sm btn-confirm px-3" onclick="confirmarConsulta(${consulta.cdConsulta})">Confirmar</button>
+                                                    <button class="btn btn-sm btn-outline-danger px-3" onclick="cancelarConsulta(${consulta.cdConsulta})">Cancelar</button>`;
                                         break;
                                     case 2:
                                         statusLabel = 'Confirmada';
                                         statusClass = 'success';
+
+                                        botoes = `<button class="btn btn-sm btn-confirm px-3" data-id="${consulta.cdConsulta}">Atender</button>
+                                                    <button class="btn btn-sm btn-outline-danger px-3" onclick="cancelarConsulta(${consulta.cdConsulta})">Cancelar</button>`;
                                         break;
                                     case 3:
                                         statusLabel = 'Realizada';
                                         statusClass = 'muted';
+
+                                        botoes =`<button class="btn btn-sm btn-outline-secondary px-3">Ver Detalhes</button>`;
                                         break;
                                     case 4:
                                         statusLabel = 'Cancelada';
                                         statusClass = 'danger';
+
+                                        botoes =`<button class="btn btn-sm btn-outline-secondary px-3">Ver Detalhes</button>`;
+
                                         break;
                                 }
 
@@ -332,11 +346,7 @@
 
                                 const especie = consulta.especie == 'cat' ? 'Gato' : 'Cachorro';
 
-                                const botoes = !isFinalizada ? `
-                                    <button class="btn btn-sm btn-confirm px-3" data-id="${consulta.cdConsulta}">Atender</button>
-                                    <button class="btn btn-sm btn-outline-danger px-3" onclick="cancelarConsulta(${consulta.cdConsulta})">Cancelar</button>                                ` : `
-                                    <button class="btn btn-sm btn-outline-secondary px-3">Ver Detalhes</button>
-                                `;
+
 
                                 const card = `
                                     <div class="${cardClasse}" style="${cardStyle}">
@@ -464,16 +474,16 @@
             }
 
             function cancelarConsulta(cdConsulta){
-                const notyf = new Notyf();
+                let notyf = new Notyf();
 
                 Swal.fire({
                     title: "Deseja mesmo cancelar esta consulta?",
-                    text: "You won't be able to revert this!",
                     icon: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#3085d6",
                     cancelButtonColor: "#d33",
-                    confirmButtonText: "Sim, cancelar"
+                    confirmButtonText: "Sim, cancelar",
+                    cancelButtonText: "Não"
                     }).then((result) => {
                     if (result.isConfirmed) {
 
@@ -497,6 +507,41 @@
                     }
                 });
 
+            }
+
+            function confirmarConsulta(cdConsulta){
+                let notyf = new Notyf();
+
+                Swal.fire({
+                    title: "Deseja mesmo confirmar esta consulta?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Sim, confirmar",
+                    cancelButtonText: "Não"
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+
+                        $.ajax({
+                            url: "/ConfirmarConsulta",
+                            method: 'POST',
+                            data: { cdConsulta: cdConsulta },
+                            success: function (response) {
+                                if (response.success === true) {
+                                    notyf.success(response.message);
+                                    carregarConsultas();
+                                } else {
+                                    notyf.error(response.message || 'Ocorreu um erro ao salvar.');
+                                }
+                            },
+                            error: function () {
+                                notyf.error('Erro ao confirmar consulta.');
+                            }
+                        });
+                        
+                    }
+                });
             }
             
 

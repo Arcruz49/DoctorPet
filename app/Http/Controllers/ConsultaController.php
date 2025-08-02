@@ -143,4 +143,31 @@ class ConsultaController extends Controller
             ]);
         }
     }
+
+    public function ConfirmarConsulta(Request $request)
+    {
+        try
+        {
+            if (empty($request->cdConsulta)) return response()->json(["success" => false, "message" => "Consulta inválida"]);
+
+            $cdConsulta = $request->cdConsulta;
+
+            $consulta = cadConsulta::find($cdConsulta);
+
+            $consulta->update(["cdStatusConsulta" => 2]);
+
+            return response()->json([
+                'success'=> true,
+                'message'=> 'Consulta confirmada com sucesso!',
+            ]) ;
+
+        }
+        catch(\Exception $ex)
+        {
+            return response()->json([
+                "success" => false,
+                "message"=> $ex->getMessage()
+            ]);
+        }
+    }
 }

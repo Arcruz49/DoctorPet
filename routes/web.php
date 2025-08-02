@@ -34,4 +34,5 @@ Route::get('/Consultas', [\App\Http\Controllers\ConsultaController::class, 'Inde
 Route::post('/createConsulta', [\App\Http\Controllers\ConsultaController::class, 'CreateConsulta'])->name('CreateConsulta');
 Route::get('/GetConsultas', [\App\Http\Controllers\ConsultaController::class, 'GetConsultas'])->name('GetConsultas');
 Route::post('/CancelarConsulta', [\App\Http\Controllers\ConsultaController::class, 'CancelarConsulta'])->name('CancelarConsulta');
+Route::post('/ConfirmarConsulta', [\App\Http\Controllers\ConsultaController::class, 'ConfirmarConsulta'])->name('ConfirmarConsulta');
 
