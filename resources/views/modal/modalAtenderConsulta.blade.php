@@ -66,7 +66,7 @@
 
             <div class="modal-footer">
                 <button class="btn secondary fecharModal" type="button" id="btnFecharConsultaSemSalvar">Fechar sem salvar</button>
-                <button class="btn secondary" type="button" id="btnFecharConsulta">Salvar</button>
+                <button class="btn btn-confirm" type="button" id="btnFecharConsulta">Salvar</button>
                 <button class="btn primary" id="btnFinalizarConsulta" type="button">Finalizar Atendimento</button>
             </div>
         </form>
