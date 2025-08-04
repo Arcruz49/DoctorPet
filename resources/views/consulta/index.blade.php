@@ -159,18 +159,6 @@
                     $('#consultaModal').removeClass('active');
                 });
 
-                // Visualizar clinica
-                $('.icon-btn.view').click(function () {
-                    // Aqui você implementaria a lógica para visualizar clinica
-                    alert('Visualizar paciente - implementar lógica');
-                });
-
-                // Editar clinica
-                $('.icon-btn.edit').click(function () {
-                    // Aqui você implementaria a lógica para editar clinica
-                    $('#consultaModal').addClass('active');
-                    $('.modal-header h2').text('Editar Paciente');
-                });
 
                 // Buscar clinicas
                 $('.search-box button').click(function () {
@@ -190,19 +178,6 @@
                     if (e.which === 13) {
                         $('.search-box button').click();
                     }
-                });
-
-                $('.tab-button').click(function () {
-                    // Remove a classe active de todos os botões e conteúdos
-                    $('.tab-button').removeClass('active');
-                    $('.tab-content').removeClass('active');
-
-                    // Adiciona a classe active ao botão clicado
-                    $(this).addClass('active');
-
-                    // Mostra o conteúdo correspondente
-                    const tabId = $(this).data('tab') + '-tab';
-                    $('#' + tabId).addClass('active');
                 });
 
 
@@ -240,23 +215,6 @@
 
             });
 
-
-            
-
-            function preencherFormulario(clinica, edit) {
-                // Aba Dados
-                limparFormulario();
-                $('#cdClinica').val(clinica.cdClinica || '');
-                $('#nmClinica').val(clinica.nmClinica);
-                $('#endereco').val(clinica.endereco);
-
-                $('#consultaModal')
-                    .find('input, select, textarea')
-                    .prop('disabled', !edit);
-            }
-
-
-            
 
             function carregarConsultas() {
                 let dtConsultaInicio = $('#dtConsultaInicio').val();
@@ -426,20 +384,20 @@
             }
 
             function limparFormulario() {
-            // Limpa formulário de cadastro
-            $('#consultaForm')[0].reset();
-            $('#consultaForm').find('input, textarea, select').val('').prop('checked', false).prop('selected', false);
+                // Limpa formulário de cadastro
+                $('#consultaForm')[0].reset();
+                $('#consultaForm').find('input, textarea, select').val('').prop('checked', false).prop('selected', false);
 
-            // Limpa formulário de atendimento
-            $('#AtenderConsultaForm')[0].reset();
-            $('#AtenderConsultaForm').find('input, textarea, select').val('').prop('checked', false).prop('selected', false);
+                // Limpa formulário de atendimento
+                $('#AtenderConsultaForm')[0].reset();
+                $('#AtenderConsultaForm').find('input, textarea, select').val('').prop('checked', false).prop('selected', false);
 
-            $('#cdConsulta').val('');
+                $('#cdConsulta').val('');
 
-            $('#consultaModal').find('input, select, textarea').prop('disabled', false);
+                $('#consultaModal').find('input, select, textarea').prop('disabled', false);
 
-            $('#consultaModal').find('input, select').trigger('change');
-        }
+                $('#consultaModal').find('input, select').trigger('change');
+            }
 
            function addPaciente(card, cdPaciente) {
                 let container = $('.add-patient-card');
