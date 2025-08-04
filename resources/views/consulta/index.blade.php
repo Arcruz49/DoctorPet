@@ -70,6 +70,10 @@
             @include('modal.modalAdicionarPaciente')
         </div>
 
+        <div class="modal-overlay" id="atenderConsultaModal">
+            @include('modal.modalAtenderConsulta')
+        </div>
+
 
     @endsection
 
@@ -101,11 +105,13 @@
                 $('#dtConsultaInicio').val(formatDate(today));
                 $('#dtConsultaFim').val(formatDate(nextWeek));
 
-                // Para fechar o modal de paciente
-                $(document).on('click', '.close-modal, .modal-overlay', function (e) {
-                    // Verifica se clicou diretamente no overlay (fora do conteúdo)
-                    if ($(e.target).hasClass('modal-overlay') || $(e.target).hasClass('close-modal')) {
-                        $('#addPacienteModal').fadeOut(); // ou .hide()
+                $(document).on('click', '.close-modal, .modal-overlay, .fecharModal', function (e) {
+                    if ($(e.target).hasClass('modal-overlay') || $(e.target).hasClass('close-modal') || $(e.target).hasClass('fecharModal')){
+                        limparFormulario();
+                        $('#consultaModal').removeClass('active');
+                        $('#addPacienteModal').removeClass('active');
+                        $('#atenderConsultaModal').removeClass('active');
+                        $('#cdConsultaAtendimento').val('');
                     }
                 });
 
@@ -235,28 +241,7 @@
             });
 
 
-            function visualizarClinica(cdClinica, editar) {
-                $.ajax({
-                    url: `/getClinica/${cdClinica}`,
-                    method: 'GET',
-                    success: function (clinica) {
-                        preencherFormulario(clinica, editar);
-                        if (editar == true) {
-                            $('#modalTitle').text('Editar Clínica');
-                            $('.modal-footer').show();
-                        }
-                        else {
-                            $('#modalTitle').text('Clínica');
-                            $('.modal-footer').hide();
-                        }
-
-                        $('#consultaModal').addClass('active');
-                    },
-                    error: function () {
-                        new Notyf().error('Erro ao carregar dados da clínica.');
-                    }
-                });
-            }
+            
 
             function preencherFormulario(clinica, edit) {
                 // Aba Dados
@@ -315,14 +300,14 @@
                                         statusLabel = 'Confirmada';
                                         statusClass = 'success';
 
-                                        botoes = `<button class="btn btn-sm btn-confirm px-3" data-id="${consulta.cdConsulta}">Atender</button>
+                                        botoes = `<button class="btn btn-sm btn-confirm px-3" onclick="atenderConsulta(${consulta.cdConsulta}, '${consulta.nmPaciente}', false)">Atender</button>
                                                     <button class="btn btn-sm btn-outline-danger px-3" onclick="cancelarConsulta(${consulta.cdConsulta})">Cancelar</button>`;
                                         break;
                                     case 3:
                                         statusLabel = 'Realizada';
                                         statusClass = 'muted';
 
-                                        botoes =`<button class="btn btn-sm btn-outline-secondary px-3">Ver Detalhes</button>`;
+                                        botoes =`<button class="btn btn-sm btn-outline-secondary px-3" onclick="atenderConsulta(${consulta.cdConsulta}, '${consulta.nmPaciente}', true)">Ver Detalhes</button>`;
                                         break;
                                     case 4:
                                         statusLabel = 'Cancelada';
@@ -441,18 +426,20 @@
             }
 
             function limparFormulario() {
-                $('#consultaForm')[0].reset();
-                $('#cdPaciente').val('');
-                $('#consultaModal').find('input[type="text"], input[type="number"], input[type="email"], input[type="tel"], textarea, select').val('');
+            // Limpa formulário de cadastro
+            $('#consultaForm')[0].reset();
+            $('#consultaForm').find('input, textarea, select').val('').prop('checked', false).prop('selected', false);
 
-                $('#consultaModal').find('input[type="radio"], input[type="checkbox"]').prop('checked', false);
+            // Limpa formulário de atendimento
+            $('#AtenderConsultaForm')[0].reset();
+            $('#AtenderConsultaForm').find('input, textarea, select').val('').prop('checked', false).prop('selected', false);
 
-                $('#consultaModal')
-                    .find('input, select, textarea')
-                    .prop('disabled', false);
+            $('#cdConsulta').val('');
 
-                $('#consultaModal').find('input, select').trigger('change');
-            }
+            $('#consultaModal').find('input, select, textarea').prop('disabled', false);
+
+            $('#consultaModal').find('input, select').trigger('change');
+        }
 
            function addPaciente(card, cdPaciente) {
                 let container = $('.add-patient-card');
@@ -543,7 +530,111 @@
                     }
                 });
             }
+
+            function atenderConsulta(cdConsulta, nmPaciente, finalizada)
+            {
+                $('#btnFecharConsultaSemSalvar').hide();
+
+                $.ajax({
+                    url: `/GetDadosConsulta/${cdConsulta}`,
+                    method: 'GET',
+                    success: function (response) {
+                        if (response.success === true) 
+                        {
+                            $('#queixaPrincipal').val(response.data.queixaPrincipal);
+                            $('#inicioSintomas').val(response.data.inicio);
+                            $('#progressaoSintomas').val(response.data.progressao);
+                            $('#sinaisClinicos').val(response.data.sinais);
+                            $('#medidasClinicas').val(response.data.medidas);
+                            $('#observacoesExame').val(response.data.obs);
+                            $('#examesSolicitados').val(response.data.examesSolicitados);
+                            $('#sugestoesDiagnosticas').val(response.data.sugestoes);
+                            $('#prescricoes').val(response.data.prescricoes);
+                            $('#objetivosTratamento').val(response.data.objetivos);
+
+                            if(finalizada){
+                                $('#btnFinalizarConsulta').hide();
+                                $('#btnFecharConsultaSemSalvar').show();
+                            } 
+                            else
+                            {
+                                $('#btnFinalizarConsulta').show();
+
+                            }
+                            
+
+                            $('#cdConsultaAtendimento').val(cdConsulta);
+                            $('#modalConsultaTitleAtender').text(`Atendendimento - ${nmPaciente}`);
+                            $('#atenderConsultaModal').addClass('active');
+                        }
+                        else {
+                            notyf.error(response.message || 'Ocorreu um erro ao buscar dados da consulta.');
+                        }
+                    },
+                    error: function () {
+                        notyf.error('Erro ao finalizar consulta.');
+                    }
+                });
+
+
+            }
             
+
+            $(document).on('click', '#btnFinalizarConsulta', function () {
+                finalizarConsulta();
+            });
+
+            $(document).on('click', '#btnFecharConsulta', function () {
+                fecharConsulta();
+            });
+
+            function finalizarConsulta() {
+                let notyf = new Notyf();
+
+                $.ajax({
+                    url: "/FinalizarConsulta",
+                    method: 'POST',
+                    data: $("#AtenderConsultaForm").serialize(),
+                    success: function (response) {
+                        if (response.success === true) {
+                            notyf.success(response.message);
+                            $('#atenderConsultaModal').removeClass('active');
+                            $('#cdConsultaAtendimento').val('');
+                            carregarConsultas();
+                        } else {
+                            notyf.error(response.message || 'Ocorreu um erro ao salvar.');
+                        }
+                    },
+                    error: function () {
+                        notyf.error('Erro ao finalizar consulta.');
+                    }
+                });
+            }
+
+
+            function fecharConsulta(){
+                let notyf = new Notyf();
+
+                $.ajax({
+                    url: "/FecharConsulta",
+                    method: 'POST',
+                    data: $("#AtenderConsultaForm").serialize(),
+                    success: function (response) {
+                        if (response.success === true) {
+                            notyf.success(response.message);
+                            $('#atenderConsultaModal').removeClass('active');
+                            $('#cdConsultaAtendimento').val('');
+                            carregarConsultas();
+                            limparFormulario();
+                        } else {
+                            notyf.error(response.message || 'Ocorreu um erro ao salvar.');
+                        }
+                    },
+                    error: function () {
+                        notyf.error('Erro ao finalizar consulta.');
+                    }
+                });
+            }
 
 
 

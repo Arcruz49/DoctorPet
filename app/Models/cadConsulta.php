@@ -18,7 +18,7 @@ class cadConsulta extends Model
         'dtCriacao',
         'queixaPrincipal',
         'inicio',
-        'preogressao',
+        'progressao',
         'sinais',
         'medidas',
         'obs',

@@ -35,4 +35,6 @@ Route::post('/createConsulta', [\App\Http\Controllers\ConsultaController::class,
 Route::get('/GetConsultas', [\App\Http\Controllers\ConsultaController::class, 'GetConsultas'])->name('GetConsultas');
 Route::post('/CancelarConsulta', [\App\Http\Controllers\ConsultaController::class, 'CancelarConsulta'])->name('CancelarConsulta');
 Route::post('/ConfirmarConsulta', [\App\Http\Controllers\ConsultaController::class, 'ConfirmarConsulta'])->name('ConfirmarConsulta');
-
+Route::post('/FinalizarConsulta', [\App\Http\Controllers\ConsultaController::class, 'FinalizarConsulta'])->name('FinalizarConsulta');
+Route::post('/FecharConsulta', [\App\Http\Controllers\ConsultaController::class, 'FecharConsulta'])->name('FecharConsulta');
+Route::get('/GetDadosConsulta/{id}', [\App\Http\Controllers\ConsultaController::class, 'GetDadosConsulta'])->name('GetDadosConsulta');

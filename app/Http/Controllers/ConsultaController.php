@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\cadClinica;
 use App\Models\cadConsulta;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -168,6 +169,91 @@ class ConsultaController extends Controller
                 "success" => false,
                 "message"=> $ex->getMessage()
             ]);
+        }
+    }
+
+    public function FinalizarConsulta(Request $request)
+    {
+        try
+        {
+            if (empty($request->cdConsultaAtendimento)) return response()->json(["success" => false, "message" => "Consulta inválida"]);
+
+            $cdConsulta = $request->cdConsultaAtendimento;
+
+            $consulta = cadConsulta::find($cdConsulta);
+
+            $consulta->update([
+                "queixaPrincipal" => $request->queixaPrincipal,
+                "inicio" => $request->inicio,
+                "progressao" => $request->progressao,
+                "sinais" => $request->sinais,
+                "medidas" => $request->medidas,
+                "obs" => $request->obs,
+                "examesSolicitados" => $request->examesSolicitados,
+                "sugestoes" => $request->sugestoes,
+                "prescricoes" => $request->prescricoes,
+                "objetivos" => $request->objetivos,
+                "cdStatusConsulta" => 3
+            ]);
+
+            return response()->json(["success" => true, "message" => "Consulta finalizada com sucesso!"]);
+        }
+        catch(\Exception $ex)
+        {
+            return response()->json([
+                "success" => false,
+                "message"=> $ex->getMessage()
+            ]);        }
+    }
+
+    public function FecharConsulta(Request $request)
+    {
+        try
+        {
+            if (empty($request->cdConsultaAtendimento)) return response()->json(["success" => false, "message" => "Consulta inválida"]);
+
+            $cdConsulta = $request->cdConsultaAtendimento;
+
+            $consulta = cadConsulta::find($cdConsulta);
+
+            $consulta->update([
+                "queixaPrincipal" => $request->queixaPrincipal,
+                "inicio" => $request->inicio,
+                "progressao" => $request->progressao,
+                "sinais" => $request->sinais,
+                "medidas" => $request->medidas,
+                "obs" => $request->obs,
+                "examesSolicitados" => $request->examesSolicitados,
+                "sugestoes" => $request->sugestoes,
+                "prescricoes" => $request->prescricoes,
+                "objetivos" => $request->objetivos,
+            ]);
+
+            return response()->json(["success" => true, "message" => "Consulta salva!"]);
+        }
+        catch(\Exception $ex)
+        {
+            return response()->json([
+                "success" => false,
+                "message"=> $ex->getMessage()
+            ]);        
+        }
+    }
+
+    public function GetDadosConsulta($id){
+        try
+        {
+            if (empty($id)) return response()->json(["success" => false, "message" => "Consulta inválida"]);
+            $consulta = cadConsulta::find($id);
+            return response()->json(["success" => true, "message" => "", "data" => $consulta]);
+            
+        }
+        catch(\Exception $ex)
+        {
+            return response()->json([
+                "success" => false,
+                "message"=> $ex->getMessage()
+            ]);        
         }
     }
 }
