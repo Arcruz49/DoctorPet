@@ -425,6 +425,14 @@
                             </div>
                         </div>
                     </div>
+
+                    <div id="consultas-tab" class="tab-content active">
+                        <div class="form-section">
+                            <h3>Consultas</h3>
+                            <div id="consultas-accordion" class="consultas-accordion">
+                            </div>
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -432,3 +440,4 @@
                 <button class="btn primary" id="btnAddPaciente" type="button">Salvar Paciente</button>
             </div>
         </div>
+

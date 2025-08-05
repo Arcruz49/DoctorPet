@@ -590,6 +590,27 @@
             }
         });
 
+        function GetConsultasPorPaciente(){
+
+            let cdPaciente = $('#cdPaciente').val();
+            $.ajax({
+                url: '/GetConsultasPorPaciente', 
+                type: 'POST',                   
+                data: {
+                    cdPaciente: cdPaciente              
+                },
+                success: function (response) {
+                    console.log("Consultas recebidas:", response);
+                },
+                error: function (xhr) {
+                    console.error("Erro na requisição:", xhr.responseText);
+                }
+            });
+        }
+
+
+
+
 
 
     </script>

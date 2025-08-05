@@ -107,12 +107,13 @@
 
                 $(document).on('click', '.close-modal, .modal-overlay, .fecharModal', function (e) {
                     if ($(e.target).hasClass('modal-overlay') || $(e.target).hasClass('close-modal') || $(e.target).hasClass('fecharModal')){
-                        limparFormulario();
                         $('#consultaModal').removeClass('active');
                         $('#addPacienteModal').removeClass('active');
                         $('#atenderConsultaModal').removeClass('active');
                         $('#cdConsultaAtendimento').val('');
                     }
+                    limparFormulario();
+
                 });
 
                 $(document).on('click', '.add-patient-btn', function () {
@@ -131,7 +132,7 @@
 
 
                 $(document).on('click', '.new-clinic, .add-clinic-btn', function () {
-                    $('#modalTitleConsulta').text('Nova Clínica'); // Corrigido o ID do título
+                    $('#modalTitleConsulta').text('Nova Clínica');
                     $('.modal-footer').show();
                     limparFormulario();
 
@@ -589,7 +590,7 @@
                         }
                     },
                     error: function () {
-                        notyf.error('Erro ao finalizar consulta.');
+                        notyf.error('Erro ao salvar consulta.');
                     }
                 });
             }

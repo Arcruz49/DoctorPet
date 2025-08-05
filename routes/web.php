@@ -38,3 +38,4 @@ Route::post('/ConfirmarConsulta', [\App\Http\Controllers\ConsultaController::cla
 Route::post('/FinalizarConsulta', [\App\Http\Controllers\ConsultaController::class, 'FinalizarConsulta'])->name('FinalizarConsulta');
 Route::post('/FecharConsulta', [\App\Http\Controllers\ConsultaController::class, 'FecharConsulta'])->name('FecharConsulta');
 Route::get('/GetDadosConsulta/{id}', [\App\Http\Controllers\ConsultaController::class, 'GetDadosConsulta'])->name('GetDadosConsulta');
+Route::post('/GetConsultasPorPaciente', [\App\Http\Controllers\ConsultaController::class, 'GetConsultasPorPaciente'])->name('GetConsultasPorPaciente');

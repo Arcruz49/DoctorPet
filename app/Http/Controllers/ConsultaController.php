@@ -256,4 +256,46 @@ class ConsultaController extends Controller
             ]);        
         }
     }
+
+    public function GetConsultasPorPaciente(Request $request)
+    {
+        DB::statement("SET lc_time_names = 'pt_BR'");
+
+        $dtInicio = $request -> dtConsultaInicio ?? '';
+        $dtFim = $request -> dtConsultaFim ?? '';
+        $exibir = $request -> exibir ?? 10;
+        $cdPaciente = $request -> cdPaciente ?? 0;
+        //dd($dtInicio, $dtFim);
+        $query = "
+            SELECT 
+                a.cdConsulta, 
+                a.cdPaciente, 
+                b.nmPaciente, 
+                b.nmTutor , 
+                b.raca, 
+                b.especie, 
+                a.cdStatusConsulta, 
+                DATE_FORMAT(a.dtConsulta, '%H:%i') AS horaConsulta,
+                CASE
+                    WHEN DATE(a.dtConsulta) = CURDATE() THEN 
+                        CONCAT('HOJE, ', UPPER(DATE_FORMAT(a.dtConsulta, '%d de %M de %Y')))
+                    WHEN DATE(a.dtConsulta) = CURDATE() + INTERVAL 1 DAY THEN
+                        CONCAT('AMANHÃ, ', UPPER(DATE_FORMAT(a.dtConsulta, '%d de %M de %Y')))
+                    ELSE 
+                        UPPER(DATE_FORMAT(a.dtConsulta, '%d de %M de %Y'))
+                END AS dataConsultaExtenso
+            FROM cadconsulta a
+            LEFT JOIN cadpaciente b ON a.cdPaciente = b.cdPaciente
+            WHERE 1 = 1
+                AND ('{$dtInicio}' = '' OR DATE(a.dtConsulta) >= '{$dtInicio}')
+                AND ('{$dtFim}' = '' OR DATE(a.dtConsulta) <= '{$dtFim}')
+                AND ('{$cdPaciente}' = 0 OR a.cdPaciente = '{$cdPaciente}')
+            ORDER BY a.dtConsulta;
+        ";
+
+        //dd($query);
+        $consultas = DB::select($query);
+        return response()->json($consultas);
+
+    }
 }
