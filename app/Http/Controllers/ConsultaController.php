@@ -293,9 +293,16 @@ class ConsultaController extends Controller
             ORDER BY a.dtConsulta;
         ";
 
-        //dd($query);
         $consultas = DB::select($query);
-        return response()->json($consultas);
+
+        $consultasAgrupadas = [];
+
+        foreach ($consultas as $c) {
+            $data = $c->dataConsultaExtenso;
+            $consultasAgrupadas[$data][] = $c;
+        }
+
+        return response()->json($consultasAgrupadas);
 
     }
 }

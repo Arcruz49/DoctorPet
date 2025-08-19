@@ -151,15 +151,6 @@
             //     }
             // });
 
-            // Simular envio do formulário
-            $('#patientForm').submit(function(e) {
-                e.preventDefault();
-                // Aqui você implementaria o AJAX para salvar o paciente
-                alert('Paciente salvo com sucesso! (implementar lógica de envio)');
-                $('#patientModal').removeClass('active');
-            });
-
-
             $('.tab-button').click(function() {
                 // Remove a classe active de todos os botões e conteúdos
                 $('.tab-button').removeClass('active');
@@ -479,6 +470,8 @@
             $('#patientForm')
             .find('input, select, textarea')
             .prop('disabled', !edit);
+
+            GetConsultasPorPaciente();
         }
 
 
@@ -577,6 +570,9 @@
             .prop('disabled', false);
 
             $('#patientForm').find('input, select').trigger('change');
+
+            const container = $('#consultas-container');
+            container.empty();
         }
 
         function toggleDropdown(btn) {
@@ -599,19 +595,102 @@
                 data: {
                     cdPaciente: cdPaciente              
                 },
-                success: function (response) {
-                    console.log("Consultas recebidas:", response);
-                },
+                success: function (data) {
+                    const container = $('#consultas-container');
+                        container.empty();
+                        debugger
+                        Object.entries(data).forEach(([dataLabel, consultas]) => {
+                            const title = `<h2 class="h6 text-secondary fw-semibold mb-3 pb-2 border-bottom">${dataLabel}</h2>`;
+                            container.append(title);
+                                debugger
+
+                            consultas.forEach(consulta => {
+                                let statusLabel = 'Desconhecido';
+                                let statusClass = 'secondary';
+
+                                let botoes = ``;
+
+
+                                switch (consulta.cdStatusConsulta) {
+                                    case 1:
+                                        statusLabel = 'Agendada';
+                                        statusClass = 'primary';
+
+                                        botoes = `<button class="btn btn-sm btn-confirm px-3" onclick="confirmarConsulta(${consulta.cdConsulta})">Confirmar</button>
+                                                    <button class="btn btn-sm btn-outline-danger px-3" onclick="cancelarConsulta(${consulta.cdConsulta})">Cancelar</button>`;
+                                        break;
+                                    case 2:
+                                        statusLabel = 'Confirmada';
+                                        statusClass = 'success';
+
+                                        botoes = `<button class="btn btn-sm btn-confirm px-3" onclick="atenderConsulta(${consulta.cdConsulta}, '${consulta.nmPaciente}', false)">Atender</button>
+                                                    <button class="btn btn-sm btn-outline-danger px-3" onclick="cancelarConsulta(${consulta.cdConsulta})">Cancelar</button>`;
+                                        break;
+                                    case 3:
+                                        statusLabel = 'Realizada';
+                                        statusClass = 'muted';
+
+                                        botoes =`<button class="btn btn-sm btn-outline-secondary px-3" onclick="atenderConsulta(${consulta.cdConsulta}, '${consulta.nmPaciente}', true)">Ver Detalhes</button>`;
+                                        break;
+                                    case 4:
+                                        statusLabel = 'Cancelada';
+                                        statusClass = 'danger';
+
+                                        botoes =`<button class="btn btn-sm btn-outline-secondary px-3">Ver Detalhes</button>`;
+
+                                        break;
+                                }
+
+                                const isFinalizada = consulta.cdStatusConsulta === 3 || consulta.cdStatusConsulta === 4;
+                                const isCancelada = consulta.cdStatusConsulta === 4;
+
+                                const horaClasse = isFinalizada
+                                    ? `text-decoration-line-through text-${statusClass}`
+                                    : `text-${statusClass}`;
+
+                                const cardClasse = 'card card-appointment mb-3';
+                                const cardStyle = isCancelada ? 'background-color: #f8d7da30;' : '';
+                                const bodyStyle = isFinalizada ? 'opacity-75' : '';
+
+                                const especie = consulta.especie == 'cat' ? 'Gato' : 'Cachorro';
+
+
+
+                                const card = `
+                                    <div class="${cardClasse}" style="${cardStyle}">
+                                        <div class="card-body p-3 d-flex flex-column flex-sm-row align-items-sm-center gap-3 ${bodyStyle}">
+                                            <div class="text-sm-center" style="flex: 0 0 100px;">
+                                                <p class="fs-5 fw-bold m-0 ${horaClasse}">${consulta.horaConsulta}</p>
+                                                <div class="d-flex align-items-center justify-content-sm-center gap-1 mt-1">
+                                                    <div class="status-dot bg-${statusClass}"></div>
+                                                    <span class="small fw-medium text-${statusClass}">${statusLabel}</span>
+                                                </div>
+                                            </div>
+                                            <div class="d-none d-sm-block vr p-0 mx-2"></div>
+                                            <div class="flex-grow-1">
+                                                <p class="fw-bold fs-6 m-0 text-muted">${consulta.nmPaciente}</p>
+                                                <div class="d-flex flex-column flex-sm-row small text-secondary mt-1" style="gap: 0.25rem 1rem;">
+                                                    <span><i class="fa-solid fa-paw me-2 text-muted"></i>${consulta.raca}</span>
+                                                    <span><i class="fa-solid fa-${consulta.especie} me-2 text-muted"></i>${especie}</span>
+                                                    <span><i class="fa-solid fa-user-shield me-2 text-muted"></i>Tutor: ${consulta.nmTutor}</span>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex gap-2 mt-2 mt-sm-0">
+                                                ${botoes}
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+
+                                container.append(card);
+                            });
+                        });
+                    },
                 error: function (xhr) {
                     console.error("Erro na requisição:", xhr.responseText);
                 }
             });
         }
-
-
-
-
-
 
     </script>
 @endpush

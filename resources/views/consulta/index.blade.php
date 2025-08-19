@@ -105,7 +105,7 @@
                 $('#dtConsultaInicio').val(formatDate(today));
                 $('#dtConsultaFim').val(formatDate(nextWeek));
 
-                $(document).on('click', '.close-modal, .modal-overlay, .fecharModal', function (e) {
+                $(document).on('click', '.close-modal, .fecharModal', function (e) {
                     if ($(e.target).hasClass('modal-overlay') || $(e.target).hasClass('close-modal') || $(e.target).hasClass('fecharModal')){
                         $('#consultaModal').removeClass('active');
                         $('#addPacienteModal').removeClass('active');
@@ -132,7 +132,7 @@
 
 
                 $(document).on('click', '.new-clinic, .add-clinic-btn', function () {
-                    $('#modalTitleConsulta').text('Nova Clínica');
+                    $('#modalTitleConsulta').text('Nova Consulta');
                     $('.modal-footer').show();
                     limparFormulario();
 
