@@ -193,3 +193,13 @@ values ('Agendada'), ('Confirmada'), ('Realizada'), ('Cancelada')
 
 
 SET lc_time_names = 'pt_BR';
+
+CREATE TABLE cadDocumento (
+    cdDocumento INT AUTO_INCREMENT PRIMARY KEY,
+    cdPaciente INT,
+    nmDocumento VARCHAR(500),
+    dtCriacao DATETIME,
+    caminho VARCHAR(5000),
+    CONSTRAINT fk_cdPaciente FOREIGN KEY (cdPaciente) REFERENCES cadPaciente(cdPaciente)
+);
+
