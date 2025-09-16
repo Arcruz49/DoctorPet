@@ -203,3 +203,4 @@ CREATE TABLE cadDocumento (
     CONSTRAINT fk_cdPaciente FOREIGN KEY (cdPaciente) REFERENCES cadPaciente(cdPaciente)
 );
 
+ALTER TABLE cadConsulta CHANGE preogressao progressao text;
