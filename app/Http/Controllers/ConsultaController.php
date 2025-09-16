@@ -93,8 +93,8 @@ class ConsultaController extends Controller
                     ELSE 
                         UPPER(DATE_FORMAT(a.dtConsulta, '%d de %M de %Y'))
                 END AS dataConsultaExtenso
-            FROM cadconsulta a
-            LEFT JOIN cadpaciente b ON a.cdPaciente = b.cdPaciente
+            FROM cadConsulta a
+            LEFT JOIN cadPaciente b ON a.cdPaciente = b.cdPaciente
             WHERE 1 = 1
                 AND ('{$dtInicio}' = '' OR DATE(a.dtConsulta) >= '{$dtInicio}')
                 AND ('{$dtFim}' = '' OR DATE(a.dtConsulta) <= '{$dtFim}')
@@ -284,8 +284,8 @@ class ConsultaController extends Controller
                     ELSE 
                         UPPER(DATE_FORMAT(a.dtConsulta, '%d de %M de %Y'))
                 END AS dataConsultaExtenso
-            FROM cadconsulta a
-            LEFT JOIN cadpaciente b ON a.cdPaciente = b.cdPaciente
+            FROM cadConsulta a
+            LEFT JOIN cadPaciente b ON a.cdPaciente = b.cdPaciente
             WHERE 1 = 1
                 AND ('{$dtInicio}' = '' OR DATE(a.dtConsulta) >= '{$dtInicio}')
                 AND ('{$dtFim}' = '' OR DATE(a.dtConsulta) <= '{$dtFim}')
