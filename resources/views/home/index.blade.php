@@ -83,6 +83,11 @@
             }
         });
 
+        function showFirstTab(){
+            setTimeout(function() {
+                $('.tab-button').first().click();
+            }, 500);
+        }
 
         $(document).ready(function() {
 
@@ -109,6 +114,7 @@
             // Fechar modal
             $('.close-modal, .btn.secondary').click(function() {
                 $('#patientModal').removeClass('active');
+                showFirstTab();
             });
 
             // Visualizar paciente
@@ -202,6 +208,7 @@
                         if (response.success === true) {
                             notyf.success(response.message);
                             $('#patientModal').removeClass('active');
+                            showFirstTab()                            
                             carregarPacientes();
                         } else {
                             notyf.error(response.message || 'Ocorreu um erro ao salvar.');
@@ -691,6 +698,81 @@
                 }
             });
         }
+
+
+        // salavr imagens
+        $(document).ready(function () {
+            $(".new-imagem").on("click", function (e) {
+                e.preventDefault();
+
+                // esconde o botão de adicionar
+                $(this).hide();
+
+                let timestamp = Date.now();
+
+                let novoCampo = `
+                    <div class="imagem-item mb-3 p-2 border rounded" id="imagem-${timestamp}">
+                        <div class="mb-2">
+                            <label>Nome da Imagem</label>
+                            <input type="text" name="nomes_imagens[]" class="form-control image-name" placeholder="">
+                        </div>
+                        <div class="mb-2">
+                            <label>Arquivo</label>
+                            <input type="file" name="imagens[]" class="form-control">
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn btn-success btn-sm salvar-imagem" data-id="${timestamp}">
+                                <i class="fas fa-check"></i> Salvar
+                            </button>
+                            <button type="button" class="btn btn-danger btn-sm remover-imagem" data-id="${timestamp}">
+                                <i class="fas fa-trash"></i> Remover
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                $("#imagens-container").append(novoCampo);
+            });
+
+            $(document).on("click", ".remover-imagem", function () {
+                let id = $(this).data("id");
+                $("#imagem-" + id).remove();
+
+                $(".new-imagem").show();
+            });
+
+            $(document).on("click", ".salvar-imagem", function () {
+                let id = $(this).data("id");
+                let name = $('.image-name').val()
+                $.ajax({
+                    url: `/SaveImage`,
+                    method: 'POST',
+                    // data: {
+
+                    // }
+                    ssuccess: function (response) {
+                        if (response.success === true) 
+                        {
+                            
+                            $('#cdConsultaAtendimento').val(cdConsulta);
+                            $('#modalConsultaTitleAtender').text(`Atendendimento - ${nmPaciente}`);
+                            $('#atenderConsultaModal').addClass('active');
+                        }
+                        else {
+                            notyf.error(response.message);
+                        }
+                    },
+                    error: function () {
+                        notyf.error('Erro ao finalizar consulta.');
+                    }
+                });
+
+                $("#imagem-" + id).remove();
+                $(".new-imagem").show();
+            });
+        });
+
+
 
     </script>
 @endpush

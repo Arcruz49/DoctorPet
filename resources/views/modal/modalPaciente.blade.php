@@ -467,11 +467,15 @@
                 </div>
             </div>
 
-            <div id="imagens-tab" class="tab-content">
+            
+        </form>
+
+
+        <div id="imagens-tab" class="tab-content">
                 <div class="form-section">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h3 class="m-0">Imagens</h3>
-                        <button class="btn primary new-consulta">
+                        <button type="button" class="btn primary new-imagem">
                             <i class="fas fa-plus"></i>
                             Nova Imagem
                         </button>
@@ -480,7 +484,6 @@
                     <div id="imagens-container"></div>
                 </div>
             </div>
-        </form>
     </div>
     <div class="modal-footer">
         <button class="btn secondary">Cancelar</button>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\cadPaciente;
 
@@ -326,5 +327,33 @@ class PacienteController extends Controller
                 'message'=> 'Erro: ' . $e->getMessage()
             ]) ;
         }
+    }
+
+    public function saveImage(Request $request){
+        try
+        {
+            //verifica se o diretório existe
+            if (!file_exists(app_path('images/pacientes'))) {
+                mkdir(app_path('images/pacientes'), 0755, true);
+            }
+
+
+
+
+
+            return response()->json([
+                'success'=> true,
+                'message'=> 'Imagem salva com sucesso!'
+            ]) ;
+
+        }
+        catch(\Exception $e)
+        {
+            return response()->json([
+                'success'=> false,
+                'message'=> 'Erro ao salvar imagem: ' . $e->getMessage()
+            ]);
+        }
+
     }
 }
