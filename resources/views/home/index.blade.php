@@ -742,36 +742,44 @@
             });
 
             $(document).on("click", ".salvar-imagem", function () {
-                let id = $(this).data("id");
-                let name = $('.image-name').val()
+                const notyf = new Notyf();
+                
+                let id = $(this).data("id"); // pega o timestamp do campo
+                let cdPaciente = $('#cdPaciente').val();
+                let name = $(`#imagem-${id} .image-name`).val();
+                let file = $(`#imagem-${id} input[type="file"]`)[0].files[0];
+
+                if (!file) {
+                    notyf.error('Selecione um arquivo antes de salvar.');
+                    return;
+                }
+
+                let formData = new FormData();
+                formData.append('cdPaciente', cdPaciente);
+                formData.append('name', name);
+                formData.append('imagem', file);
+
                 $.ajax({
-                    url: `/SaveImage`,
+                    url: `/saveImage`,
                     method: 'POST',
-                    // data: {
-
-                    // }
-                    ssuccess: function (response) {
-                        if (response.success === true) 
-                        {
-                            
-                            $('#cdConsultaAtendimento').val(cdConsulta);
-                            $('#modalConsultaTitleAtender').text(`Atendendimento - ${nmPaciente}`);
-                            $('#atenderConsultaModal').addClass('active');
-                        }
-                        else {
+                    data: formData,
+                    processData: false,  
+                    contentType: false,  
+                    success: function (response) {
+                        if (response.success === true) {
+                            notyf.success(response.message);
+                            $("#imagem-" + id).remove();
+                            $(".new-imagem").show();
+                        } else {
                             notyf.error(response.message);
-
-                            
                         }
                     },
                     error: function () {
-                        notyf.error('Erro ao finalizar consulta.');
+                        notyf.error('Erro ao salvar imagem.');
                     }
                 });
-
-                $("#imagem-" + id).remove();
-                $(".new-imagem").show();
             });
+
         });
 
 

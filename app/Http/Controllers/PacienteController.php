@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\cadClinica;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\cadPaciente;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
 
 class PacienteController extends Controller
 
@@ -329,31 +332,55 @@ class PacienteController extends Controller
         }
     }
 
-    public function saveImage(Request $request){
-        try
-        {
-            //verifica se o diretório existe
-            if (!file_exists(app_path('images/pacientes'))) {
-                mkdir(app_path('images/pacientes'), 0755, true);
+    public function saveImage(Request $request)
+    {
+        try {
+            // validação básica
+            $request->validate([
+                'cdPaciente' => 'required|exists:cadPaciente,cdPaciente',
+                'imagem' => 'required|file|image|max:2048',
+            ]);
+
+            $paciente = cadPaciente::where("cdPaciente", $request->cdPaciente)->first();
+            $clinica = cadClinica::where("cdClinica", $paciente->cdClinica)->first();
+
+            // sanitize nomes
+            $clinicaDir = $clinica->cdClinica . '_' . Str::slug($clinica->nmClinica, '_');
+            $pacienteDir = $paciente->cdPaciente . '_' . Str::slug($paciente->nmPaciente, '_') . '_' . Str::slug($paciente->nmTutor, '_');
+
+            // caminho completo do paciente
+            $pacientePath = storage_path("app/clinicas/{$clinicaDir}/{$pacienteDir}/imagens");
+
+            // cria diretório se não existir
+            if (!File::exists($pacientePath)) {
+                File::makeDirectory($pacientePath, 0755, true);
             }
 
+            // nome do arquivo
+            $file = $request->file('imagem');
+            $fileName = !empty($request->name)
+                ? Str::slug($request->name, '_') . '.' . $file->getClientOriginalExtension()
+                : $file->getClientOriginalName();
 
-
-
+            // move arquivo
+            $file->move($pacientePath, $fileName);
 
             return response()->json([
-                'success'=> true,
-                'message'=> 'Imagem salva com sucesso!'
-            ]) ;
+                'success' => true,
+                'message' => 'Imagem salva com sucesso!',
+                'path' => $pacientePath . '/' . $fileName
+            ]);
 
-        }
-        catch(\Exception $e)
-        {
+        } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
-                'success'=> false,
-                'message'=> 'Erro ao salvar imagem: ' . $e->getMessage()
+                'success' => false,
+                'message' => implode(', ', $e->validator->errors()->all())
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erro ao salvar imagem: ' . $e->getMessage()
             ]);
         }
-
     }
 }

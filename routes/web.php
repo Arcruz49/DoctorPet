@@ -14,6 +14,7 @@ Route::get('/getPacientes', [\App\Http\Controllers\PacienteController::class, 'G
 Route::post('/createPaciente', [\App\Http\Controllers\PacienteController::class, 'CreatePaciente'])->name('CreatePaciente');
 Route::get('/getPaciente/{id}', [\App\Http\Controllers\PacienteController::class, 'GetPaciente'])->name('GetPaciente');
 Route::post('/editPaciente', [\App\Http\Controllers\PacienteController::class, 'EditPaciente'])->name('EditPaciente');
+Route::post('/saveImage', [\App\Http\Controllers\PacienteController::class, 'SaveImage'])->name('SaveImage');
 
 // Clínica
 Route::get('/Clinicas', [\App\Http\Controllers\ClinicaController::class, 'Index'])->name('Clinicas');
