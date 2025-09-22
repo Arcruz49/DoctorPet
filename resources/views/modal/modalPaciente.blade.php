@@ -457,7 +457,7 @@
                 <div class="form-section">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h3 class="m-0">Documentos</h3>
-                        <button class="btn primary new-consulta">
+                        <button class="btn primary new-documento">
                             <i class="fas fa-plus"></i>
                             Novo Documento
                         </button>

@@ -332,37 +332,29 @@ class PacienteController extends Controller
         }
     }
 
-    public function saveImage(Request $request)
+    public function SaveImage(Request $request)
     {
         try {
-            // validação básica
+            // validacoes
             $request->validate([
                 'cdPaciente' => 'required|exists:cadPaciente,cdPaciente',
-                'imagem' => 'required|file|image|max:2048',
+                'imagem' => 'required|file|image',
             ]);
 
             $paciente = cadPaciente::where("cdPaciente", $request->cdPaciente)->first();
             $clinica = cadClinica::where("cdClinica", $paciente->cdClinica)->first();
 
-            // sanitize nomes
-            $clinicaDir = $clinica->cdClinica . '_' . Str::slug($clinica->nmClinica, '_');
-            $pacienteDir = $paciente->cdPaciente . '_' . Str::slug($paciente->nmPaciente, '_') . '_' . Str::slug($paciente->nmTutor, '_');
+            $pacientePath = $this->GetPathPaciente($paciente, $clinica, 'imagem');
 
-            // caminho completo do paciente
-            $pacientePath = storage_path("app/clinicas/{$clinicaDir}/{$pacienteDir}/imagens");
-
-            // cria diretório se não existir
             if (!File::exists($pacientePath)) {
                 File::makeDirectory($pacientePath, 0755, true);
             }
 
-            // nome do arquivo
             $file = $request->file('imagem');
             $fileName = !empty($request->name)
                 ? Str::slug($request->name, '_') . '.' . $file->getClientOriginalExtension()
                 : $file->getClientOriginalName();
 
-            // move arquivo
             $file->move($pacientePath, $fileName);
 
             return response()->json([
@@ -382,5 +374,64 @@ class PacienteController extends Controller
                 'message' => 'Erro ao salvar imagem: ' . $e->getMessage()
             ]);
         }
+    }
+
+    public function saveDocument(Request $request)
+    {
+        try {
+            // validacoes
+            $request->validate([
+                'cdPaciente' => 'required|exists:cadPaciente,cdPaciente',
+                'documento' => 'required|file',
+            ]);
+
+            $paciente = cadPaciente::where("cdPaciente", $request->cdPaciente)->first();
+            $clinica = cadClinica::where("cdClinica", $paciente->cdClinica)->first();
+
+            $pacientePath = $this->GetPathPaciente($paciente, $clinica, 'documento');
+
+            if (!File::exists($pacientePath)) {
+                File::makeDirectory($pacientePath, 0755, true);
+            }
+
+            $file = $request->file('documento');
+            $fileName = !empty($request->name)
+                ? Str::slug($request->name, '_') . '.' . $file->getClientOriginalExtension()
+                : $file->getClientOriginalName();
+
+            $file->move($pacientePath, $fileName);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Documento salvo com sucesso!',
+                'path' => $pacientePath . '/' . $fileName
+            ]);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => implode(', ', $e->validator->errors()->all())
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erro ao salvar o documento: ' . $e->getMessage()
+            ]);
+        }
+    }
+
+    public function GetImagens(){
+        
+    }
+
+
+
+    public function GetPathPaciente($paciente, $clinica, $fileType){
+        
+        $clinicaDir = $clinica->cdClinica . '_' . Str::slug($clinica->nmClinica, '_');
+        $pacienteDir = $paciente->cdPaciente . '_' . Str::slug($paciente->nmPaciente, '_') . '_' . Str::slug($paciente->nmTutor, '_');
+        $pacientePath = storage_path("app/clinicas/{$clinicaDir}/{$pacienteDir}");
+
+        return $fileType == "imagem" ? $pacientePath . '/imagens' : $pacientePath . '/documentos';
     }
 }

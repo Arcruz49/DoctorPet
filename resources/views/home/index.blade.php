@@ -700,7 +700,7 @@
         }
 
 
-        // salavr imagens
+        // salvar imagens
         $(document).ready(function () {
             $(".new-imagem").on("click", function (e) {
                 e.preventDefault();
@@ -776,6 +776,91 @@
                     },
                     error: function () {
                         notyf.error('Erro ao salvar imagem.');
+                    }
+                });
+            });
+
+        });
+
+
+
+
+        // salvar documentos
+        $(document).ready(function () {
+            $(".new-documento").on("click", function (e) {
+                e.preventDefault();
+
+                // esconde o botão de adicionar
+                $(this).hide();
+
+                let timestamp = Date.now();
+
+                let novoCampo = `
+                    <div class="documento-item mb-3 p-2 border rounded" id="documento-${timestamp}">
+                        <div class="mb-2">
+                            <label>Nome do Documento</label>
+                            <input type="text" name="nomes_imagens[]" class="form-control image-name" placeholder="">
+                        </div>
+                        <div class="mb-2">
+                            <label>Arquivo</label>
+                            <input type="file" name="imagens[]" class="form-control">
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn btn-success btn-sm salvar-documento" data-id="${timestamp}">
+                                <i class="fas fa-check"></i> Salvar
+                            </button>
+                            <button type="button" class="btn btn-danger btn-sm remover-documento" data-id="${timestamp}">
+                                <i class="fas fa-trash"></i> Remover
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                $("#documentos-container").append(novoCampo);
+            });
+
+            $(document).on("click", ".remover-documento", function () {
+                let id = $(this).data("id");
+                $("#documento-" + id).remove();
+
+                $(".new-documento").show();
+            });
+
+            $(document).on("click", ".salvar-documento", function () {
+                const notyf = new Notyf();
+                
+                let id = $(this).data("id"); // pega o timestamp do campo
+                let cdPaciente = $('#cdPaciente').val();
+                let name = $(`#documento-${id} .image-name`).val();
+                let file = $(`#documento-${id} input[type="file"]`)[0].files[0];
+
+                if (!file) {
+                    notyf.error('Selecione um arquivo antes de salvar.');
+                    return;
+                }
+
+                let formData = new FormData();
+                formData.append('cdPaciente', cdPaciente);
+                formData.append('name', name);
+                formData.append('documento', file);
+
+                $.ajax({
+                    url: `/saveDocument`,
+                    method: 'POST',
+                    data: formData,
+                    processData: false,  
+                    contentType: false,  
+                    success: function (response) {
+                        if (response.success === true) {
+                            notyf.success(response.message);
+                            $("#documento-" + id).remove();
+                            $(".new-documento").show();
+                        } else {
+                            notyf.error(response.message);
+                        }
+                    },
+                    error: function () {
+                        notyf.error('Erro ao salvar documento.');
                     }
                 });
             });
