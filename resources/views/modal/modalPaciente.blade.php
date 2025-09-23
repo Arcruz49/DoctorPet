@@ -453,37 +453,43 @@
                 </div>
             </div>
 
-            <div id="documentos-tab" class="tab-content">
-                <div class="form-section">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h3 class="m-0">Documentos</h3>
-                        <button class="btn primary new-documento">
-                            <i class="fas fa-plus"></i>
-                            Novo Documento
-                        </button>
-                    </div>
 
-                    <div id="documentos-container"></div>
-                </div>
-            </div>
 
             
         </form>
 
+        <div id="documentos-tab" class="tab-content">
+            <div class="form-section">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3 class="m-0">Documentos</h3>
+                    <button class="btn primary new-documento">
+                        <i class="fas fa-plus"></i>
+                        Novo Documento
+                    </button>
+                </div>
+                <div class="d-flex justify-content-center" style="align-items: center; margin-left: 5%;">
+                    <div id="documentos-container"></div>
+                </div>
+
+            </div>
+        </div>
 
         <div id="imagens-tab" class="tab-content">
-                <div class="form-section">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h3 class="m-0">Imagens</h3>
-                        <button type="button" class="btn primary new-imagem">
-                            <i class="fas fa-plus"></i>
-                            Nova Imagem
-                        </button>
-                    </div>
-
-                    <div id="imagens-container"></div>
+            <div class="form-section">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h3 class="m-0">Imagens</h3>
+                    <button type="button" class="btn primary new-imagem">
+                        <i class="fas fa-plus"></i> Nova Imagem
+                    </button>
                 </div>
+                <div class="d-flex justify-content-center" style="align-items: center; margin-left: 5%;">
+                    <div id="imagens-container" class="d-inline-flex flex-wrap gap-3"></div>
+                </div>
+
             </div>
+        </div>
+
+
     </div>
     <div class="modal-footer">
         <button class="btn secondary">Cancelar</button>

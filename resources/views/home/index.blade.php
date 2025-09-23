@@ -605,12 +605,9 @@
                 success: function (data) {
                     const container = $('#consultas-container');
                         container.empty();
-                        debugger
                         Object.entries(data).forEach(([dataLabel, consultas]) => {
                             const title = `<h2 class="h6 text-secondary fw-semibold mb-3 pb-2 border-bottom">${dataLabel}</h2>`;
                             container.append(title);
-                                debugger
-
                             consultas.forEach(consulta => {
                                 let statusLabel = 'Desconhecido';
                                 let statusClass = 'secondary';
@@ -829,7 +826,7 @@
             $(document).on("click", ".salvar-documento", function () {
                 const notyf = new Notyf();
                 
-                let id = $(this).data("id"); // pega o timestamp do campo
+                let id = $(this).data("id"); 
                 let cdPaciente = $('#cdPaciente').val();
                 let name = $(`#documento-${id} .image-name`).val();
                 let file = $(`#documento-${id} input[type="file"]`)[0].files[0];
@@ -867,6 +864,85 @@
 
         });
 
+
+        function getImagens() {
+            const notyf = new Notyf();
+            let cdPaciente = $('#cdPaciente').val();
+
+            $.ajax({
+                url: `/GetImagens/${cdPaciente}`,
+                method: 'GET',
+                success: function (response) {
+                    if (response.success === true) {
+                        const container = $('#imagens-container');
+                        container.empty(); // limpa o container
+
+                        if(response.data.length === 0){
+                            container.append('<p>Nenhuma imagem encontrada.</p>');
+                            return;
+                        }
+
+                        response.data.forEach(function(item) {
+                        const html = `
+                        <div class="arquivo-card">
+                            <i class="fa-solid fa-image fa-3x mb-2" style="color:#A5D8FF;"></i>
+                            <span class="arquivo-nome" title="${item.name}">${item.name}</span>
+                            <span class="arquivo-path" style="display:none;">${item.relativePath}</span>
+                        </div>
+                        `;
+
+
+                            container.append(html);
+                        });
+
+                    } else {
+                        notyf.error(response.message);
+                    }
+                },
+                error: function () {
+                    notyf.error('Erro ao carregar imagens.');
+                }
+            });
+        }
+
+        function getDocumentos() {
+            const notyf = new Notyf();
+            let cdPaciente = $('#cdPaciente').val();
+
+            $.ajax({
+                url: `/GetDocumentos/${cdPaciente}`,
+                method: 'GET',
+                success: function (response) {
+                    if (response.success === true) {
+                        const container = $('#documentos-container');
+                        container.empty(); // limpa o container
+
+                        if(response.data.length === 0){
+                            container.append('<p>Nenhum documento encontrado.</p>');
+                            return;
+                        }
+
+                        response.data.forEach(function(item) {
+                            const html = `
+                                <div class="arquivo-card">
+                                    <i class="fa-solid fa-file-alt fa-3x mb-2" style="color:#A5D8FF;"></i>
+                                    <span class="arquivo-nome" title="${item.name}">${item.name}</span>
+                                    <span class="arquivo-path" style="display:none;">${item.relativePath}</span>
+                                </div>
+                            `;
+
+                            container.append(html);
+                        });
+
+                    } else {
+                        notyf.error(response.message);
+                    }
+                },
+                error: function () {
+                    notyf.error('Erro ao carregar documentos.');
+                }
+            });
+        }
 
 
     </script>

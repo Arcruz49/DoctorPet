@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\cadClinica;
+use Exception;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\cadPaciente;
@@ -323,7 +324,7 @@ class PacienteController extends Controller
             ]) ;
 
         }
-        catch(\Exception $e)
+        catch(Exception $e)
         {
             return response()->json([
                 'success'=> false,
@@ -412,7 +413,7 @@ class PacienteController extends Controller
                 'success' => false,
                 'message' => implode(', ', $e->validator->errors()->all())
             ], 422);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Erro ao salvar o documento: ' . $e->getMessage()
@@ -420,8 +421,68 @@ class PacienteController extends Controller
         }
     }
 
-    public function GetImagens(){
+    public function GetImagens($id){
+        try{
+            $paciente = cadPaciente::where('cdPaciente', $id)->first();
+            $clinica = cadClinica::where('cdClinica', $paciente->cdPaciente)->first();
+            $path = $this->GetPathPaciente($paciente, $clinica, 'imagem');
         
+            if (!File::exists($path)) throw new Exception('Caminho não encontrado');
+            
+            $files = File::files($path);
+
+            $imagens = [];
+            foreach ($files as $file) {
+                $relativePath = 'storage/app' . str_replace(storage_path('app'), '', $file->getPathname());
+
+                $imagens[] = [
+                    'name' => $file->getFilename(),
+                    'relativePath' => $relativePath,
+                ];
+            }
+            return response()->json([
+                'success' => true,
+                'data' => $imagens
+            ]);
+        }
+        catch(Exception $e){
+            return response()->json([
+                'success' => false,
+                'message' => 'Erro ao listar imagens: ' . $e->getMessage()
+            ]);
+        }
+    }
+
+    public function GetDocumentos($id){
+        try{
+            $paciente = cadPaciente::where('cdPaciente', $id)->first();
+            $clinica = cadClinica::where('cdClinica', $paciente->cdPaciente)->first();
+            $path = $this->GetPathPaciente($paciente, $clinica, 'documento');
+        
+            if (!File::exists($path)) throw new Exception('Caminho não encontrado');
+            
+            $files = File::files($path);
+
+            $imagens = [];
+            foreach ($files as $file) {
+                $relativePath = 'storage/app' . str_replace(storage_path('app'), '', $file->getPathname());
+
+                $imagens[] = [
+                    'name' => $file->getFilename(),
+                    'relativePath' => $relativePath,
+                ];
+            }
+            return response()->json([
+                'success' => true,
+                'data' => $imagens
+            ]);
+        }
+        catch(Exception $e){
+            return response()->json([
+                'success' => false,
+                'message' => 'Erro ao listar documentos: ' . $e->getMessage()
+            ]);
+        }
     }
 
 
