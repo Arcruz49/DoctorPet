@@ -10,8 +10,8 @@
             <button class="tab-button" data-tab="questionnaire">Questionário</button>
             <button class="tab-button hideOnCreate" data-tab="consultas">Consultas</button>
             <button class="tab-button hideOnCreate" data-tab="exames">Exames</button>
-            <button class="tab-button hideOnCreate" data-tab="documentos">Documentos</button>
-            <button class="tab-button hideOnCreate" data-tab="imagens">Imagens</button>
+            <button class="tab-button hideOnCreate" onclick="getDocumentos()" data-tab="documentos">Documentos</button>
+            <button class="tab-button hideOnCreate" onclick="getImagens()" data-tab="imagens">Imagens</button>
         </div>
 
         <form id="patientForm">
@@ -467,6 +467,9 @@
                         Novo Documento
                     </button>
                 </div>
+
+                <div id="documentos-container-add" class="d-flex flex-wrap gap-3" style="justify-content: center;"></div>
+
                 <div class="d-flex justify-content-center" style="align-items: center; margin-left: 5%;">
                     <div id="documentos-container"></div>
                 </div>
@@ -482,6 +485,9 @@
                         <i class="fas fa-plus"></i> Nova Imagem
                     </button>
                 </div>
+                
+                <div id="imagens-container-add" class="d-flex flex-wrap gap-3" style="justify-content: center;"></div>
+
                 <div class="d-flex justify-content-center" style="align-items: center; margin-left: 5%;">
                     <div id="imagens-container" class="d-inline-flex flex-wrap gap-3"></div>
                 </div>

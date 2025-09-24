@@ -421,37 +421,36 @@ class PacienteController extends Controller
         }
     }
 
-    public function GetImagens($id){
-        try{
+    public function GetImagens($id)
+    {
+        try {
             $paciente = cadPaciente::where('cdPaciente', $id)->first();
-            $clinica = cadClinica::where('cdClinica', $paciente->cdPaciente)->first();
-            $path = $this->GetPathPaciente($paciente, $clinica, 'imagem');
-        
-            if (!File::exists($path)) throw new Exception('Caminho não encontrado');
-            
-            $files = File::files($path);
+            $clinica  = cadClinica::where('cdClinica', $paciente->cdPaciente)->first();
+            $path     = $this->GetPathPaciente($paciente, $clinica, 'imagem');
 
-            $imagens = [];
-            foreach ($files as $file) {
-                $relativePath = 'storage/app' . str_replace(storage_path('app'), '', $file->getPathname());
-
-                $imagens[] = [
-                    'name' => $file->getFilename(),
-                    'relativePath' => $relativePath,
-                ];
+            if (!File::exists($path)) {
+                throw new Exception('Caminho não encontrado');
             }
+
+            $imagens = collect(File::files($path))
+                ->sortByDesc(fn($file) => filemtime($file)) // mais recentes primeiro
+                ->map(fn($file) => [
+                    'name'         => $file->getFilename(),
+                    'relativePath' => ltrim(str_replace(storage_path('app') . '/', '', $file->getPathname()), '/'),
+                ])->values();
+
             return response()->json([
                 'success' => true,
-                'data' => $imagens
+                'data'    => $imagens
             ]);
-        }
-        catch(Exception $e){
+        } catch (Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Erro ao listar imagens: ' . $e->getMessage()
             ]);
         }
     }
+
 
     public function GetDocumentos($id){
         try{
@@ -461,20 +460,18 @@ class PacienteController extends Controller
         
             if (!File::exists($path)) throw new Exception('Caminho não encontrado');
             
-            $files = File::files($path);
+            //files = File::files($path);
 
-            $imagens = [];
-            foreach ($files as $file) {
-                $relativePath = 'storage/app' . str_replace(storage_path('app'), '', $file->getPathname());
+            $documentos = collect(File::files($path))
+            ->sortByDesc(fn($file) => filemtime($file)) 
+            ->map(fn($file) => [
+                'name'         => $file->getFilename(),
+                'relativePath' => ltrim(str_replace(storage_path('app') . '/', '', $file->getPathname()), '/'),
+            ])->values();
 
-                $imagens[] = [
-                    'name' => $file->getFilename(),
-                    'relativePath' => $relativePath,
-                ];
-            }
             return response()->json([
                 'success' => true,
-                'data' => $imagens
+                'data' => $documentos
             ]);
         }
         catch(Exception $e){
@@ -485,8 +482,6 @@ class PacienteController extends Controller
         }
     }
 
-
-
     public function GetPathPaciente($paciente, $clinica, $fileType){
         
         $clinicaDir = $clinica->cdClinica . '_' . Str::slug($clinica->nmClinica, '_');
@@ -495,4 +490,28 @@ class PacienteController extends Controller
 
         return $fileType == "imagem" ? $pacientePath . '/imagens' : $pacientePath . '/documentos';
     }
+
+
+    public function DownloadFile(Request $request)
+    {
+        try {
+            $path = $request->query('path');
+            $fullPath = storage_path('app/' . $path);
+
+            if (!file_exists($fullPath)) {
+                throw new Exception('Arquivo não encontrado');
+            }
+
+            return response()->download($fullPath);
+
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erro ao baixar arquivo: ' . $e->getMessage()
+            ], 404);
+        }
+    }
+
+
+
 }

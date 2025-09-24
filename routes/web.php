@@ -21,6 +21,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/saveDocument', [\App\Http\Controllers\PacienteController::class, 'saveDocument'])->name('saveDocument');
     Route::get('/GetImagens/{id}', [\App\Http\Controllers\PacienteController::class, 'GetImagens'])->name('GetImagens');
     Route::get('/GetDocumentos/{id}', [\App\Http\Controllers\PacienteController::class, 'GetDocumentos'])->name('GetDocumentos');
+    Route::get('/DownloadFile', [\App\Http\Controllers\PacienteController::class, 'DownloadFile'])->name('DownloadFile');
+
 
     // Clínica
     Route::get('/Clinicas', [\App\Http\Controllers\ClinicaController::class, 'Index'])->name('Clinicas');

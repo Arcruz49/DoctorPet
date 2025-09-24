@@ -728,7 +728,7 @@
                     </div>
                 `;
 
-                $("#imagens-container").append(novoCampo);
+                $("#imagens-container-add").append(novoCampo);
             });
 
             $(document).on("click", ".remover-imagem", function () {
@@ -767,6 +767,7 @@
                             notyf.success(response.message);
                             $("#imagem-" + id).remove();
                             $(".new-imagem").show();
+                            getImagens();
                         } else {
                             notyf.error(response.message);
                         }
@@ -813,7 +814,7 @@
                     </div>
                 `;
 
-                $("#documentos-container").append(novoCampo);
+                $("#documentos-container-add").append(novoCampo);
             });
 
             $(document).on("click", ".remover-documento", function () {
@@ -852,6 +853,7 @@
                             notyf.success(response.message);
                             $("#documento-" + id).remove();
                             $(".new-documento").show();
+                            getDocumentos();
                         } else {
                             notyf.error(response.message);
                         }
@@ -896,7 +898,7 @@
                         });
 
                     } else {
-                        notyf.error(response.message);
+                        // notyf.error(response.message);
                     }
                 },
                 error: function () {
@@ -935,7 +937,7 @@
                         });
 
                     } else {
-                        notyf.error(response.message);
+                        // notyf.error(response.message);
                     }
                 },
                 error: function () {
@@ -943,6 +945,17 @@
                 }
             });
         }
+
+        $(document).on('click', '.arquivo-card', function () {
+            const path = $(this).find('.arquivo-path').text(); 
+            downloadFile(path);
+        });
+
+
+        function downloadFile(path) {
+            window.location.href = `/DownloadFile?path=${encodeURIComponent(path)}`;
+        }
+
 
 
     </script>
