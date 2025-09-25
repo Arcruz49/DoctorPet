@@ -27,4 +27,25 @@ class SystemHelper
             return redirect()->route('login')->withErrors('Sessão expirada. Faça login novamente.');
         }
     }
+
+    public static function verificaSeArquivoJaExiste($fileName, $path){
+        if (!file_exists($path . '/' . $fileName)) return false;
+        return true;
+    }
+
+    public static function renomeiaArquivo($fileName, $path, $num = 1)
+    {
+        $info = pathinfo($fileName);
+        $nome = $info['filename'];
+        $ext  = isset($info['extension']) ? '.' . $info['extension'] : '';
+
+        $novoNome = $nome . "($num)" . $ext;
+
+        if (self::verificaSeArquivoJaExiste($novoNome, $path)) {
+            return self::renomeiaArquivo($fileName, $path, $num + 1);
+        }
+
+        return $novoNome;
+    }
+
 }

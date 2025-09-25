@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\SystemHelper;
 use App\Models\cadClinica;
 use Exception;
 use Illuminate\Support\Facades\Storage;
@@ -356,6 +357,11 @@ class PacienteController extends Controller
                 ? Str::slug($request->name, '_') . '.' . $file->getClientOriginalExtension()
                 : $file->getClientOriginalName();
 
+            
+            if(systemHelper::verificaSeArquivoJaExiste($fileName, $pacientePath)){
+                $fileName = SystemHelper::renomeiaArquivo($fileName, $pacientePath);
+            }
+
             $file->move($pacientePath, $fileName);
 
             return response()->json([
@@ -369,7 +375,7 @@ class PacienteController extends Controller
                 'success' => false,
                 'message' => implode(', ', $e->validator->errors()->all())
             ], 422);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Erro ao salvar imagem: ' . $e->getMessage()
@@ -400,6 +406,10 @@ class PacienteController extends Controller
                 ? Str::slug($request->name, '_') . '.' . $file->getClientOriginalExtension()
                 : $file->getClientOriginalName();
 
+            if(systemHelper::verificaSeArquivoJaExiste($fileName, $pacientePath)){
+                $fileName = SystemHelper::renomeiaArquivo($fileName, $pacientePath);
+            }
+            
             $file->move($pacientePath, $fileName);
 
             return response()->json([
@@ -511,6 +521,8 @@ class PacienteController extends Controller
             ], 404);
         }
     }
+
+    
 
 
 
