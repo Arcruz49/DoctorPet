@@ -70,11 +70,24 @@
         @include('modal.modalPaciente')
     </div>
 
+    <div class="modal-overlay" id="atenderConsultaModal">
+        @include('modal.modalAtenderConsulta')
+    </div>
+
+        <div class="modal-overlay" id="consultaModal">
+            @include('modal.modalConsulta')
+        </div>
+
 @endsection
 
 @push('scripts')
     <script>
 
+        $('.close-modal, .btn.secondary').click(function () {
+            $('#atenderConsultaModal').removeClass('active');
+            //limparFormulario();
+
+        });
 
         $.ajaxSetup({
             headers: {
@@ -1025,6 +1038,95 @@
                     }
                 });
 
+            }
+
+            function atenderConsulta(cdConsulta, nmPaciente, finalizada)
+            {
+                $('#btnFecharConsultaSemSalvar').hide();
+
+                $.ajax({
+                    url: `/GetDadosConsulta/${cdConsulta}`,
+                    method: 'GET',
+                    success: function (response) {
+                        if (response.success === true) 
+                        {
+                            $('#queixaPrincipal').val(response.data.queixaPrincipal);
+                            $('#inicioSintomas').val(response.data.inicio);
+                            $('#progressaoSintomas').val(response.data.progressao);
+                            $('#sinaisClinicos').val(response.data.sinais);
+                            $('#medidasClinicas').val(response.data.medidas);
+                            $('#observacoesExame').val(response.data.obs);
+                            $('#examesSolicitados').val(response.data.examesSolicitados);
+                            $('#sugestoesDiagnosticas').val(response.data.sugestoes);
+                            $('#prescricoes').val(response.data.prescricoes);
+                            $('#objetivosTratamento').val(response.data.objetivos);
+
+                            if(finalizada){
+                                $('#btnFinalizarConsulta').hide();
+                                $('#btnFecharConsultaSemSalvar').show();
+                            } 
+                            else
+                            {
+                                $('#btnFinalizarConsulta').show();
+
+                            }
+                            
+
+                            $('#cdConsultaAtendimento').val(cdConsulta);
+                            $('#modalConsultaTitleAtender').text(`Atendendimento - ${nmPaciente}`);
+                            $('#atenderConsultaModal').addClass('active');
+                        }
+                        else {
+                            notyf.error(response.message || 'Ocorreu um erro ao buscar dados da consulta.');
+                        }
+                    },
+                    error: function () {
+                        notyf.error('Erro ao finalizar consulta.');
+                    }
+                });
+
+
+            }
+
+            $(document).on('click', '.new-consulta', function () {
+                $('#modalTitleConsulta').text('Nova Consulta');
+                $('.modal-footer').show();
+                limparFormulario();
+
+                $('#consultaForm')[0].reset();
+
+                $('.add-patient-card').html(`
+                    <div id="btnAbrirModalPaciente">
+                        <button type="button" class="add-patient-btn">
+                            <i class="fas fa-plus-circle"></i>
+                            <span>Adicionar Paciente</span>
+                        </button>
+                    </div>
+                `);
+
+                $('#consultaModal').addClass('active');
+            });
+
+
+
+            //adicionar a logica de preencher o paciente automaticamente.
+            function addPaciente(card, cdPaciente) {
+                let container = $('.add-patient-card');
+                container.empty();
+
+                let clone = $(card).clone();
+
+                clone.off('click').on('click', function () {
+                    $('#consultaModal').removeClass('active');
+                    $('#addPacienteModal').addClass('active');
+                });
+
+                $('#cdPacienteAdicionado').val(cdPaciente);
+
+                container.append(clone);
+
+                $('#addPacienteModal').removeClass('active');
+                $('#consultaModal').addClass('active');
             }
 
 
