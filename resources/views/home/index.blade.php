@@ -619,15 +619,15 @@
                                         statusLabel = 'Agendada';
                                         statusClass = 'primary';
 
-                                        botoes = `<button class="btn btn-sm btn-confirm px-3" onclick="confirmarConsulta(${consulta.cdConsulta})">Confirmar</button>
-                                                    <button class="btn btn-sm btn-outline-danger px-3" onclick="cancelarConsulta(${consulta.cdConsulta})">Cancelar</button>`;
+                                        botoes = `<button type="button" class="btn btn-sm btn-confirm px-3" onclick="confirmarConsulta(${consulta.cdConsulta})">Confirmar</button>
+                                                    <button type="button" class="btn btn-sm btn-outline-danger px-3" onclick="cancelarConsulta(${consulta.cdConsulta})">Cancelar</button>`;
                                         break;
                                     case 2:
                                         statusLabel = 'Confirmada';
                                         statusClass = 'success';
 
-                                        botoes = `<button class="btn btn-sm btn-confirm px-3" onclick="atenderConsulta(${consulta.cdConsulta}, '${consulta.nmPaciente}', false)">Atender</button>
-                                                    <button class="btn btn-sm btn-outline-danger px-3" onclick="cancelarConsulta(${consulta.cdConsulta})">Cancelar</button>`;
+                                        botoes = `<button type="button" class="btn btn-sm btn-confirm px-3" onclick="atenderConsulta(${consulta.cdConsulta}, '${consulta.nmPaciente}', false)">Atender</button>
+                                                    <button type="button" class="btn btn-sm btn-outline-danger px-3" onclick="cancelarConsulta(${consulta.cdConsulta})">Cancelar</button>`;
                                         break;
                                     case 3:
                                         statusLabel = 'Realizada';
@@ -954,6 +954,78 @@
         function downloadFile(path) {
             window.location.href = `/DownloadFile?path=${encodeURIComponent(path)}`;
         }
+
+
+        function confirmarConsulta(cdConsulta){
+                let notyf = new Notyf();
+
+                Swal.fire({
+                    title: "Deseja mesmo confirmar esta consulta?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Sim, confirmar",
+                    cancelButtonText: "Não"
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+
+                        $.ajax({
+                            url: "/ConfirmarConsulta",
+                            method: 'POST',
+                            data: { cdConsulta: cdConsulta },
+                            success: function (response) {
+                                if (response.success === true) {
+                                    notyf.success(response.message);
+                                } else {
+                                    notyf.error(response.message || 'Ocorreu um erro ao salvar.');
+                                }
+                                GetConsultasPorPaciente();
+                            },
+                            error: function () {
+                                notyf.error('Erro ao confirmar consulta.');
+                            }
+                        });
+                        
+                    }
+                });
+            }
+
+            function cancelarConsulta(cdConsulta){
+                let notyf = new Notyf();
+
+                Swal.fire({
+                    title: "Deseja mesmo cancelar esta consulta?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Sim, cancelar",
+                    cancelButtonText: "Não"
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+
+                        $.ajax({
+                            url: "/CancelarConsulta",
+                            method: 'POST',
+                            data: { cdConsulta: cdConsulta },
+                            success: function (response) {
+                                if (response.success === true) {
+                                    notyf.success(response.message);
+                                    GetConsultasPorPaciente();
+                                } else {
+                                    notyf.error(response.message || 'Ocorreu um erro ao salvar.');
+                                }
+                            },
+                            error: function () {
+                                notyf.error('Erro ao cancelar consulta.');
+                            }
+                        });
+                        
+                    }
+                });
+
+            }
 
 
 

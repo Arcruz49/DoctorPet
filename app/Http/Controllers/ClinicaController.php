@@ -108,6 +108,7 @@ class ClinicaController extends Controller
     
     }
 
+	
     public function editClinica(Request $request){
         try
         {
