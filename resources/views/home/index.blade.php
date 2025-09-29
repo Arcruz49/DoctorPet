@@ -970,165 +970,220 @@
 
 
         function confirmarConsulta(cdConsulta){
-                let notyf = new Notyf();
+            let notyf = new Notyf();
 
-                Swal.fire({
-                    title: "Deseja mesmo confirmar esta consulta?",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "Sim, confirmar",
-                    cancelButtonText: "Não"
-                    }).then((result) => {
-                    if (result.isConfirmed) {
+            Swal.fire({
+                title: "Deseja mesmo confirmar esta consulta?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Sim, confirmar",
+                cancelButtonText: "Não"
+                }).then((result) => {
+                if (result.isConfirmed) {
 
-                        $.ajax({
-                            url: "/ConfirmarConsulta",
-                            method: 'POST',
-                            data: { cdConsulta: cdConsulta },
-                            success: function (response) {
-                                if (response.success === true) {
-                                    notyf.success(response.message);
-                                } else {
-                                    notyf.error(response.message || 'Ocorreu um erro ao salvar.');
-                                }
+                    $.ajax({
+                        url: "/ConfirmarConsulta",
+                        method: 'POST',
+                        data: { cdConsulta: cdConsulta },
+                        success: function (response) {
+                            if (response.success === true) {
+                                notyf.success(response.message);
+                            } else {
+                                notyf.error(response.message || 'Ocorreu um erro ao salvar.');
+                            }
+                            GetConsultasPorPaciente();
+                        },
+                        error: function () {
+                            notyf.error('Erro ao confirmar consulta.');
+                        }
+                    });
+                    
+                }
+            });
+        }
+
+        function cancelarConsulta(cdConsulta){
+            let notyf = new Notyf();
+
+            Swal.fire({
+                title: "Deseja mesmo cancelar esta consulta?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Sim, cancelar",
+                cancelButtonText: "Não"
+                }).then((result) => {
+                if (result.isConfirmed) {
+
+                    $.ajax({
+                        url: "/CancelarConsulta",
+                        method: 'POST',
+                        data: { cdConsulta: cdConsulta },
+                        success: function (response) {
+                            if (response.success === true) {
+                                notyf.success(response.message);
                                 GetConsultasPorPaciente();
-                            },
-                            error: function () {
-                                notyf.error('Erro ao confirmar consulta.');
+                            } else {
+                                notyf.error(response.message || 'Ocorreu um erro ao salvar.');
                             }
-                        });
-                        
-                    }
-                });
-            }
+                        },
+                        error: function () {
+                            notyf.error('Erro ao cancelar consulta.');
+                        }
+                    });
+                    
+                }
+            });
 
-            function cancelarConsulta(cdConsulta){
-                let notyf = new Notyf();
+        }
 
-                Swal.fire({
-                    title: "Deseja mesmo cancelar esta consulta?",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "Sim, cancelar",
-                    cancelButtonText: "Não"
-                    }).then((result) => {
-                    if (result.isConfirmed) {
+        function atenderConsulta(cdConsulta, nmPaciente, finalizada)
+        {
+            $('#btnFecharConsultaSemSalvar').hide();
 
-                        $.ajax({
-                            url: "/CancelarConsulta",
-                            method: 'POST',
-                            data: { cdConsulta: cdConsulta },
-                            success: function (response) {
-                                if (response.success === true) {
-                                    notyf.success(response.message);
-                                    GetConsultasPorPaciente();
-                                } else {
-                                    notyf.error(response.message || 'Ocorreu um erro ao salvar.');
-                                }
-                            },
-                            error: function () {
-                                notyf.error('Erro ao cancelar consulta.');
-                            }
-                        });
-                        
-                    }
-                });
+            $.ajax({
+                url: `/GetDadosConsulta/${cdConsulta}`,
+                method: 'GET',
+                success: function (response) {
+                    if (response.success === true) 
+                    {
+                        $('#queixaPrincipal').val(response.data.queixaPrincipal);
+                        $('#inicioSintomas').val(response.data.inicio);
+                        $('#progressaoSintomas').val(response.data.progressao);
+                        $('#sinaisClinicos').val(response.data.sinais);
+                        $('#medidasClinicas').val(response.data.medidas);
+                        $('#observacoesExame').val(response.data.obs);
+                        $('#examesSolicitados').val(response.data.examesSolicitados);
+                        $('#sugestoesDiagnosticas').val(response.data.sugestoes);
+                        $('#prescricoes').val(response.data.prescricoes);
+                        $('#objetivosTratamento').val(response.data.objetivos);
 
-            }
-
-            function atenderConsulta(cdConsulta, nmPaciente, finalizada)
-            {
-                $('#btnFecharConsultaSemSalvar').hide();
-
-                $.ajax({
-                    url: `/GetDadosConsulta/${cdConsulta}`,
-                    method: 'GET',
-                    success: function (response) {
-                        if (response.success === true) 
+                        if(finalizada){
+                            $('#btnFinalizarConsulta').hide();
+                            $('#btnFecharConsultaSemSalvar').show();
+                        } 
+                        else
                         {
-                            $('#queixaPrincipal').val(response.data.queixaPrincipal);
-                            $('#inicioSintomas').val(response.data.inicio);
-                            $('#progressaoSintomas').val(response.data.progressao);
-                            $('#sinaisClinicos').val(response.data.sinais);
-                            $('#medidasClinicas').val(response.data.medidas);
-                            $('#observacoesExame').val(response.data.obs);
-                            $('#examesSolicitados').val(response.data.examesSolicitados);
-                            $('#sugestoesDiagnosticas').val(response.data.sugestoes);
-                            $('#prescricoes').val(response.data.prescricoes);
-                            $('#objetivosTratamento').val(response.data.objetivos);
+                            $('#btnFinalizarConsulta').show();
 
-                            if(finalizada){
-                                $('#btnFinalizarConsulta').hide();
-                                $('#btnFecharConsultaSemSalvar').show();
-                            } 
-                            else
-                            {
-                                $('#btnFinalizarConsulta').show();
-
-                            }
-                            
-
-                            $('#cdConsultaAtendimento').val(cdConsulta);
-                            $('#modalConsultaTitleAtender').text(`Atendendimento - ${nmPaciente}`);
-                            $('#atenderConsultaModal').addClass('active');
                         }
-                        else {
-                            notyf.error(response.message || 'Ocorreu um erro ao buscar dados da consulta.');
-                        }
-                    },
-                    error: function () {
-                        notyf.error('Erro ao finalizar consulta.');
+                        
+
+                        $('#cdConsultaAtendimento').val(cdConsulta);
+                        $('#modalConsultaTitleAtender').text(`Atendendimento - ${nmPaciente}`);
+                        $('#atenderConsultaModal').addClass('active');
                     }
-                });
-
-
-            }
-
-            $(document).on('click', '.new-consulta', function () {
-                $('#modalTitleConsulta').text('Nova Consulta');
-                $('.modal-footer').show();
-                limparFormulario();
-
-                $('#consultaForm')[0].reset();
-
-                $('.add-patient-card').html(`
-                    <div id="btnAbrirModalPaciente">
-                        <button type="button" class="add-patient-btn">
-                            <i class="fas fa-plus-circle"></i>
-                            <span>Adicionar Paciente</span>
-                        </button>
-                    </div>
-                `);
-
-                $('#consultaModal').addClass('active');
+                    else {
+                        notyf.error(response.message || 'Ocorreu um erro ao buscar dados da consulta.');
+                    }
+                },
+                error: function () {
+                    notyf.error('Erro ao finalizar consulta.');
+                }
             });
 
 
+        }
 
-            //adicionar a logica de preencher o paciente automaticamente.
-            function addPaciente(card, cdPaciente) {
-                let container = $('.add-patient-card');
-                container.empty();
+        $(document).on('click', '.new-consulta', function () {
+            $('#modalTitleConsulta').text('Nova Consulta');
+            $('.modal-footer').show();
+            limparFormulario();
 
-                let clone = $(card).clone();
+            $('#consultaForm')[0].reset();
 
-                clone.off('click').on('click', function () {
-                    $('#consultaModal').removeClass('active');
-                    $('#addPacienteModal').addClass('active');
+            $('.add-patient-card').html(`
+                <div id="btnAbrirModalPaciente">
+                    <button type="button" class="add-patient-btn">
+                        <i class="fas fa-plus-circle"></i>
+                        <span>Adicionar Paciente</span>
+                    </button>
+                </div>
+            `);
+
+            $('#consultaModal').addClass('active');
+        });
+
+
+
+        //adicionar a logica de preencher o paciente automaticamente.
+        function addPaciente(card, cdPaciente) {
+            let container = $('.add-patient-card');
+            container.empty();
+
+            let clone = $(card).clone();
+
+            clone.off('click').on('click', function () {
+                $('#consultaModal').removeClass('active');
+                $('#addPacienteModal').addClass('active');
+            });
+
+            $('#cdPacienteAdicionado').val(cdPaciente);
+
+            container.append(clone);
+
+            $('#addPacienteModal').removeClass('active');
+            $('#consultaModal').addClass('active');
+        }
+
+
+        function carregarPacientes() {
+                let search = $('#search').val();
+                let searchEspecie = $('#searchEspecie').val();
+                let searchOrder = $('#searchOrder').val();
+                let searchExibir = $('#searchExibir').val();
+                let searchClinica = $('#searchClinica').val();
+
+                $.ajax({
+                    url: '/getPacientes',
+                    method: 'GET',
+                    data: {
+                        search: search,
+                        especie: searchEspecie,
+                        order: searchOrder,
+                        exibir: searchExibir,
+                        searchClinica: searchClinica
+                    },
+                    success: function (pacientes) {
+                        let container = $('#patientsContainer');
+                        container.empty();
+
+                        pacientes.forEach(paciente => {
+                            let icon = '<i class="fas fa-dog"></i>';
+                            let cor = paciente.color;
+                            if (paciente.especie.toLowerCase().includes('cat')) icon = '<i class="fas fa-cat"></i>';
+
+                            if(paciente.color == '' || paciente.color == null || paciente.color == undefined){
+                                const cores = ['#FFD6E0', '#C1FBA4', '#7BF1A8', '#90F1EF', '#FFB7FF'];
+                                cor = cores[Math.floor(Math.random() * cores.length)];
+                            }
+
+                            let card = `
+                                <div class="patient-card" onclick="addPaciente(this, ${paciente.cdPaciente})" data-cdpaciente="${paciente.cdPaciente}">
+                                    <div class="patient-avatar" style="background-color: ${cor};">
+                                        ${icon}
+                                    </div>
+                                    <div class="patient-info">
+                                        <h3>${paciente.nmPaciente}</h3>
+                                        <p class="meta">${paciente.raca} • ${paciente.idade}</p>
+                                        <p class="owner">Tutor: ${paciente.nmTutor}</p>
+                                        
+                                    </div>
+                                </div>
+                            `;
+
+                            container.append(card);
+                        });
+
+                    },
+                    error: function () {
+                        alert('Erro ao carregar os pacientes.');
+                    }
                 });
-
-                $('#cdPacienteAdicionado').val(cdPaciente);
-
-                container.append(clone);
-
-                $('#addPacienteModal').removeClass('active');
-                $('#consultaModal').addClass('active');
             }
-
 
 
     </script>
