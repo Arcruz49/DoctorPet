@@ -435,9 +435,9 @@ class PacienteController extends Controller
     {
         try {
             $paciente = cadPaciente::where('cdPaciente', $id)->first();
-            $clinica  = cadClinica::where('cdClinica', $paciente->cdPaciente)->first();
-            $path     = $this->GetPathPaciente($paciente, $clinica, 'imagem');
+            $clinica  = cadClinica::where('cdClinica', $paciente->cdClinica)->first();
 
+            $path     = $this->GetPathPaciente($paciente, $clinica, 'imagem');
             if (!File::exists($path)) {
                 throw new Exception('Caminho não encontrado');
             }
@@ -465,7 +465,7 @@ class PacienteController extends Controller
     public function GetDocumentos($id){
         try{
             $paciente = cadPaciente::where('cdPaciente', $id)->first();
-            $clinica = cadClinica::where('cdClinica', $paciente->cdPaciente)->first();
+            $clinica = cadClinica::where('cdClinica', $paciente->cdClinica)->first();
             $path = $this->GetPathPaciente($paciente, $clinica, 'documento');
         
             if (!File::exists($path)) throw new Exception('Caminho não encontrado');
