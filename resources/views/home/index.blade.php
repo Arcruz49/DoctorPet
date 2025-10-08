@@ -83,11 +83,7 @@
 @push('scripts')
     <script>
 
-        $('.close-modal, .btn.secondary').click(function () {
-            $('#atenderConsultaModal').removeClass('active');
-            //limparFormulario();
 
-        });
 
         $.ajaxSetup({
             headers: {
@@ -126,6 +122,8 @@
             // Fechar modal
             $('.close-modal, .btn.secondary').click(function() {
                 $('#patientModal').removeClass('active');
+                $('#consultaModal').removeClass('active');
+
                 showFirstTab();
             });
 
@@ -272,6 +270,7 @@
             $('#age').val(paciente.idade);
             $('#gender').val(paciente.sexo);
             $('#weight').val(paciente.peso);
+
 
             $('#ownerName').val(paciente.nmTutor);
             $('#ownerPhone').val(paciente.telefone || '');
@@ -562,7 +561,7 @@
                     });
 
                     container.append(`
-                        <div class="add-patient-card">
+                        <div class="add-patient-card-home">
                             <button class="add-patient-btn">
                                 <i class="fas fa-plus-circle"></i>
                                 <span>Adicionar Paciente</span>
@@ -1088,21 +1087,21 @@
 
         }
 
+
+
+        //aqui
         $(document).on('click', '.new-consulta', function () {
+
             $('#modalTitleConsulta').text('Nova Consulta');
             $('.modal-footer').show();
-            limparFormulario();
+            $('#dtConsulta').val('');
 
-            $('#consultaForm')[0].reset();
+            // $('#consultaForm')[0].reset();
 
-            $('.add-patient-card').html(`
-                <div id="btnAbrirModalPaciente">
-                    <button type="button" class="add-patient-btn">
-                        <i class="fas fa-plus-circle"></i>
-                        <span>Adicionar Paciente</span>
-                    </button>
-                </div>
-            `);
+
+            
+            addPaciente($('#cdPaciente').val())
+
 
             $('#consultaModal').addClass('active');
         });
@@ -1110,59 +1109,19 @@
 
 
         //adicionar a logica de preencher o paciente automaticamente.
-        function addPaciente(card, cdPaciente) {
+        function addPaciente(cdPaciente) {
             let container = $('.add-patient-card');
             container.empty();
+            $.ajax({
+                url: `/getPaciente/${cdPaciente}`,
+                method: 'GET',
+                success: function (paciente) {
+                    let icon = '<i class="fas fa-dog"></i>';
+                    let cor = paciente.color;
+                    if (paciente.especie.toLowerCase().includes('cat')) icon = '<i class="fas fa-cat"></i>';
 
-            let clone = $(card).clone();
-
-            clone.off('click').on('click', function () {
-                $('#consultaModal').removeClass('active');
-                $('#addPacienteModal').addClass('active');
-            });
-
-            $('#cdPacienteAdicionado').val(cdPaciente);
-
-            container.append(clone);
-
-            $('#addPacienteModal').removeClass('active');
-            $('#consultaModal').addClass('active');
-        }
-
-
-        function carregarPacientes() {
-                let search = $('#search').val();
-                let searchEspecie = $('#searchEspecie').val();
-                let searchOrder = $('#searchOrder').val();
-                let searchExibir = $('#searchExibir').val();
-                let searchClinica = $('#searchClinica').val();
-
-                $.ajax({
-                    url: '/getPacientes',
-                    method: 'GET',
-                    data: {
-                        search: search,
-                        especie: searchEspecie,
-                        order: searchOrder,
-                        exibir: searchExibir,
-                        searchClinica: searchClinica
-                    },
-                    success: function (pacientes) {
-                        let container = $('#patientsContainer');
-                        container.empty();
-
-                        pacientes.forEach(paciente => {
-                            let icon = '<i class="fas fa-dog"></i>';
-                            let cor = paciente.color;
-                            if (paciente.especie.toLowerCase().includes('cat')) icon = '<i class="fas fa-cat"></i>';
-
-                            if(paciente.color == '' || paciente.color == null || paciente.color == undefined){
-                                const cores = ['#FFD6E0', '#C1FBA4', '#7BF1A8', '#90F1EF', '#FFB7FF'];
-                                cor = cores[Math.floor(Math.random() * cores.length)];
-                            }
-
-                            let card = `
-                                <div class="patient-card" onclick="addPaciente(this, ${paciente.cdPaciente})" data-cdpaciente="${paciente.cdPaciente}">
+                    $('.add-patient-card').html(`
+                <div class="patient-card" onclick="addPaciente(this, ${paciente.cdPaciente})" data-cdpaciente="${paciente.cdPaciente}">
                                     <div class="patient-avatar" style="background-color: ${cor};">
                                         ${icon}
                                     </div>
@@ -1173,18 +1132,146 @@
                                         
                                     </div>
                                 </div>
-                            `;
+            `);
 
-                            container.append(card);
-                        });
+                },
+                error: function () {
+                    new Notyf().error('Erro ao carregar dados do paciente.');
+                }
+            });
 
-                    },
-                    error: function () {
-                        alert('Erro ao carregar os pacientes.');
+            // clone.off('click').on('click', function () {
+            //     $('#consultaModal').removeClass('active');
+            //     $('#addPacienteModal').addClass('active');
+            // });
+
+            // $('#cdPacienteAdicionado').val(cdPaciente);
+
+            // container.append(clone);
+
+            // $('#addPacienteModal').removeClass('active');
+            // $('#consultaModal').addClass('active');
+        }
+
+
+        function carregarPacientes() {
+            let search = $('#search').val();
+            let searchEspecie = $('#searchEspecie').val();
+            let searchOrder = $('#searchOrder').val();
+            let searchExibir = $('#searchExibir').val();
+            let searchClinica = $('#searchClinica').val();
+
+            $.ajax({
+                url: '/getPacientes',
+                method: 'GET',
+                data: {
+                    search: search,
+                    especie: searchEspecie,
+                    order: searchOrder,
+                    exibir: searchExibir,
+                    searchClinica: searchClinica
+                },
+                success: function (pacientes) {
+                    let container = $('#patientsContainer');
+                    container.empty();
+
+                    pacientes.forEach(paciente => {
+                        let icon = '<i class="fas fa-dog"></i>';
+                        let cor = paciente.color;
+                        if (paciente.especie.toLowerCase().includes('cat')) icon = '<i class="fas fa-cat"></i>';
+
+                        if(paciente.color == '' || paciente.color == null || paciente.color == undefined){
+                            const cores = ['#FFD6E0', '#C1FBA4', '#7BF1A8', '#90F1EF', '#FFB7FF'];
+                            cor = cores[Math.floor(Math.random() * cores.length)];
+                        }
+
+                        let card = `
+                            <div class="patient-card">
+                                <div class="patient-avatar" style="background-color: ${cor};">
+                                    ${icon}
+                                </div>
+                                <div class="patient-info">
+                                    <h3>${paciente.nmPaciente}</h3>
+                                    <p class="meta">${paciente.raca} • ${paciente.idade}</p>
+                                    <p class="owner">Tutor: ${paciente.nmTutor}</p>
+                                    
+                                </div>
+                                <div class="patient-actions">
+                                    <button class="icon-btn view" onclick="visualizarPaciente(${paciente.cdPaciente}, false)">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="icon-btn edit" onclick="visualizarPaciente(${paciente.cdPaciente}, true)">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <div class="dropdown">
+                                        <button class="icon-btn more" onclick="toggleDropdown(this)">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <button onclick="deletarPaciente(${paciente.cdPaciente})">
+                                                <i class="fas fa-trash-alt"></i> Excluir
+                                            </button>
+                                            <!-- Você pode adicionar mais ações aqui -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+
+                        container.append(card);
+                    });
+
+                    container.append(`
+                        <div class="add-patient-card-home">
+                            <button class="add-patient-btn">
+                                <i class="fas fa-plus-circle"></i>
+                                <span>Adicionar Paciente</span>
+                            </button>
+                        </div>
+                    `);
+                },
+                error: function () {
+                    alert('Erro ao carregar os pacientes.');
+                }
+            });
+        }
+
+        $('#btnSalvarConsulta').on('click', function () {
+                    
+            const notyf = new Notyf();
+            let url = '/createConsulta';
+            let paciente = $('#cdPaciente').val();
+            let dtConsulta = $('#dtConsulta').val();
+            // if ($('#cdClinica').val() !== "") {
+            //     url = '/editClinica';
+            // }
+            $.ajax({
+                url: url,
+                method: 'POST',
+                data: {
+                    cdPacienteAdicionado: paciente,
+                    dtConsulta : dtConsulta
+                },
+                success: function (response) {
+                    if (response.success === true) {
+                        notyf.success(response.message);
+                        $('#consultaModal').removeClass('active');
+                        carregarConsultas();
+                    } else {
+                        notyf.error(response.message || 'Ocorreu um erro ao salvar.');
                     }
-                });
-            }
+                },
+                error: function () {
+                    notyf.error('Erro ao salvar consulta.');
+                }
+            });
 
+            GetConsultasPorPaciente();
+        });
+
+
+
+        
 
     </script>
 @endpush

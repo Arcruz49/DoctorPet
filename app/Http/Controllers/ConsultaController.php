@@ -29,6 +29,9 @@ class ConsultaController extends Controller
     }
 
     public function CreateConsulta(Request $request){
+
+        
+
         $errorMessage = '';
 
         if (empty($request->cdPacienteAdicionado)) $errorMessage .= "Paciente inválido<br>";

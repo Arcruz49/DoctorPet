@@ -409,7 +409,7 @@ body {
 }
 
 /* Card de adicionar paciente */
-.add-patient-card {
+.add-patient-card, .add-patient-card-home {
     background-color: white;
     border-radius: 12px;
     padding: 20px;
@@ -421,7 +421,7 @@ body {
     border: 2px dashed var(--border);
 }
 
-.add-patient-card:hover {
+.add-patient-card:hover, .add-patient-card-home:hover {
     border-color: var(--primary);
 }
 

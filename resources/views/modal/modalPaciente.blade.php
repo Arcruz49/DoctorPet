@@ -429,7 +429,7 @@
                 <div class="form-section">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h3 class="m-0">Consultas</h3>
-                        <button class="btn primary new-consulta">
+                        <button type="button" class="btn primary new-consulta">
                             <i class="fas fa-plus"></i>
                             Nova Consulta
                         </button>

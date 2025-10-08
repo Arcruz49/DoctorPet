@@ -11,7 +11,7 @@ class ClinicaController extends Controller
     public function Index(){
 
         $usuario = Auth::user();
-
+        
         if (!$usuario) {
             // Redireciona para login ou mostra erro
             return redirect()->route('login')->withErrors('Sessão expirada. Faça login novamente.');
