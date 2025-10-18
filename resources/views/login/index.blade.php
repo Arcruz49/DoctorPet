@@ -56,6 +56,16 @@
         </div>
     </div>
 
+
+
+
+    <div id="loadingModal" class="loading-modal">
+        <div class="loading-content">
+            <img src="{{ asset('images/morgana_loading.GIF') }}" alt="Carregando..." class="loading-gif">
+            <p>Carregando...</p>
+        </div>
+    </div>
+
     <script src="{{ asset('js/bootstrapbundle.js') }}"></script>
 
     <script src="{{ asset('js/jquery.js') }}"></script>
@@ -94,6 +104,24 @@
             });
         });
     });
+
+
+    function showLoading() {
+        $('#loadingModal').addClass('active');
+    }
+
+    function hideLoading() {
+        $('#loadingModal').removeClass('active');
+    }
+
+    $(document).ajaxStart(function () {
+        showLoading();
+    });
+
+    $(document).ajaxStop(function () {
+        hideLoading();
+    });
+
 </script>
 
 </html>
