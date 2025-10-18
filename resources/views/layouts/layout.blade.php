@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DoctorPet | Sistema Veterinário</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap"
+    <link href="{{ asset('css/fonts.css') }}"
         rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/notyf.css') }}">
+    <link href="{{ asset('css/bootstrap.css') }}"rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/home.css') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
@@ -41,7 +41,7 @@
                             <span>Clínicas</span>
                         </a>
                     </li>
-                    <li {{ Route::is('Consultas') ? 'active' : '' }}>
+                    <li class="{{ Route::is('Consultas') ? 'active' : '' }}">
                         <a href="{{ route('Consultas') }}">
                             <i class="fas fa-calendar-check"></i>
                             <span>Consultas</span>
@@ -93,9 +93,9 @@
 
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ asset('js/jquery.js') }}"></script>
+    <script src="{{ asset('js/notyf.js') }}"></script>
+    <script src="{{ asset('js/sweetalert.js') }}"></script>
 
     <script>
 
@@ -156,4 +156,6 @@
     $(document).ajaxStop(function () {
         hideLoading();
     });
+
+    
 </script>

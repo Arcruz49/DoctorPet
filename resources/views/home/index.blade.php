@@ -120,9 +120,10 @@
             });
 
             // Fechar modal
-            $('.close-modal, .btn.secondary').click(function() {
+            $('.close-modal, .btn.secondary, .fecharModal').click(function() {
                 $('#patientModal').removeClass('active');
                 $('#consultaModal').removeClass('active');
+                $('#atenderConsultaModal').removeClass('active');
 
                 showFirstTab();
             });
@@ -645,7 +646,7 @@
                                         statusLabel = 'Realizada';
                                         statusClass = 'muted';
 
-                                        botoes =`<button class="btn btn-sm btn-outline-secondary px-3" onclick="atenderConsulta(${consulta.cdConsulta}, '${consulta.nmPaciente}', true)">Ver Detalhes</button>`;
+                                        botoes =`<button class="btn btn-sm btn-outline-secondary px-3" type="button" onclick="atenderConsulta(${consulta.cdConsulta}, '${consulta.nmPaciente}', true)">Ver Detalhes</button>`;
                                         break;
                                     case 4:
                                         statusLabel = 'Cancelada';
@@ -1121,7 +1122,7 @@
                     if (paciente.especie.toLowerCase().includes('cat')) icon = '<i class="fas fa-cat"></i>';
 
                     $('.add-patient-card').html(`
-                <div class="patient-card" onclick="addPaciente(this, ${paciente.cdPaciente})" data-cdpaciente="${paciente.cdPaciente}">
+                <div class="patient-card" data-cdpaciente="${paciente.cdPaciente}">
                                     <div class="patient-avatar" style="background-color: ${cor};">
                                         ${icon}
                                     </div>
@@ -1256,7 +1257,7 @@
                     if (response.success === true) {
                         notyf.success(response.message);
                         $('#consultaModal').removeClass('active');
-                        carregarConsultas();
+                        GetConsultasPorPaciente();
                     } else {
                         notyf.error(response.message || 'Ocorreu um erro ao salvar.');
                     }
@@ -1269,9 +1270,63 @@
             GetConsultasPorPaciente();
         });
 
+        //fechar sem concluir a consulta
+        $(document).on('click', '#btnFecharConsulta', function () {
+            fecharConsulta();
+        });
 
-
+        //fechar concluindo a consulta
+        $(document).on('click', '#btnFinalizarConsulta', function () {
+            finalizarConsulta();
+        });
         
+        function fecharConsulta(){
+            let notyf = new Notyf();
+
+            $.ajax({
+                url: "/FecharConsulta",
+                method: 'POST',
+                data: $("#AtenderConsultaForm").serialize(),
+                success: function (response) {
+                    if (response.success === true) {
+                        notyf.success(response.message);
+                        $('#atenderConsultaModal').removeClass('active');
+                        $('#cdConsultaAtendimento').val('');
+                        GetConsultasPorPaciente();
+                    } else {
+                        notyf.error(response.message || 'Ocorreu um erro ao salvar.');
+                    }
+                },
+                error: function () {
+                    notyf.error('Erro ao salvar consulta.');
+                }
+            });
+        }
+
+
+
+        function finalizarConsulta() {
+                let notyf = new Notyf();
+
+                $.ajax({
+                    url: "/FinalizarConsulta",
+                    method: 'POST',
+                    data: $("#AtenderConsultaForm").serialize(),
+                    success: function (response) {
+                        if (response.success === true) {
+                            notyf.success(response.message);
+                            $('#atenderConsultaModal').removeClass('active');
+                            $('#cdConsultaAtendimento').val('');
+                            GetConsultasPorPaciente();
+                        } else {
+                            notyf.error(response.message || 'Ocorreu um erro ao salvar.');
+                        }
+                    },
+                    error: function () {
+                        notyf.error('Erro ao finalizar consulta.');
+                    }
+                });
+            }
 
     </script>
 @endpush
