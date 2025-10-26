@@ -192,6 +192,7 @@ insert into cadStatusConsulta(descStatusConsulta)
 values ('Agendada'), ('Confirmada'), ('Realizada'), ('Cancelada')
 
 
+
 SET lc_time_names = 'pt_BR';
 
 CREATE TABLE cadDocumento (
