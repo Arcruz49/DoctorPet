@@ -181,7 +181,7 @@ create table cadStatusConsulta
 )
 
 
-alter table cadconsulta 
+alter table cadConsulta
 add cdStatusConsulta int
 
 ALTER TABLE cadConsulta
