@@ -980,3 +980,23 @@ body {
     font-size: 1.1rem;
     font-weight: 500;
 }
+
+c.mainTitle {
+    margin-left: 0; /* padrão (desktop) */
+}
+
+@media (max-width: 768px) {
+    .mainTitle {
+        margin-left: 15%;
+    }
+}
+
+.mainTitle {
+    margin-left: 0;
+}
+
+@media (max-width: 768px) {
+    .mainTitle {
+        margin-left: 15%;
+    }
+}

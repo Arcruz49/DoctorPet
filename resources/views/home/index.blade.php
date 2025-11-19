@@ -8,7 +8,7 @@
 
 @section('content')
     <header class="main-header">
-        <h1>Pacientes</h1>
+        <h1 class="mainTitle">Pacientes</h1>
         <div class="header-actions">
             <div class="search-box">
                 <input type="text" id="search" placeholder="Buscar paciente...">
