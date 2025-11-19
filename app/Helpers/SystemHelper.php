@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use Exception;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 
@@ -46,6 +47,18 @@ class SystemHelper
         }
 
         return $novoNome;
+    }
+
+    public static function sendEmail($email, $header ,$content)
+    {
+        try
+        {
+            
+        }
+        catch(Exception $ex)
+        {
+
+        }
     }
 
 }

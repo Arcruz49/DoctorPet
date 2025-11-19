@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS cadUsuario (
     cdUsuario INT AUTO_INCREMENT PRIMARY KEY,
     nmUsuario VARCHAR(500),
     login VARCHAR(256),
+    email varchar(100),
     senha VARCHAR(256),
     imagemPerfil LONGBLOB,
     dtCriacao DATETIME,
