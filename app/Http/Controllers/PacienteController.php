@@ -69,10 +69,10 @@ class PacienteController extends Controller
 
         if (empty($request->nmPaciente)) $errorMessage .= "Nome inválido<br>";
         if (empty($request->especie))   $errorMessage .= "Espécie inválida<br>";
-        if (empty($request->raca))      $errorMessage .= "Raça inválida<br>";
-        if (empty($request->idade))     $errorMessage .= "Idade inválida<br>";
-        if (empty($request->sexo))      $errorMessage .= "Sexo inválido<br>";
-        if (empty($request->peso))      $errorMessage .= "Peso inválido<br>";
+        // if (empty($request->raca))      $errorMessage .= "Raça inválida<br>";
+        // if (empty($request->idade))     $errorMessage .= "Idade inválida<br>";
+        // if (empty($request->sexo))      $errorMessage .= "Sexo inválido<br>";
+        // if (empty($request->peso))      $errorMessage .= "Peso inválido<br>";
         if (empty($request->nmTutor))   $errorMessage .= "Responsável inválido<br>";
         if (empty($request->cdClinica))   $errorMessage .= "Clínica inválida<br>";
 

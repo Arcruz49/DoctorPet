@@ -85,17 +85,21 @@ class LoginController extends Controller
     }
 
 
-    public function RegisterUserEmail()
+    public function RegisterUserEmail(Request $request)
     {
         try
         {
+            $id = $request->id;
+            $user = cadUsuario::where('id', $id)->first();
+            
+            
 
         }
         catch(Exception $ex)
         {
             return response()->json([
                 'success' => false,
-                'message' => 'error: ' . $ex->getMessage();
+                'message' => 'error: ' . $ex->getMessage(),
             ]);
         }
     }

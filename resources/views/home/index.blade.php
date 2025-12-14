@@ -532,7 +532,9 @@
                                 </div>
                                 <div class="patient-info">
                                     <h3>${paciente.nmPaciente}</h3>
-                                    <p class="meta">${paciente.raca} • ${paciente.idade}</p>
+                                        <p class="meta">
+                                        ${(paciente.raca ?? "")} • ${(paciente.idade ?? "")}
+                                        </p>
                                     <p class="owner">Tutor: ${paciente.nmTutor}</p>
                                     
                                 </div>
@@ -1193,7 +1195,9 @@
                                 </div>
                                 <div class="patient-info">
                                     <h3>${paciente.nmPaciente}</h3>
-                                    <p class="meta">${paciente.raca} • ${paciente.idade}</p>
+                                        <p class="meta">
+                                        ${(paciente.raca ?? "")} • ${(paciente.idade ?? "")}
+                                        </p>
                                     <p class="owner">Tutor: ${paciente.nmTutor}</p>
                                     
                                 </div>
